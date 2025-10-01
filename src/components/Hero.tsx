@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Mail, Linkedin, Github, Twitter, Instagram } from "lucide-react";
+import { Mail, Linkedin, Github, Facebook, Instagram } from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
 
 const Hero = () => {
@@ -55,7 +55,7 @@ const Hero = () => {
             {/* Social Links */}
             <div className="flex gap-4 justify-center md:justify-start">
               <a
-                href="https://linkedin.com/in/nishanrahman"
+                href="https://www.linkedin.com/in/nishanrahmanofficial/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
@@ -63,7 +63,7 @@ const Hero = () => {
                 <Linkedin className="h-6 w-6 text-primary" />
               </a>
               <a
-                href="https://github.com/nishanrahman"
+                href="https://github.com/nishanrahman0"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
@@ -71,15 +71,15 @@ const Hero = () => {
                 <Github className="h-6 w-6 text-primary" />
               </a>
               <a
-                href="https://twitter.com/nishanrahman"
+                href="https://www.facebook.com/nishan.rahman.2024"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
               >
-                <Twitter className="h-6 w-6 text-primary" />
+                <Facebook className="h-6 w-6 text-primary" />
               </a>
               <a
-                href="https://instagram.com/nishanrahman"
+                href="https://www.instagram.com/mdnishanrahman?utm_source=qr&igsh=MWk3ZGw3YzVwZGY2cg=="
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full glass-card hover:scale-110 transition-transform"

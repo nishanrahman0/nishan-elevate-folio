@@ -21,8 +21,13 @@ const Contact = () => {
       return;
     }
 
-    // Here you would typically send the form data to a backend
-    toast.success("Message sent successfully! I'll get back to you soon.");
+    // Send message via WhatsApp
+    const phoneNumber = "8801601944455";
+    const message = `Name: ${formData.name}%0AEmail: ${formData.email}%0AMessage: ${formData.message}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    
+    window.open(whatsappUrl, '_blank');
+    toast.success("Redirecting to WhatsApp...");
     
     // Reset form
     setFormData({ name: "", email: "", message: "" });
