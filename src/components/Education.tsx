@@ -2,8 +2,12 @@ import { GraduationCap, Calendar } from "lucide-react";
 
 const Education = () => {
   return (
-    <section id="education" className="section-padding">
-      <div className="container mx-auto max-w-4xl">
+    <section id="education" className="section-padding bg-gradient-to-bl from-background via-secondary/5 to-background relative overflow-hidden">
+      {/* Floating decorative shapes */}
+      <div className="absolute top-20 right-20 w-32 h-32 border-2 border-primary/20 rounded-full animate-pulse" />
+      <div className="absolute bottom-40 left-20 w-24 h-24 border-2 border-accent/20 rounded-full animate-pulse delay-1000" />
+      
+      <div className="container mx-auto max-w-4xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">Education</span>

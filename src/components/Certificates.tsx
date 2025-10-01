@@ -25,8 +25,11 @@ const certificates = [
 
 const Certificates = () => {
   return (
-    <section id="certificates" className="section-padding bg-gradient-to-b from-muted/20 to-background">
-      <div className="container mx-auto max-w-6xl">
+    <section id="certificates" className="section-padding bg-gradient-to-tr from-muted/40 via-primary/5 to-background relative overflow-hidden">
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+      
+      <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">Certificates</span>
@@ -47,7 +50,7 @@ const Certificates = () => {
                 <h3 className="text-lg font-bold text-foreground">{cert.title}</h3>
               </div>
               <p className="text-sm text-muted-foreground">{cert.issuer}</p>
-              <CheckCircle2 className="h-6 w-6 text-green-500 mx-auto mt-4" />
+              <CheckCircle2 className="h-6 w-6 text-primary mx-auto mt-4" />
             </div>
           ))}
         </div>

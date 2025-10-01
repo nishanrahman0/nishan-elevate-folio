@@ -5,20 +5,28 @@ const activities = [
     title: "Deputy Director of Documentation",
     organization: "Rajshahi University Career Club",
     icon: Users,
-    gradient: "from-blue-500 to-cyan-500",
+    gradient: "from-primary to-secondary",
   },
   {
     title: "Volunteer",
     organization: "Hult Prize RU 2024–25",
     icon: Award,
-    gradient: "from-purple-500 to-pink-500",
+    gradient: "from-accent to-primary",
   },
 ];
 
 const Extracurricular = () => {
   return (
-    <section id="extracurricular" className="section-padding">
-      <div className="container mx-auto max-w-4xl">
+    <section id="extracurricular" className="section-padding bg-gradient-to-br from-background via-secondary/5 to-accent/5 relative overflow-hidden">
+      {/* Scattered dot pattern */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 left-20 w-2 h-2 bg-primary rounded-full animate-pulse" />
+        <div className="absolute top-40 right-32 w-2 h-2 bg-accent rounded-full animate-pulse delay-300" />
+        <div className="absolute bottom-32 left-40 w-2 h-2 bg-secondary rounded-full animate-pulse delay-700" />
+        <div className="absolute bottom-20 right-20 w-2 h-2 bg-primary rounded-full animate-pulse delay-1000" />
+      </div>
+      
+      <div className="container mx-auto max-w-4xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">Extracurricular Activities</span>

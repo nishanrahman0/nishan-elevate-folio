@@ -1,13 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Download, Mail, Linkedin, Github, Twitter, Instagram } from "lucide-react";
+import { Mail, Linkedin, Github, Twitter, Instagram } from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
 
 const Hero = () => {
-  const handleDownloadResume = () => {
-    // This will be implemented when the resume PDF is uploaded
-    alert("Resume download will be available soon!");
-  };
-
   const handleContactClick = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -45,22 +40,14 @@ const Hero = () => {
               Aspiring Data Analyst | Tech Explorer | AI Enthusiast
             </p>
             
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-8">
+            <div className="flex justify-center md:justify-start mb-8">
               <Button 
                 variant="hero" 
                 size="lg" 
-                onClick={handleDownloadResume}
+                onClick={handleContactClick}
                 className="group"
               >
-                <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-                Download Resume
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                onClick={handleContactClick}
-              >
-                <Mail className="mr-2 h-5 w-5" />
+                <Mail className="mr-2 h-5 w-5 group-hover:animate-bounce" />
                 Contact Me
               </Button>
             </div>

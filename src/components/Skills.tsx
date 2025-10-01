@@ -4,21 +4,25 @@ const skillCategories = [
   {
     category: "Data Analytics & Visualization",
     icon: BarChart3,
-    color: "from-blue-500 to-cyan-500",
+    color: "from-primary to-secondary",
     skills: ["Excel", "Google Sheets", "Tableau", "Power BI", "R", "Python", "SQL"],
   },
   {
     category: "Productivity & Design Tools",
     icon: Palette,
-    color: "from-purple-500 to-pink-500",
+    color: "from-accent to-primary",
     skills: ["MS Office", "Google Docs", "Canva", "After Effects", "Drive Management"],
   },
 ];
 
 const Skills = () => {
   return (
-    <section id="skills" className="section-padding">
-      <div className="container mx-auto max-w-6xl">
+    <section id="skills" className="section-padding bg-gradient-to-br from-background via-accent/5 to-secondary/5 relative overflow-hidden">
+      {/* Animated gradient orbs */}
+      <div className="absolute top-40 left-10 w-72 h-72 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-l from-secondary/10 to-primary/10 rounded-full blur-3xl animate-pulse delay-1000" />
+      
+      <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">Skills</span>

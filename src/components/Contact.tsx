@@ -36,8 +36,11 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-padding bg-gradient-to-b from-muted/20 to-background">
-      <div className="container mx-auto max-w-6xl">
+    <section id="contact" className="section-padding bg-gradient-to-t from-muted/40 via-primary/5 to-background relative overflow-hidden">
+      {/* Radial gradient background */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+      
+      <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">Get In Touch</span>
