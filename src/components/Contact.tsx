@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, Send } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,9 @@ const Contact = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -21,16 +24,30 @@ const Contact = () => {
       return;
     }
 
-    // Send message via WhatsApp
-    const phoneNumber = "8801601944455";
-    const message = `Name: ${formData.name}%0AEmail: ${formData.email}%0AMessage: ${formData.message}`;
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    window.open(whatsappUrl, '_blank');
-    toast.success("Redirecting to WhatsApp...");
-    
-    // Reset form
-    setFormData({ name: "", email: "", message: "" });
+    setIsSubmitting(true);
+
+    try {
+      // Send message to Gmail via backend function
+      const { data, error } = await supabase.functions.invoke('send-contact-message', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+      });
+
+      if (error) throw error;
+
+      toast.success("Message sent successfully! I'll get back to you soon.");
+      
+      // Reset form
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again or contact me directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -139,9 +156,15 @@ const Contact = () => {
                 />
               </div>
 
-              <Button type="submit" variant="hero" size="lg" className="w-full">
+              <Button 
+                type="submit" 
+                variant="hero" 
+                size="lg" 
+                className="w-full"
+                disabled={isSubmitting}
+              >
                 <Send className="mr-2 h-5 w-5" />
-                Send Message
+                {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </div>
