@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, LogIn } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { label: "Home", href: "#home" },
@@ -15,6 +18,8 @@ const navItems = [
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,6 +70,17 @@ const Navigation = () => {
                 {item.label}
               </a>
             ))}
+            {user ? (
+              <Button onClick={signOut} variant="ghost" size="sm">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            ) : (
+              <Button onClick={() => navigate("/auth")} variant="ghost" size="sm">
+                <LogIn className="h-4 w-4 mr-2" />
+                Login
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -94,6 +110,17 @@ const Navigation = () => {
                   {item.label}
                 </a>
               ))}
+              {user ? (
+                <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              ) : (
+                <Button onClick={() => navigate("/auth")} variant="ghost" size="sm" className="w-full justify-start">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Login
+                </Button>
+              )}
             </div>
           </div>
         )}

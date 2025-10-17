@@ -8,6 +8,7 @@ import Experience from "@/components/Experience";
 import Extracurricular from "@/components/Extracurricular";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import AdminPanel from "@/components/AdminPanel";
 
 const Index = () => {
   return (
@@ -15,6 +16,9 @@ const Index = () => {
       <Navigation />
       <Hero />
       <About />
+      <div className="container mx-auto px-4">
+        <AdminPanel />
+      </div>
       <Education />
       <Certificates />
       <Skills />
