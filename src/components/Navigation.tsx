@@ -71,10 +71,15 @@ const Navigation = () => {
               </a>
             ))}
             {user ? (
-              <Button onClick={signOut} variant="ghost" size="sm">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
+              <>
+                <Button onClick={() => navigate("/admin")} variant="ghost" size="sm">
+                  Admin
+                </Button>
+                <Button onClick={signOut} variant="ghost" size="sm">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
+              </>
             ) : (
               <Button onClick={() => navigate("/auth")} variant="ghost" size="sm">
                 <LogIn className="h-4 w-4 mr-2" />
