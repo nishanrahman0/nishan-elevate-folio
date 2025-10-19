@@ -1,30 +1,39 @@
+import { useState, useEffect } from "react";
 import { Briefcase, Code, Calendar, TrendingUp } from "lucide-react";
+import * as Icons from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const experiences = [
-  {
-    title: "Content Writer",
-    company: "USA-based Company",
-    duration: "3 months (May–July 2024)",
-    description: "Created engaging content for various digital platforms",
-    icon: Briefcase,
-  },
-  {
-    title: "Google Data Analytics Projects",
-    company: "Self-paced Learning",
-    duration: "50+ hands-on projects",
-    description: "Google Sheets, Tableau, BigQuery, R Programming",
-    icon: Code,
-  },
-  {
-    title: "Google Data Analytics Capstone",
-    company: "Google Certificate Program",
-    duration: "Completed Case Study",
-    description: "End-to-end data analysis project demonstrating full data analytics lifecycle",
-    icon: TrendingUp,
-  },
-];
+interface ExperienceItem {
+  id: string;
+  title: string;
+  company: string;
+  duration: string;
+  description: string;
+  icon_name: string;
+}
 
 const Experience = () => {
+  const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
+
+  useEffect(() => {
+    fetchExperiences();
+  }, []);
+
+  const fetchExperiences = async () => {
+    const { data } = await supabase
+      .from("experiences")
+      .select("*")
+      .order("display_order");
+
+    if (data) {
+      setExperiences(data);
+    }
+  };
+
+  const getIcon = (iconName: string) => {
+    const IconComponent = (Icons as any)[iconName];
+    return IconComponent || Briefcase;
+  };
   return (
     <section id="experience" className="section-padding bg-gradient-to-tl from-muted/30 via-background to-primary/5 relative overflow-hidden">
       {/* Decorative corner elements */}
@@ -40,15 +49,17 @@ const Experience = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {experiences.map((exp, index) => (
-            <div
-              key={index}
-              className="glass-card rounded-2xl p-6 hover:scale-105 transition-transform animate-fade-in-up group"
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
-                <exp.icon className="h-8 w-8 text-white" />
-              </div>
+          {experiences.map((exp, index) => {
+            const IconComponent = getIcon(exp.icon_name);
+            return (
+              <div
+                key={exp.id}
+                className="glass-card rounded-2xl p-6 hover:scale-105 transition-transform animate-fade-in-up group"
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
+                  <IconComponent className="h-8 w-8 text-white" />
+                </div>
               
               <h3 className="text-xl font-bold text-foreground mb-2">{exp.title}</h3>
               <p className="text-primary font-semibold mb-2">{exp.company}</p>
@@ -58,9 +69,10 @@ const Experience = () => {
                 <span>{exp.duration}</span>
               </div>
               
-              <p className="text-sm text-muted-foreground">{exp.description}</p>
-            </div>
-          ))}
+                <p className="text-sm text-muted-foreground">{exp.description}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

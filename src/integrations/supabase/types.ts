@@ -14,6 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
+      about_content: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      certificates: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          icon_emoji: string
+          id: string
+          issuer: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          icon_emoji?: string
+          id?: string
+          issuer: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          icon_emoji?: string
+          id?: string
+          issuer?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      education: {
+        Row: {
+          created_at: string | null
+          degree: string
+          duration: string
+          id: string
+          image_url: string | null
+          institution: string
+          logo_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          degree: string
+          duration: string
+          id?: string
+          image_url?: string | null
+          institution: string
+          logo_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          degree?: string
+          duration?: string
+          id?: string
+          image_url?: string | null
+          institution?: string
+          logo_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      experiences: {
+        Row: {
+          company: string
+          created_at: string | null
+          description: string
+          display_order: number | null
+          duration: string
+          icon_name: string
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          company: string
+          created_at?: string | null
+          description: string
+          display_order?: number | null
+          duration: string
+          icon_name?: string
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          company?: string
+          created_at?: string | null
+          description?: string
+          display_order?: number | null
+          duration?: string
+          icon_name?: string
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hero_content: {
+        Row: {
+          created_at: string | null
+          facebook_url: string | null
+          github_url: string | null
+          id: string
+          instagram_url: string | null
+          linkedin_url: string | null
+          name: string
+          profile_image_url: string | null
+          tagline: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          facebook_url?: string | null
+          github_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          name: string
+          profile_image_url?: string | null
+          tagline: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          facebook_url?: string | null
+          github_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          name?: string
+          profile_image_url?: string | null
+          tagline?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -31,6 +190,39 @@ export type Database = {
           created_at?: string | null
           email?: string | null
           id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string
+          color_gradient: string
+          created_at: string | null
+          display_order: number | null
+          icon_name: string
+          id: string
+          skill_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          color_gradient?: string
+          created_at?: string | null
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          skill_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          color_gradient?: string
+          created_at?: string | null
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          skill_name?: string
           updated_at?: string | null
         }
         Relationships: []

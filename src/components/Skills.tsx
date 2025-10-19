@@ -1,21 +1,61 @@
-import { BarChart3, Code, Palette, Database } from "lucide-react";
+import { useState, useEffect } from "react";
+import { BarChart3, Code, Palette } from "lucide-react";
+import * as Icons from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const skillCategories = [
-  {
-    category: "Data Analytics & Visualization",
-    icon: BarChart3,
-    color: "from-primary to-secondary",
-    skills: ["Excel", "Google Sheets", "Tableau", "Power BI", "R", "Python", "SQL"],
-  },
-  {
-    category: "Productivity & Design Tools",
-    icon: Palette,
-    color: "from-accent to-primary",
-    skills: ["MS Office", "Google Docs", "Canva", "After Effects", "Drive Management"],
-  },
-];
+interface Skill {
+  id: string;
+  category: string;
+  skill_name: string;
+  icon_name: string;
+  color_gradient: string;
+}
+
+interface SkillCategory {
+  category: string;
+  icon: any;
+  color: string;
+  skills: string[];
+}
 
 const Skills = () => {
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
+  const fetchSkills = async () => {
+    const { data } = await supabase
+      .from("skills")
+      .select("*")
+      .order("display_order");
+
+    if (data) {
+      // Group skills by category
+      const grouped = data.reduce((acc: Record<string, Skill[]>, skill: Skill) => {
+        if (!acc[skill.category]) {
+          acc[skill.category] = [];
+        }
+        acc[skill.category].push(skill);
+        return acc;
+      }, {});
+
+      // Convert to array format
+      const categories = Object.entries(grouped).map(([category, skills]) => {
+        const firstSkill = skills[0];
+        const IconComponent = (Icons as any)[firstSkill.icon_name] || Code;
+        return {
+          category,
+          icon: IconComponent,
+          color: firstSkill.color_gradient,
+          skills: skills.map((s) => s.skill_name),
+        };
+      });
+
+      setSkillCategories(categories);
+    }
+  };
   return (
     <section id="skills" className="section-padding bg-gradient-to-br from-background via-accent/5 to-secondary/5 relative overflow-hidden">
       {/* Animated gradient orbs */}

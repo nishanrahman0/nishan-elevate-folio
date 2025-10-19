@@ -1,8 +1,34 @@
+import { useState, useEffect } from "react";
 import { Calendar } from "lucide-react";
 import ruLogo from "@/assets/ru-logo.png";
 import ruMonument from "@/assets/ru-monument.jpg";
+import { supabase } from "@/integrations/supabase/client";
 
 const Education = () => {
+  const [education, setEducation] = useState({
+    institution: "",
+    degree: "",
+    duration: "",
+  });
+
+  useEffect(() => {
+    fetchEducation();
+  }, []);
+
+  const fetchEducation = async () => {
+    const { data } = await supabase
+      .from("education")
+      .select("*")
+      .maybeSingle();
+
+    if (data) {
+      setEducation({
+        institution: data.institution,
+        degree: data.degree,
+        duration: data.duration,
+      });
+    }
+  };
   return (
     <section id="education" className="section-padding bg-gradient-to-bl from-background via-secondary/5 to-background relative overflow-hidden">
       {/* Floating decorative shapes - hidden on mobile */}
@@ -29,28 +55,28 @@ const Education = () => {
               </div>
               <div className="flex-1 md:hidden">
                 <h3 className="text-xl font-bold text-foreground mb-1">
-                  University of Rajshahi
+                  {education.institution}
                 </h3>
                 <p className="text-lg text-primary font-semibold mb-1">
-                  BBA in Management Studies
+                  {education.degree}
                 </p>
                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Calendar className="h-4 w-4" />
-                  <span>September 2023 – Present</span>
+                  <span>{education.duration}</span>
                 </div>
               </div>
             </div>
             
             <div className="hidden md:block flex-1">
               <h3 className="text-2xl font-bold text-foreground mb-2">
-                University of Rajshahi
+                {education.institution}
               </h3>
               <p className="text-xl text-primary font-semibold mb-2">
-                BBA in Management Studies
+                {education.degree}
               </p>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="h-4 w-4" />
-                <span>September 2023 – Present</span>
+                <span>{education.duration}</span>
               </div>
             </div>
             

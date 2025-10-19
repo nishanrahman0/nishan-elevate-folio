@@ -1,29 +1,31 @@
+import { useState, useEffect } from "react";
 import { Award, CheckCircle2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const certificates = [
-  {
-    title: "Google Data Analytics",
-    issuer: "Google",
-    icon: "📊",
-  },
-  {
-    title: "Technical Support Fundamentals",
-    issuer: "Google",
-    icon: "🛠️",
-  },
-  {
-    title: "Mastering Supervision",
-    issuer: "Professional Certificate",
-    icon: "👥",
-  },
-  {
-    title: "Generative AI for Business",
-    issuer: "Professional Certificate",
-    icon: "🤖",
-  },
-];
+interface Certificate {
+  id: string;
+  title: string;
+  issuer: string;
+  icon_emoji: string;
+}
 
 const Certificates = () => {
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+
+  useEffect(() => {
+    fetchCertificates();
+  }, []);
+
+  const fetchCertificates = async () => {
+    const { data } = await supabase
+      .from("certificates")
+      .select("*")
+      .order("display_order");
+
+    if (data) {
+      setCertificates(data);
+    }
+  };
   return (
     <section id="certificates" className="section-padding bg-gradient-to-tr from-muted/40 via-primary/5 to-background relative overflow-hidden">
       {/* Grid pattern overlay */}
@@ -40,11 +42,11 @@ const Certificates = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {certificates.map((cert, index) => (
             <div
-              key={index}
+              key={cert.id}
               className="glass-card rounded-2xl p-6 text-center hover:scale-105 transition-transform animate-fade-in-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="text-5xl mb-4">{cert.icon}</div>
+              <div className="text-5xl mb-4">{cert.icon_emoji}</div>
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Award className="h-5 w-5 text-primary" />
                 <h3 className="text-lg font-bold text-foreground">{cert.title}</h3>

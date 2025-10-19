@@ -1,4 +1,24 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
 const About = () => {
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    fetchAboutContent();
+  }, []);
+
+  const fetchAboutContent = async () => {
+    const { data } = await supabase
+      .from("about_content")
+      .select("content")
+      .maybeSingle();
+
+    if (data) {
+      setContent(data.content);
+    }
+  };
+
   return (
     <section id="about" className="section-padding bg-gradient-to-br from-muted/30 via-background to-accent/5 relative overflow-hidden">
       {/* Decorative elements */}
@@ -15,11 +35,7 @@ const About = () => {
 
         <div className="glass-card rounded-2xl p-8 md:p-12 animate-fade-in-up">
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-            I'm a Management Studies student at the University of Rajshahi with strong skills in{" "}
-            <span className="text-primary font-semibold">Data Analytics</span>,{" "}
-            <span className="text-secondary font-semibold">Visualization</span>, and{" "}
-            <span className="text-accent font-semibold">AI tools</span>. 
-            Passionate about solving business problems with data-driven solutions and modern productivity tools.
+            {content}
           </p>
         </div>
       </div>

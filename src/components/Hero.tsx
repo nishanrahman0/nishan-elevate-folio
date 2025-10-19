@@ -1,8 +1,41 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mail, Linkedin, Github, Facebook, Instagram } from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import { supabase } from "@/integrations/supabase/client";
 
 const Hero = () => {
+  const [heroData, setHeroData] = useState({
+    name: "Nishan Rahman",
+    tagline: "Aspiring Data Analyst | Tech Explorer | AI Enthusiast",
+    linkedin_url: "",
+    github_url: "",
+    facebook_url: "",
+    instagram_url: "",
+  });
+
+  useEffect(() => {
+    fetchHeroData();
+  }, []);
+
+  const fetchHeroData = async () => {
+    const { data } = await supabase
+      .from("hero_content")
+      .select("*")
+      .maybeSingle();
+
+    if (data) {
+      setHeroData({
+        name: data.name,
+        tagline: data.tagline,
+        linkedin_url: data.linkedin_url || "",
+        github_url: data.github_url || "",
+        facebook_url: data.facebook_url || "",
+        instagram_url: data.instagram_url || "",
+      });
+    }
+  };
+
   const handleContactClick = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -33,11 +66,11 @@ const Hero = () => {
           {/* Hero Content */}
           <div className="text-center md:text-left max-w-2xl animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold mb-4">
-              <span className="gradient-text">Nishan Rahman</span>
+              <span className="gradient-text">{heroData.name}</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-medium">
-              Aspiring Data Analyst | Tech Explorer | AI Enthusiast
+              {heroData.tagline}
             </p>
             
             <div className="flex justify-center md:justify-start mb-8">
@@ -54,38 +87,46 @@ const Hero = () => {
 
             {/* Social Links */}
             <div className="flex gap-4 justify-center md:justify-start">
-              <a
-                href="https://www.linkedin.com/in/nishanrahmanofficial/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-              >
-                <Linkedin className="h-6 w-6 text-primary" />
-              </a>
-              <a
-                href="https://github.com/nishanrahman0"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-              >
-                <Github className="h-6 w-6 text-primary" />
-              </a>
-              <a
-                href="https://www.facebook.com/nishan.rahman.2024"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-              >
-                <Facebook className="h-6 w-6 text-primary" />
-              </a>
-              <a
-                href="https://www.instagram.com/mdnishanrahman?utm_source=qr&igsh=MWk3ZGw3YzVwZGY2cg=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-              >
-                <Instagram className="h-6 w-6 text-primary" />
-              </a>
+              {heroData.linkedin_url && (
+                <a
+                  href={heroData.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
+                >
+                  <Linkedin className="h-6 w-6 text-primary" />
+                </a>
+              )}
+              {heroData.github_url && (
+                <a
+                  href={heroData.github_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
+                >
+                  <Github className="h-6 w-6 text-primary" />
+                </a>
+              )}
+              {heroData.facebook_url && (
+                <a
+                  href={heroData.facebook_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
+                >
+                  <Facebook className="h-6 w-6 text-primary" />
+                </a>
+              )}
+              {heroData.instagram_url && (
+                <a
+                  href={heroData.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
+                >
+                  <Instagram className="h-6 w-6 text-primary" />
+                </a>
+              )}
             </div>
           </div>
         </div>
