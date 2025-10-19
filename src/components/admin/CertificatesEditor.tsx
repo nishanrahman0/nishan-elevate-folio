@@ -6,12 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 interface Certificate {
   id: string;
   title: string;
   issuer: string;
   icon_emoji: string;
+  image_url?: string;
   display_order: number;
 }
 
@@ -24,6 +26,7 @@ export function CertificatesEditor() {
     title: "",
     issuer: "",
     icon_emoji: "📜",
+    image_url: "",
   });
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export function CertificatesEditor() {
         description: editingId ? "Certificate updated" : "Certificate added",
       });
 
-      setFormData({ title: "", issuer: "", icon_emoji: "📜" });
+      setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "" });
       setEditingId(null);
       fetchCertificates();
     } catch (error: any) {
@@ -90,6 +93,7 @@ export function CertificatesEditor() {
       title: cert.title,
       issuer: cert.issuer,
       icon_emoji: cert.icon_emoji,
+      image_url: cert.image_url || "",
     });
   };
 
@@ -155,6 +159,11 @@ export function CertificatesEditor() {
               />
             </div>
           </div>
+          <ImageUpload
+            currentImageUrl={formData.image_url}
+            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+            label="Certificate Image"
+          />
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -163,7 +172,7 @@ export function CertificatesEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ title: "", issuer: "", icon_emoji: "📜" });
+                setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "" });
               }}>
                 Cancel
               </Button>

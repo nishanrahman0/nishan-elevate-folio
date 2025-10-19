@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 export function HeroEditor() {
   const { toast } = useToast();
@@ -15,6 +16,7 @@ export function HeroEditor() {
   const [formData, setFormData] = useState({
     name: "",
     tagline: "",
+    profile_image_url: "",
     linkedin_url: "",
     github_url: "",
     facebook_url: "",
@@ -39,6 +41,7 @@ export function HeroEditor() {
         setFormData({
           name: data.name || "",
           tagline: data.tagline || "",
+          profile_image_url: data.profile_image_url || "",
           linkedin_url: data.linkedin_url || "",
           github_url: data.github_url || "",
           facebook_url: data.facebook_url || "",
@@ -100,6 +103,11 @@ export function HeroEditor() {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
+        <ImageUpload
+          currentImageUrl={formData.profile_image_url}
+          onImageUploaded={(url) => setFormData({ ...formData, profile_image_url: url })}
+          label="Profile Photo"
+        />
         <div className="space-y-2">
           <Label htmlFor="tagline">Tagline</Label>
           <Input

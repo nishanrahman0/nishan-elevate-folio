@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 export function AboutEditor() {
   const { toast } = useToast();
@@ -13,6 +14,7 @@ export function AboutEditor() {
   const [saving, setSaving] = useState(false);
   const [aboutId, setAboutId] = useState<string | null>(null);
   const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     fetchAboutContent();
@@ -30,6 +32,7 @@ export function AboutEditor() {
       if (data) {
         setAboutId(data.id);
         setContent(data.content || "");
+        setImageUrl(data.image_url || "");
       }
     } catch (error: any) {
       toast({
@@ -47,7 +50,7 @@ export function AboutEditor() {
     try {
       const { error } = await supabase
         .from("about_content")
-        .update({ content, updated_at: new Date().toISOString() })
+        .update({ content, image_url: imageUrl, updated_at: new Date().toISOString() })
         .eq("id", aboutId);
 
       if (error) throw error;
@@ -87,6 +90,11 @@ export function AboutEditor() {
             rows={8}
           />
         </div>
+        <ImageUpload
+          currentImageUrl={imageUrl}
+          onImageUploaded={setImageUrl}
+          label="About Section Image"
+        />
         <Button onClick={handleSave} disabled={saving}>
           {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Save Changes

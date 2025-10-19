@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 interface Experience {
   id: string;
@@ -15,6 +16,7 @@ interface Experience {
   duration: string;
   description: string;
   icon_name: string;
+  image_url?: string;
   display_order: number;
 }
 
@@ -29,6 +31,7 @@ export function ExperienceEditor() {
     duration: "",
     description: "",
     icon_name: "Briefcase",
+    image_url: "",
   });
 
   useEffect(() => {
@@ -77,7 +80,7 @@ export function ExperienceEditor() {
         description: editingId ? "Experience updated" : "Experience added",
       });
 
-      setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase" });
+      setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "" });
       setEditingId(null);
       fetchExperiences();
     } catch (error: any) {
@@ -97,6 +100,7 @@ export function ExperienceEditor() {
       duration: exp.duration,
       description: exp.description,
       icon_name: exp.icon_name,
+      image_url: exp.image_url || "",
     });
   };
 
@@ -182,6 +186,11 @@ export function ExperienceEditor() {
               rows={4}
             />
           </div>
+          <ImageUpload
+            currentImageUrl={formData.image_url}
+            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+            label="Experience Image"
+          />
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -190,7 +199,7 @@ export function ExperienceEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase" });
+                setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "" });
               }}>
                 Cancel
               </Button>

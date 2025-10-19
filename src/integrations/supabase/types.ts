@@ -19,18 +19,21 @@ export type Database = {
           content: string
           created_at: string | null
           id: string
+          image_url: string | null
           updated_at: string | null
         }
         Insert: {
           content: string
           created_at?: string | null
           id?: string
+          image_url?: string | null
           updated_at?: string | null
         }
         Update: {
           content?: string
           created_at?: string | null
           id?: string
+          image_url?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -41,6 +44,7 @@ export type Database = {
           display_order: number | null
           icon_emoji: string
           id: string
+          image_url: string | null
           issuer: string
           title: string
           updated_at: string | null
@@ -50,6 +54,7 @@ export type Database = {
           display_order?: number | null
           icon_emoji?: string
           id?: string
+          image_url?: string | null
           issuer: string
           title: string
           updated_at?: string | null
@@ -59,6 +64,7 @@ export type Database = {
           display_order?: number | null
           icon_emoji?: string
           id?: string
+          image_url?: string | null
           issuer?: string
           title?: string
           updated_at?: string | null
@@ -107,6 +113,7 @@ export type Database = {
           duration: string
           icon_name: string
           id: string
+          image_url: string | null
           title: string
           updated_at: string | null
         }
@@ -118,6 +125,7 @@ export type Database = {
           duration: string
           icon_name?: string
           id?: string
+          image_url?: string | null
           title: string
           updated_at?: string | null
         }
@@ -129,6 +137,7 @@ export type Database = {
           duration?: string
           icon_name?: string
           id?: string
+          image_url?: string | null
           title?: string
           updated_at?: string | null
         }
@@ -202,6 +211,7 @@ export type Database = {
           display_order: number | null
           icon_name: string
           id: string
+          image_url: string | null
           skill_name: string
           updated_at: string | null
         }
@@ -212,6 +222,7 @@ export type Database = {
           display_order?: number | null
           icon_name?: string
           id?: string
+          image_url?: string | null
           skill_name: string
           updated_at?: string | null
         }
@@ -222,6 +233,7 @@ export type Database = {
           display_order?: number | null
           icon_name?: string
           id?: string
+          image_url?: string | null
           skill_name?: string
           updated_at?: string | null
         }
