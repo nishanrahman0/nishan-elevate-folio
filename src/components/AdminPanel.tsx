@@ -1,9 +1,11 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
   const { isAdmin, user } = useAuth();
+  const navigate = useNavigate();
 
   if (!isAdmin) {
     return null;
@@ -21,11 +23,11 @@ const AdminPanel = () => {
             Logged in as: {user?.email}
           </p>
           <div className="flex gap-2 flex-wrap">
-            <Button>Edit About</Button>
-            <Button>Manage Experience</Button>
-            <Button>Update Skills</Button>
-            <Button>Add Certificate</Button>
-            <Button>Edit Education</Button>
+            <Button onClick={() => navigate("/admin?tab=about")}>Edit About</Button>
+            <Button onClick={() => navigate("/admin?tab=experience")}>Manage Experience</Button>
+            <Button onClick={() => navigate("/admin?tab=skills")}>Update Skills</Button>
+            <Button onClick={() => navigate("/admin?tab=certificates")}>Add Certificate</Button>
+            <Button onClick={() => navigate("/admin?tab=education")}>Edit Education</Button>
           </div>
         </div>
       </CardContent>
