@@ -46,6 +46,7 @@ export type Database = {
           id: string
           image_url: string | null
           issuer: string
+          link_url: string | null
           title: string
           updated_at: string | null
         }
@@ -56,6 +57,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           issuer: string
+          link_url?: string | null
           title: string
           updated_at?: string | null
         }
@@ -66,6 +68,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           issuer?: string
+          link_url?: string | null
           title?: string
           updated_at?: string | null
         }
@@ -79,6 +82,7 @@ export type Database = {
           id: string
           image_url: string | null
           institution: string
+          link_url: string | null
           logo_url: string | null
           updated_at: string | null
         }
@@ -89,6 +93,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           institution: string
+          link_url?: string | null
           logo_url?: string | null
           updated_at?: string | null
         }
@@ -99,6 +104,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           institution?: string
+          link_url?: string | null
           logo_url?: string | null
           updated_at?: string | null
         }
@@ -114,6 +120,7 @@ export type Database = {
           icon_name: string
           id: string
           image_url: string | null
+          link_url: string | null
           title: string
           updated_at: string | null
         }
@@ -126,6 +133,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          link_url?: string | null
           title: string
           updated_at?: string | null
         }
@@ -138,6 +146,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          link_url?: string | null
           title?: string
           updated_at?: string | null
         }
@@ -212,6 +221,7 @@ export type Database = {
           icon_name: string
           id: string
           image_url: string | null
+          link_url: string | null
           skill_name: string
           updated_at: string | null
         }
@@ -223,6 +233,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          link_url?: string | null
           skill_name: string
           updated_at?: string | null
         }
@@ -234,6 +245,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          link_url?: string | null
           skill_name?: string
           updated_at?: string | null
         }

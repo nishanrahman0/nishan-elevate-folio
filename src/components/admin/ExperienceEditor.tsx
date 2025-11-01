@@ -32,6 +32,7 @@ export function ExperienceEditor() {
     description: "",
     icon_name: "Briefcase",
     image_url: "",
+    link_url: "",
   });
 
   useEffect(() => {
@@ -80,7 +81,7 @@ export function ExperienceEditor() {
         description: editingId ? "Experience updated" : "Experience added",
       });
 
-      setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "" });
+      setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "", link_url: "" });
       setEditingId(null);
       fetchExperiences();
     } catch (error: any) {
@@ -101,6 +102,7 @@ export function ExperienceEditor() {
       description: exp.description,
       icon_name: exp.icon_name,
       image_url: exp.image_url || "",
+      link_url: (exp as any).link_url || "",
     });
   };
 
@@ -191,6 +193,15 @@ export function ExperienceEditor() {
             onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
             label="Experience Image"
           />
+          <div className="space-y-2">
+            <Label htmlFor="exp_link_url">Link URL (optional)</Label>
+            <Input
+              id="exp_link_url"
+              value={formData.link_url}
+              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+              placeholder="https://..."
+            />
+          </div>
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -199,7 +210,7 @@ export function ExperienceEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "" });
+                setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "", link_url: "" });
               }}>
                 Cancel
               </Button>

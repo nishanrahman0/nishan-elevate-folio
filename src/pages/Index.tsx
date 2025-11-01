@@ -9,6 +9,7 @@ import Extracurricular from "@/components/Extracurricular";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import AdminPanel from "@/components/AdminPanel";
+import { ChatBot } from "@/components/ChatBot";
 
 const Index = () => {
   return (
@@ -26,6 +27,7 @@ const Index = () => {
       <Extracurricular />
       <Contact />
       <Footer />
+      <ChatBot />
     </div>
   );
 };

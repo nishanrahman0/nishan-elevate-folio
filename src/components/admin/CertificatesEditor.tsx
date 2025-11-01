@@ -27,6 +27,7 @@ export function CertificatesEditor() {
     issuer: "",
     icon_emoji: "📜",
     image_url: "",
+    link_url: "",
   });
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export function CertificatesEditor() {
         description: editingId ? "Certificate updated" : "Certificate added",
       });
 
-      setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "" });
+      setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "", link_url: "" });
       setEditingId(null);
       fetchCertificates();
     } catch (error: any) {
@@ -94,6 +95,7 @@ export function CertificatesEditor() {
       issuer: cert.issuer,
       icon_emoji: cert.icon_emoji,
       image_url: cert.image_url || "",
+      link_url: (cert as any).link_url || "",
     });
   };
 
@@ -164,6 +166,15 @@ export function CertificatesEditor() {
             onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
             label="Certificate Image"
           />
+          <div className="space-y-2">
+            <Label htmlFor="cert_link_url">Link URL (optional)</Label>
+            <Input
+              id="cert_link_url"
+              value={formData.link_url}
+              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+              placeholder="https://..."
+            />
+          </div>
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -172,7 +183,7 @@ export function CertificatesEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "" });
+                setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "", link_url: "" });
               }}>
                 Cancel
               </Button>

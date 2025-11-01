@@ -26,6 +26,7 @@ export function SkillsEditor() {
     skill_name: "",
     icon_name: "Code",
     color_gradient: "from-primary to-secondary",
+    link_url: "",
   });
 
   useEffect(() => {
@@ -74,7 +75,7 @@ export function SkillsEditor() {
         description: editingId ? "Skill updated" : "Skill added",
       });
 
-      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary" });
+      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", link_url: "" });
       setEditingId(null);
       fetchSkills();
     } catch (error: any) {
@@ -93,6 +94,7 @@ export function SkillsEditor() {
       skill_name: skill.skill_name,
       icon_name: skill.icon_name,
       color_gradient: skill.color_gradient,
+      link_url: (skill as any).link_url || "",
     });
   };
 
@@ -180,6 +182,15 @@ export function SkillsEditor() {
               />
             </div>
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="skill_link_url">Link URL (optional)</Label>
+            <Input
+              id="skill_link_url"
+              value={formData.link_url}
+              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+              placeholder="https://..."
+            />
+          </div>
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -188,7 +199,7 @@ export function SkillsEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary" });
+                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", link_url: "" });
               }}>
                 Cancel
               </Button>

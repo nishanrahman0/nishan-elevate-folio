@@ -28,6 +28,7 @@ export function EducationEditor() {
     duration: "",
     logo_url: "",
     image_url: "",
+    link_url: "",
   });
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export function EducationEditor() {
         description: editingId ? "Education updated" : "Education added",
       });
 
-      setFormData({ institution: "", degree: "", duration: "", logo_url: "", image_url: "" });
+      setFormData({ institution: "", degree: "", duration: "", logo_url: "", image_url: "", link_url: "" });
       setEditingId(null);
       fetchEducation();
     } catch (error: any) {
@@ -96,6 +97,7 @@ export function EducationEditor() {
       duration: edu.duration,
       logo_url: edu.logo_url || "",
       image_url: edu.image_url || "",
+      link_url: (edu as any).link_url || "",
     });
   };
 
@@ -171,6 +173,15 @@ export function EducationEditor() {
             onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
             label="Campus Image"
           />
+          <div className="space-y-2">
+            <Label htmlFor="link_url">Link URL (optional)</Label>
+            <Input
+              id="link_url"
+              value={formData.link_url}
+              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+              placeholder="https://..."
+            />
+          </div>
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -179,7 +190,7 @@ export function EducationEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ institution: "", degree: "", duration: "", logo_url: "", image_url: "" });
+                setFormData({ institution: "", degree: "", duration: "", logo_url: "", image_url: "", link_url: "" });
               }}>
                 Cancel
               </Button>
