@@ -10,6 +10,8 @@ interface ExperienceItem {
   duration: string;
   description: string;
   icon_name: string;
+  image_url?: string;
+  link_url?: string;
 }
 
 const Experience = () => {
@@ -51,26 +53,34 @@ const Experience = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {experiences.map((exp, index) => {
             const IconComponent = getIcon(exp.icon_name);
+            const Wrapper = exp.link_url ? 'a' : 'div';
+            const wrapperProps = exp.link_url ? { href: exp.link_url, target: "_blank", rel: "noopener noreferrer" } : {};
+            
             return (
-              <div
+              <Wrapper
                 key={exp.id}
-                className="glass-card rounded-2xl p-6 hover:scale-105 transition-transform animate-fade-in-up group"
+                {...wrapperProps}
+                className="glass-card rounded-2xl p-6 hover:scale-105 transition-transform animate-fade-in-up group block"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
-                  <IconComponent className="h-8 w-8 text-white" />
+                {exp.image_url ? (
+                  <img src={exp.image_url} alt={exp.title} className="w-full h-32 object-cover rounded-xl mb-4" />
+                ) : (
+                  <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
+                    <IconComponent className="h-8 w-8 text-white" />
+                  </div>
+                )}
+              
+                <h3 className="text-xl font-bold text-foreground mb-2">{exp.title}</h3>
+                <p className="text-primary font-semibold mb-2">{exp.company}</p>
+              
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                  <Calendar className="h-4 w-4" />
+                  <span>{exp.duration}</span>
                 </div>
               
-              <h3 className="text-xl font-bold text-foreground mb-2">{exp.title}</h3>
-              <p className="text-primary font-semibold mb-2">{exp.company}</p>
-              
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                <Calendar className="h-4 w-4" />
-                <span>{exp.duration}</span>
-              </div>
-              
                 <p className="text-sm text-muted-foreground">{exp.description}</p>
-              </div>
+              </Wrapper>
             );
           })}
         </div>

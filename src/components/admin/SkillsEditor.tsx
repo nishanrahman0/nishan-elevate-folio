@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 interface Skill {
   id: string;
@@ -26,6 +27,7 @@ export function SkillsEditor() {
     skill_name: "",
     icon_name: "Code",
     color_gradient: "from-primary to-secondary",
+    image_url: "",
     link_url: "",
   });
 
@@ -75,7 +77,7 @@ export function SkillsEditor() {
         description: editingId ? "Skill updated" : "Skill added",
       });
 
-      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", link_url: "" });
+      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
       setEditingId(null);
       fetchSkills();
     } catch (error: any) {
@@ -94,6 +96,7 @@ export function SkillsEditor() {
       skill_name: skill.skill_name,
       icon_name: skill.icon_name,
       color_gradient: skill.color_gradient,
+      image_url: (skill as any).image_url || "",
       link_url: (skill as any).link_url || "",
     });
   };
@@ -182,6 +185,11 @@ export function SkillsEditor() {
               />
             </div>
           </div>
+          <ImageUpload
+            currentImageUrl={formData.image_url}
+            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+            label="Skill Image (optional)"
+          />
           <div className="space-y-2">
             <Label htmlFor="skill_link_url">Link URL (optional)</Label>
             <Input
@@ -199,7 +207,7 @@ export function SkillsEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", link_url: "" });
+                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
               }}>
                 Cancel
               </Button>

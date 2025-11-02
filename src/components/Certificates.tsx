@@ -7,6 +7,8 @@ interface Certificate {
   title: string;
   issuer: string;
   icon_emoji: string;
+  image_url?: string;
+  link_url?: string;
 }
 
 const Certificates = () => {
@@ -40,21 +42,31 @@ const Certificates = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {certificates.map((cert, index) => (
-            <div
-              key={cert.id}
-              className="glass-card rounded-2xl p-6 text-center hover:scale-105 transition-transform animate-fade-in-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className="text-5xl mb-4">{cert.icon_emoji}</div>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Award className="h-5 w-5 text-primary" />
-                <h3 className="text-lg font-bold text-foreground">{cert.title}</h3>
-              </div>
-              <p className="text-sm text-muted-foreground">{cert.issuer}</p>
-              <CheckCircle2 className="h-6 w-6 text-primary mx-auto mt-4" />
-            </div>
-          ))}
+          {certificates.map((cert, index) => {
+            const Wrapper = cert.link_url ? 'a' : 'div';
+            const wrapperProps = cert.link_url ? { href: cert.link_url, target: "_blank", rel: "noopener noreferrer" } : {};
+            
+            return (
+              <Wrapper
+                key={cert.id}
+                {...wrapperProps}
+                className="glass-card rounded-2xl p-6 text-center hover:scale-105 transition-transform animate-fade-in-up block"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {cert.image_url ? (
+                  <img src={cert.image_url} alt={cert.title} className="w-full h-32 object-cover rounded-xl mb-4" />
+                ) : (
+                  <div className="text-5xl mb-4">{cert.icon_emoji}</div>
+                )}
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Award className="h-5 w-5 text-primary" />
+                  <h3 className="text-lg font-bold text-foreground">{cert.title}</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">{cert.issuer}</p>
+                <CheckCircle2 className="h-6 w-6 text-primary mx-auto mt-4" />
+              </Wrapper>
+            );
+          })}
         </div>
       </div>
     </section>
