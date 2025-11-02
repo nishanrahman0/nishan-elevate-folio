@@ -38,6 +38,39 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          images: Json | null
+          published: boolean | null
+          title: string
+          updated_at: string | null
+          videos: Json | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          images?: Json | null
+          published?: boolean | null
+          title: string
+          updated_at?: string | null
+          videos?: Json | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          images?: Json | null
+          published?: boolean | null
+          title?: string
+          updated_at?: string | null
+          videos?: Json | null
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           created_at: string | null
@@ -106,6 +139,39 @@ export type Database = {
           institution?: string
           link_url?: string | null
           logo_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          caption: string | null
+          created_at: string | null
+          description: string
+          display_order: number | null
+          id: string
+          images: Json | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string | null
+          description: string
+          display_order?: number | null
+          id?: string
+          images?: Json | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string | null
+          description?: string
+          display_order?: number | null
+          id?: string
+          images?: Json | null
+          title?: string
           updated_at?: string | null
         }
         Relationships: []
