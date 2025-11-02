@@ -11,7 +11,9 @@ const navItems = [
   { label: "Certificates", href: "#certificates" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
+  { label: "Events", href: "#events" },
   { label: "Activities", href: "#extracurricular" },
+  { label: "Blog", href: "/blog", isRoute: true },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -29,10 +31,14 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (href: string, isRoute?: boolean) => {
     setIsOpen(false);
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: "smooth" });
+    if (isRoute) {
+      navigate(href);
+    } else {
+      const element = document.querySelector(href);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -63,7 +69,7 @@ const Navigation = () => {
                 href={item.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleNavClick(item.href);
+                  handleNavClick(item.href, item.isRoute);
                 }}
                 className="text-foreground hover:text-primary transition-colors font-medium"
               >
@@ -108,7 +114,7 @@ const Navigation = () => {
                   href={item.href}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleNavClick(item.href);
+                    handleNavClick(item.href, item.isRoute);
                   }}
                   className="text-foreground hover:text-primary transition-colors font-medium py-2"
                 >

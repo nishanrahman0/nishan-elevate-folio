@@ -11,6 +11,8 @@ import { ExperienceEditor } from "@/components/admin/ExperienceEditor";
 import { EducationEditor } from "@/components/admin/EducationEditor";
 import { CertificatesEditor } from "@/components/admin/CertificatesEditor";
 import { SkillsEditor } from "@/components/admin/SkillsEditor";
+import { EventsEditor } from "@/components/admin/EventsEditor";
+import { BlogEditor } from "@/components/admin/BlogEditor";
 
 export default function Admin() {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -58,14 +60,16 @@ export default function Admin() {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="hero">Hero</TabsTrigger>
-            <TabsTrigger value="about">About</TabsTrigger>
-            <TabsTrigger value="experience">Experience</TabsTrigger>
-            <TabsTrigger value="education">Education</TabsTrigger>
-            <TabsTrigger value="certificates">Certificates</TabsTrigger>
-            <TabsTrigger value="skills">Skills</TabsTrigger>
-          </TabsList>
+            <TabsList className="grid w-full grid-cols-8">
+              <TabsTrigger value="hero">Hero</TabsTrigger>
+              <TabsTrigger value="about">About</TabsTrigger>
+              <TabsTrigger value="experience">Experience</TabsTrigger>
+              <TabsTrigger value="education">Education</TabsTrigger>
+              <TabsTrigger value="certificates">Certificates</TabsTrigger>
+              <TabsTrigger value="skills">Skills</TabsTrigger>
+              <TabsTrigger value="events">Events</TabsTrigger>
+              <TabsTrigger value="blog">Blog</TabsTrigger>
+            </TabsList>
 
           <TabsContent value="hero">
             <HeroEditor />
@@ -89,6 +93,14 @@ export default function Admin() {
 
           <TabsContent value="skills">
             <SkillsEditor />
+          </TabsContent>
+
+          <TabsContent value="events">
+            <EventsEditor />
+          </TabsContent>
+
+          <TabsContent value="blog">
+            <BlogEditor />
           </TabsContent>
         </Tabs>
       </main>
