@@ -97,11 +97,13 @@ const Education = () => {
                   </div>
                   
                   <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
-                    <img 
-                      src={imageSrc} 
-                      alt={`${edu.institution} Campus`}
-                      className="w-full md:w-32 h-32 md:h-32 object-cover rounded-xl"
-                    />
+                    <div className="rounded-xl p-1 bg-gradient-to-br from-primary/20 to-accent/20">
+                      <img 
+                        src={imageSrc} 
+                        alt={`${edu.institution} Campus`}
+                        className="w-full md:w-64 h-40 md:h-40 object-cover rounded-lg"
+                      />
+                    </div>
                   </div>
                 </div>
               </Wrapper>

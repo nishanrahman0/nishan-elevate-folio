@@ -3,8 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface BlogPost {
   id: string;
@@ -17,6 +20,8 @@ interface BlogPost {
 }
 
 const Blog = () => {
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const { data: posts, isLoading } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
@@ -32,12 +37,16 @@ const Blog = () => {
   });
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-secondary/5">
       <Navigation />
       <div className="pt-24 pb-16 min-h-screen">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-8 gradient-text text-center">Blog</h1>
-          
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold gradient-text">Blog</h1>
+            {isAdmin && (
+              <Button variant="outline" onClick={() => navigate("/admin?tab=blog")}>Manage Posts</Button>
+            )}
+          </div>
           {isLoading ? (
             <p className="text-center text-muted-foreground">Loading posts...</p>
           ) : !posts || posts.length === 0 ? (

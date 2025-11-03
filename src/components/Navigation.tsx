@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, LogOut, LogIn } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
   { label: "Home", href: "#home" },
@@ -22,7 +22,7 @@ const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-
+  const location = useLocation();
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -31,15 +31,19 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (href: string, isRoute?: boolean) => {
-    setIsOpen(false);
-    if (isRoute) {
-      navigate(href);
-    } else {
-      const element = document.querySelector(href);
-      element?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+const handleNavClick = (href: string, isRoute?: boolean) => {
+  setIsOpen(false);
+  if (isRoute) {
+    navigate(href);
+    return;
+  }
+  if (location.pathname !== "/") {
+    navigate(`/${href}`);
+    return;
+  }
+  const element = document.querySelector(href);
+  element?.scrollIntoView({ behavior: "smooth" });
+};
 
   return (
     <nav

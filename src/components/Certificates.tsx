@@ -54,7 +54,9 @@ const Certificates = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {cert.image_url ? (
-                  <img src={cert.image_url} alt={cert.title} className="w-full h-32 object-cover rounded-xl mb-4" />
+                  <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
+                    <img src={cert.image_url} alt={cert.title} className="w-full h-40 object-cover rounded-lg" />
+                  </div>
                 ) : (
                   <div className="text-5xl mb-4">{cert.icon_emoji}</div>
                 )}

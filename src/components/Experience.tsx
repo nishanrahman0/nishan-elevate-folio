@@ -64,7 +64,9 @@ const Experience = () => {
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 {exp.image_url ? (
-                  <img src={exp.image_url} alt={exp.title} className="w-full h-32 object-cover rounded-xl mb-4" />
+                  <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
+                    <img src={exp.image_url} alt={exp.title} className="w-full h-48 object-cover rounded-lg" />
+                  </div>
                 ) : (
                   <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
                     <IconComponent className="h-8 w-8 text-white" />
