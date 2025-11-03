@@ -120,7 +120,7 @@ All colors MUST be HSL.
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-lg bg-white/70 border border-white/30 shadow-lg;
+    @apply backdrop-blur-xl bg-white/80 dark:bg-white/10 border border-white/40 dark:border-white/20 shadow-xl;
   }
   
   .gradient-text {
@@ -129,6 +129,23 @@ All colors MUST be HSL.
   
   .section-padding {
     @apply py-16 md:py-24 px-4 md:px-8;
+  }
+
+  /* Rich text editor styles */
+  .rich-text-editor .ql-toolbar {
+    @apply border-border bg-muted/30 rounded-t-lg;
+  }
+  
+  .rich-text-editor .ql-container {
+    @apply border-border rounded-b-lg;
+  }
+  
+  .rich-text-editor .ql-editor {
+    @apply min-h-[200px] text-foreground;
+  }
+  
+  .rich-text-editor .ql-editor.ql-blank::before {
+    @apply text-muted-foreground;
   }
 }
 

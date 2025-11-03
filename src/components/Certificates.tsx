@@ -41,7 +41,7 @@ const Certificates = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {certificates.map((cert, index) => {
             const Wrapper = cert.link_url ? 'a' : 'div';
             const wrapperProps = cert.link_url ? { href: cert.link_url, target: "_blank", rel: "noopener noreferrer" } : {};
@@ -50,15 +50,15 @@ const Certificates = () => {
               <Wrapper
                 key={cert.id}
                 {...wrapperProps}
-                className="glass-card rounded-2xl p-6 text-center hover:scale-105 transition-transform animate-fade-in-up block"
+                className="glass-card rounded-2xl p-8 text-center hover:scale-105 hover:shadow-2xl transition-all animate-fade-in-up block group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {cert.image_url ? (
-                  <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
-                    <img src={cert.image_url} alt={cert.title} className="w-full h-40 object-cover rounded-lg" />
+                  <div className="rounded-xl mb-6 p-2 bg-gradient-to-br from-primary/30 to-accent/30 shadow-lg">
+                    <img src={cert.image_url} alt={cert.title} className="w-full h-56 object-cover rounded-lg" />
                   </div>
                 ) : (
-                  <div className="text-5xl mb-4">{cert.icon_emoji}</div>
+                  <div className="text-6xl mb-6">{cert.icon_emoji}</div>
                 )}
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Award className="h-5 w-5 text-primary" />

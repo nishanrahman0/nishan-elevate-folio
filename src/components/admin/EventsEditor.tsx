@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { ImageUpload } from "./ImageUpload";
 import { Trash2, Plus } from "lucide-react";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 interface Event {
   id: string;
@@ -145,12 +146,10 @@ export function EventsEditor() {
 
             <div>
               <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
+              <RichTextEditor
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={4}
-                required
+                onChange={(value) => setFormData({ ...formData, description: value })}
+                placeholder="Describe the event..."
               />
             </div>
 

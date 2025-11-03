@@ -54,8 +54,8 @@ const Blog = () => {
           ) : (
             <div className="space-y-8">
               {posts.map((post) => (
-                <Card key={post.id} className="overflow-hidden">
-                  <CardContent className="p-6">
+                <Card key={post.id} className="glass-card overflow-hidden">
+                  <CardContent className="p-8">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                       <Calendar className="h-4 w-4" />
                       <span>{format(new Date(post.created_at), "MMMM d, yyyy")}</span>
@@ -90,9 +90,10 @@ const Blog = () => {
                       </div>
                     )}
                     
-                    <div className="prose prose-lg max-w-none whitespace-pre-wrap">
-                      {post.content}
-                    </div>
+                    <div 
+                      className="prose prose-lg max-w-none text-foreground"
+                      dangerouslySetInnerHTML={{ __html: post.content }}
+                    />
                   </CardContent>
                 </Card>
               ))}

@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { ImageUpload } from "./ImageUpload";
 import { Trash2 } from "lucide-react";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 interface BlogPost {
   id: string;
@@ -167,12 +168,10 @@ export function BlogEditor() {
 
             <div>
               <Label htmlFor="content">Content</Label>
-              <Textarea
-                id="content"
+              <RichTextEditor
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                rows={10}
-                required
+                onChange={(value) => setFormData({ ...formData, content: value })}
+                placeholder="Write your blog post content here..."
               />
             </div>
 

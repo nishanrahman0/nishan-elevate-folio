@@ -44,10 +44,14 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+      {/* Decorative gradient background */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+      
+      <header className="border-b glass-card relative z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Content Management</h1>
+          <h1 className="text-2xl font-bold gradient-text">Content Management</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">{user?.email}</span>
             <Button variant="outline" onClick={handleSignOut}>
@@ -58,9 +62,10 @@ export default function Admin() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
-            <TabsList className="grid w-full grid-cols-8">
+      <main className="container mx-auto px-4 py-8 relative z-10">
+        <div className="glass-card rounded-2xl p-6">
+          <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
+            <TabsList className="grid w-full grid-cols-8 gap-2">
               <TabsTrigger value="hero">Hero</TabsTrigger>
               <TabsTrigger value="about">About</TabsTrigger>
               <TabsTrigger value="experience">Experience</TabsTrigger>
@@ -102,7 +107,8 @@ export default function Admin() {
           <TabsContent value="blog">
             <BlogEditor />
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        </div>
       </main>
     </div>
   );

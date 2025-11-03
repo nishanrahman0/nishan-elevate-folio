@@ -14,8 +14,13 @@ import { ChatBot } from "@/components/ChatBot";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+      {/* Decorative gradient background */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="relative z-10">
+        <Navigation />
       <Hero />
       <About />
       <div className="container mx-auto px-4">
@@ -30,6 +35,7 @@ const Index = () => {
       <Contact />
       <Footer />
       <ChatBot />
+      </div>
     </div>
   );
 };

@@ -49,13 +49,23 @@ const Events = () => {
   }
 
   return (
-    <section id="events" className="section-padding bg-muted/30">
-      <div className="container mx-auto px-4">
-        <h2 className="section-title">Events</h2>
+    <section id="events" className="section-padding bg-gradient-to-bl from-background via-primary/5 to-accent/10 relative overflow-hidden">
+      {/* Decorative gradient orbs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-l from-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-12 animate-fade-in">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="gradient-text">Events</span>
+          </h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
+        </div>
+        
         <div className="grid gap-8 max-w-5xl mx-auto">
           {events.map((event) => (
-            <Card key={event.id} className="overflow-hidden">
-              <CardContent className="p-6">
+            <Card key={event.id} className="glass-card overflow-hidden">
+              <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4 gradient-text">{event.title}</h3>
                 
                 {event.images && event.images.length > 0 && (
@@ -89,7 +99,10 @@ const Events = () => {
                   </Carousel>
                 )}
 
-                <p className="text-foreground/80 mb-4 whitespace-pre-wrap">{event.description}</p>
+                <div 
+                  className="prose prose-lg max-w-none mb-4 text-foreground/80"
+                  dangerouslySetInnerHTML={{ __html: event.description }}
+                />
                 {event.caption && (
                   <p className="text-sm text-muted-foreground italic">{event.caption}</p>
                 )}
