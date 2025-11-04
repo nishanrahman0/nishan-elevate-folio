@@ -13,8 +13,6 @@ import { CertificatesEditor } from "@/components/admin/CertificatesEditor";
 import { SkillsEditor } from "@/components/admin/SkillsEditor";
 import { EventsEditor } from "@/components/admin/EventsEditor";
 import { BlogEditor } from "@/components/admin/BlogEditor";
-import { ExtracurricularEditor } from "@/components/admin/ExtracurricularEditor";
-import { ContactEditor } from "@/components/admin/ContactEditor";
 import Navigation from "@/components/Navigation";
 
 export default function Admin() {
@@ -70,7 +68,7 @@ export default function Admin() {
       <main className="container mx-auto px-4 pt-24 pb-8 relative z-10">
         <div className="glass-card rounded-2xl p-6">
           <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 md:grid-cols-10 gap-2">
+            <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 gap-2">
               <TabsTrigger value="hero">Hero</TabsTrigger>
               <TabsTrigger value="about">About</TabsTrigger>
               <TabsTrigger value="experience">Experience</TabsTrigger>
@@ -78,8 +76,6 @@ export default function Admin() {
               <TabsTrigger value="certificates">Certificates</TabsTrigger>
               <TabsTrigger value="skills">Skills</TabsTrigger>
               <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="activities">Activities</TabsTrigger>
-              <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="blog">Blog</TabsTrigger>
             </TabsList>
 
@@ -113,14 +109,6 @@ export default function Admin() {
 
           <TabsContent value="blog">
             <BlogEditor />
-          </TabsContent>
-
-          <TabsContent value="activities">
-            <ExtracurricularEditor />
-          </TabsContent>
-
-          <TabsContent value="contact">
-            <ContactEditor />
           </TabsContent>
           </Tabs>
         </div>
