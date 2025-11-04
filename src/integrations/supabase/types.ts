@@ -257,6 +257,36 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_social_links: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          icon_name: string
+          id: string
+          label: string
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          label: string
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          label?: string
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null

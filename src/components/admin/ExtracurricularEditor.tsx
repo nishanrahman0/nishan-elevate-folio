@@ -5,34 +5,31 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { ImageUpload } from "./ImageUpload";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
-export function AboutEditor() {
+export function ExtracurricularEditor() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [aboutId, setAboutId] = useState<string | null>(null);
+  const [contentId, setContentId] = useState<string | null>(null);
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
-    fetchAboutContent();
+    fetchContent();
   }, []);
 
-  const fetchAboutContent = async () => {
+  const fetchContent = async () => {
     try {
       const { data, error } = await supabase
-        .from("about_content")
+        .from("extracurricular_content")
         .select("*")
         .maybeSingle();
 
       if (error) throw error;
 
       if (data) {
-        setAboutId(data.id);
+        setContentId(data.id);
         setContent(data.content || "");
-        setImageUrl(data.image_url || "");
       }
     } catch (error: any) {
       toast({
@@ -48,17 +45,27 @@ export function AboutEditor() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const { error } = await supabase
-        .from("about_content")
-        .update({ content, image_url: imageUrl, updated_at: new Date().toISOString() })
-        .eq("id", aboutId);
+      if (contentId) {
+        const { error } = await supabase
+          .from("extracurricular_content")
+          .update({ content, updated_at: new Date().toISOString() })
+          .eq("id", contentId);
 
-      if (error) throw error;
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("extracurricular_content")
+          .insert([{ content }]);
+
+        if (error) throw error;
+      }
 
       toast({
         title: "Success",
-        description: "About section updated successfully",
+        description: "Content updated successfully",
       });
+      
+      fetchContent();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -77,23 +84,18 @@ export function AboutEditor() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>About Section</CardTitle>
-        <CardDescription>Edit your about me content</CardDescription>
+        <CardTitle>Extracurricular Activities</CardTitle>
+        <CardDescription>Edit your extracurricular activities section</CardDescription>
       </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="content">About Content</Label>
-            <RichTextEditor
-              value={content}
-              onChange={setContent}
-              placeholder="Write about yourself..."
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="content">Content</Label>
+          <RichTextEditor
+            value={content}
+            onChange={setContent}
+            placeholder="Describe your extracurricular activities..."
           />
         </div>
-        <ImageUpload
-          currentImageUrl={imageUrl}
-          onImageUploaded={setImageUrl}
-          label="About Section Image"
-        />
         <Button onClick={handleSave} disabled={saving}>
           {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Save Changes

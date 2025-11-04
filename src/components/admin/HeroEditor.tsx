@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+import { HeroSocialLinksEditor } from "./HeroSocialLinksEditor";
 
 export function HeroEditor() {
   const { toast } = useToast();
@@ -89,70 +90,74 @@ export function HeroEditor() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Hero Section</CardTitle>
-        <CardDescription>Edit your homepage hero content</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Hero Section</CardTitle>
+          <CardDescription>Edit your homepage hero content</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            />
+          </div>
+          <ImageUpload
+            currentImageUrl={formData.profile_image_url}
+            onImageUploaded={(url) => setFormData({ ...formData, profile_image_url: url })}
+            label="Profile Photo"
           />
-        </div>
-        <ImageUpload
-          currentImageUrl={formData.profile_image_url}
-          onImageUploaded={(url) => setFormData({ ...formData, profile_image_url: url })}
-          label="Profile Photo"
-        />
-        <div className="space-y-2">
-          <Label htmlFor="tagline">Tagline</Label>
-          <Input
-            id="tagline"
-            value={formData.tagline}
-            onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="linkedin">LinkedIn URL</Label>
-          <Input
-            id="linkedin"
-            value={formData.linkedin_url}
-            onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="github">GitHub URL</Label>
-          <Input
-            id="github"
-            value={formData.github_url}
-            onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="facebook">Facebook URL</Label>
-          <Input
-            id="facebook"
-            value={formData.facebook_url}
-            onChange={(e) => setFormData({ ...formData, facebook_url: e.target.value })}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="instagram">Instagram URL</Label>
-          <Input
-            id="instagram"
-            value={formData.instagram_url}
-            onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
-          />
-        </div>
-        <Button onClick={handleSave} disabled={saving}>
-          {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Save Changes
-        </Button>
-      </CardContent>
-    </Card>
+          <div className="space-y-2">
+            <Label htmlFor="tagline">Tagline</Label>
+            <Input
+              id="tagline"
+              value={formData.tagline}
+              onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="linkedin">LinkedIn URL</Label>
+            <Input
+              id="linkedin"
+              value={formData.linkedin_url}
+              onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="github">GitHub URL</Label>
+            <Input
+              id="github"
+              value={formData.github_url}
+              onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="facebook">Facebook URL</Label>
+            <Input
+              id="facebook"
+              value={formData.facebook_url}
+              onChange={(e) => setFormData({ ...formData, facebook_url: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="instagram">Instagram URL</Label>
+            <Input
+              id="instagram"
+              value={formData.instagram_url}
+              onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
+            />
+          </div>
+          <Button onClick={handleSave} disabled={saving}>
+            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Save Changes
+          </Button>
+        </CardContent>
+      </Card>
+      
+      <HeroSocialLinksEditor />
+    </div>
   );
 }

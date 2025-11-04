@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Mail, Linkedin, Github, Facebook, Instagram } from "lucide-react";
+import * as Icons from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
 import { supabase } from "@/integrations/supabase/client";
+
+interface SocialLink {
+  id: string;
+  label: string;
+  icon_name: string;
+  url: string;
+}
 
 const Hero = () => {
   const [heroData, setHeroData] = useState({
@@ -13,9 +21,11 @@ const Hero = () => {
     facebook_url: "",
     instagram_url: "",
   });
+  const [customLinks, setCustomLinks] = useState<SocialLink[]>([]);
 
   useEffect(() => {
     fetchHeroData();
+    fetchCustomLinks();
   }, []);
 
   const fetchHeroData = async () => {
@@ -33,6 +43,17 @@ const Hero = () => {
         facebook_url: data.facebook_url || "",
         instagram_url: data.instagram_url || "",
       });
+    }
+  };
+
+  const fetchCustomLinks = async () => {
+    const { data } = await supabase
+      .from("hero_social_links")
+      .select("*")
+      .order("display_order");
+
+    if (data) {
+      setCustomLinks(data);
     }
   };
 
@@ -127,6 +148,21 @@ const Hero = () => {
                   <Instagram className="h-6 w-6 text-primary" />
                 </a>
               )}
+              {customLinks.map((link) => {
+                const IconComponent = (Icons as any)[link.icon_name] || Icons.Link;
+                return (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
+                    aria-label={link.label}
+                  >
+                    <IconComponent className="h-6 w-6 text-primary" />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>

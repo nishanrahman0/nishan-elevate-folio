@@ -20,7 +20,7 @@ const About = () => {
   };
 
   return (
-    <section id="about" className="section-padding bg-gradient-to-br from-muted/30 via-background to-accent/5 relative overflow-hidden">
+    <section id="about" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
@@ -34,9 +34,10 @@ const About = () => {
         </div>
 
         <div className="glass-card rounded-2xl p-8 md:p-12 animate-fade-in-up">
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-            {content}
-          </p>
+          <div 
+            className="prose prose-lg max-w-none text-foreground leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </div>
       </div>
     </section>
