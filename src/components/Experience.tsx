@@ -37,7 +37,7 @@ const Experience = () => {
     return IconComponent || Briefcase;
   };
   return (
-    <section id="experience" className="section-padding bg-gradient-to-tl from-muted/30 via-background to-primary/5 relative overflow-hidden">
+    <section id="experience" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       {/* Decorative corner elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-br-full" />
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-accent/10 to-transparent rounded-tl-full" />
@@ -81,7 +81,10 @@ const Experience = () => {
                   <span>{exp.duration}</span>
                 </div>
               
-                <p className="text-sm text-muted-foreground">{exp.description}</p>
+                <div 
+                  className="prose prose-sm md:prose-base max-w-none text-foreground"
+                  dangerouslySetInnerHTML={{ __html: exp.description }}
+                />
               </Wrapper>
             );
           })}

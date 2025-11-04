@@ -37,9 +37,12 @@ const Blog = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+      {/* Decorative gradient background */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
       <Navigation />
-      <div className="pt-24 pb-16 min-h-screen">
+      <div className="pt-24 pb-16 min-h-screen relative z-10">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-4xl md:text-5xl font-bold gradient-text">Blog</h1>

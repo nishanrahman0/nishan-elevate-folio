@@ -49,7 +49,7 @@ const Events = () => {
   }
 
   return (
-    <section id="events" className="section-padding bg-gradient-to-bl from-background via-primary/5 to-accent/10 relative overflow-hidden">
+    <section id="events" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       {/* Decorative gradient orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-l from-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />

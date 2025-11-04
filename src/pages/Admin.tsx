@@ -13,6 +13,7 @@ import { CertificatesEditor } from "@/components/admin/CertificatesEditor";
 import { SkillsEditor } from "@/components/admin/SkillsEditor";
 import { EventsEditor } from "@/components/admin/EventsEditor";
 import { BlogEditor } from "@/components/admin/BlogEditor";
+import Navigation from "@/components/Navigation";
 
 export default function Admin() {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -49,6 +50,8 @@ export default function Admin() {
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
       
+      <Navigation />
+      
       <header className="border-b glass-card relative z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold gradient-text">Content Management</h1>
@@ -62,7 +65,7 @@ export default function Admin() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 relative z-10">
+      <main className="container mx-auto px-4 pt-24 pb-8 relative z-10">
         <div className="glass-card rounded-2xl p-6">
           <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
             <TabsList className="grid w-full grid-cols-8 gap-2">

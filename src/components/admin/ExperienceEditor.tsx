@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 interface Experience {
   id: string;
@@ -181,11 +182,10 @@ export function ExperienceEditor() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
+            <RichTextEditor
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={4}
+              onChange={(val) => setFormData({ ...formData, description: val })}
+              placeholder="Describe the role, impact, and tools..."
             />
           </div>
           <ImageUpload

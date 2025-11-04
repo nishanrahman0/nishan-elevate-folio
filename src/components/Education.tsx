@@ -32,7 +32,7 @@ const Education = () => {
     }
   };
   return (
-    <section id="education" className="section-padding bg-gradient-to-bl from-background via-secondary/5 to-background relative overflow-hidden">
+    <section id="education" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       <div className="hidden md:block absolute top-20 right-20 w-32 h-32 border-2 border-primary/20 rounded-full animate-pulse" />
       <div className="hidden md:block absolute bottom-40 left-20 w-24 h-24 border-2 border-accent/20 rounded-full animate-pulse delay-1000" />
       
