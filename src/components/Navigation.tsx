@@ -3,26 +3,59 @@ import { Menu, X, LogOut, LogIn } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
-const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Education", href: "#education" },
-  { label: "Certificates", href: "#certificates" },
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
-  { label: "Events", href: "#events" },
-  { label: "Activities", href: "#extracurricular" },
-  { label: "Blog", href: "/blog", isRoute: true },
-  { label: "Contact", href: "#contact" },
-];
+interface NavItem {
+  label: string;
+  href: string;
+  isRoute?: boolean;
+}
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [navItems, setNavItems] = useState<NavItem[]>([]);
+  const [logoUrl, setLogoUrl] = useState("");
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    fetchNavItems();
+    fetchLogo();
+  }, []);
+
+  const fetchNavItems = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("navigation_items")
+        .select("*")
+        .order("display_order", { ascending: true });
+      
+      if (error) throw error;
+      setNavItems(data?.map(item => ({
+        label: item.label,
+        href: item.href,
+        isRoute: item.is_route
+      })) || []);
+    } catch (error) {
+      console.error("Error fetching navigation items:", error);
+    }
+  };
+
+  const fetchLogo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("hero_content")
+        .select("logo_url")
+        .maybeSingle();
+      
+      if (error) throw error;
+      setLogoUrl(data?.logo_url || "");
+    } catch (error) {
+      console.error("Error fetching logo:", error);
+    }
+  };
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -60,9 +93,10 @@ const handleNavClick = (href: string, isRoute?: boolean) => {
               e.preventDefault();
               handleNavClick("#home");
             }}
-            className="text-2xl font-bold gradient-text"
+            className="text-2xl font-bold gradient-text flex items-center gap-2"
           >
-            NR
+            {logoUrl && <img src={logoUrl} alt="Logo" className="h-8 w-8 object-contain" />}
+            {!logoUrl && "NR"}
           </a>
 
           {/* Desktop Navigation */}

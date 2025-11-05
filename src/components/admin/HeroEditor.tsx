@@ -18,6 +18,7 @@ export function HeroEditor() {
     name: "",
     tagline: "",
     profile_image_url: "",
+    logo_url: "",
     linkedin_url: "",
     github_url: "",
     facebook_url: "",
@@ -43,6 +44,7 @@ export function HeroEditor() {
           name: data.name || "",
           tagline: data.tagline || "",
           profile_image_url: data.profile_image_url || "",
+          logo_url: data.logo_url || "",
           linkedin_url: data.linkedin_url || "",
           github_url: data.github_url || "",
           facebook_url: data.facebook_url || "",
@@ -110,8 +112,13 @@ export function HeroEditor() {
             onImageUploaded={(url) => setFormData({ ...formData, profile_image_url: url })}
             label="Profile Photo"
           />
+          <ImageUpload
+            currentImageUrl={formData.logo_url}
+            onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
+            label="Logo (appears in navigation)"
+          />
           <div className="space-y-2">
-            <Label htmlFor="tagline">Tagline</Label>
+            <Label htmlFor="tagline">Tagline / Motto</Label>
             <Input
               id="tagline"
               value={formData.tagline}

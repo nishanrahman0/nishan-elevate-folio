@@ -1,21 +1,36 @@
-import { Users, Award } from "lucide-react";
+import { useState, useEffect } from "react";
+import * as Icons from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const activities = [
-  {
-    title: "Deputy Director of Documentation",
-    organization: "Rajshahi University Career Club",
-    icon: Users,
-    gradient: "from-primary to-secondary",
-  },
-  {
-    title: "Volunteer",
-    organization: "Hult Prize RU 2024–25",
-    icon: Award,
-    gradient: "from-accent to-primary",
-  },
-];
+interface Activity {
+  id: string;
+  title: string;
+  organization: string;
+  icon_name: string;
+  color_gradient: string;
+  display_order: number;
+}
 
 const Extracurricular = () => {
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  useEffect(() => {
+    fetchActivities();
+  }, []);
+
+  const fetchActivities = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("extracurricular_activities")
+        .select("*")
+        .order("display_order", { ascending: true });
+      
+      if (error) throw error;
+      setActivities(data || []);
+    } catch (error) {
+      console.error("Error fetching activities:", error);
+    }
+  };
   return (
     <section id="extracurricular" className="section-padding bg-gradient-to-br from-background via-secondary/5 to-accent/5 relative overflow-hidden">
       {/* Scattered dot pattern */}
@@ -35,19 +50,22 @@ const Extracurricular = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {activities.map((activity, index) => (
-            <div
-              key={index}
-              className="glass-card rounded-2xl p-8 hover:scale-105 transition-transform animate-fade-in-up"
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              <div className={`p-4 bg-gradient-to-br ${activity.gradient} rounded-xl w-fit mb-4`}>
-                <activity.icon className="h-8 w-8 text-white" />
+          {activities.map((activity, index) => {
+            const IconComponent = Icons[activity.icon_name as keyof typeof Icons] as React.ComponentType<{ className?: string }> || Icons.Users;
+            return (
+              <div
+                key={activity.id}
+                className="glass-card rounded-2xl p-8 hover:scale-105 transition-transform animate-fade-in-up"
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div className={`p-4 bg-gradient-to-br ${activity.color_gradient} rounded-xl w-fit mb-4`}>
+                  <IconComponent className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-2">{activity.title}</h3>
+                <p className="text-primary font-semibold">{activity.organization}</p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-2">{activity.title}</h3>
-              <p className="text-primary font-semibold">{activity.organization}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

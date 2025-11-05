@@ -13,6 +13,8 @@ import { CertificatesEditor } from "@/components/admin/CertificatesEditor";
 import { SkillsEditor } from "@/components/admin/SkillsEditor";
 import { EventsEditor } from "@/components/admin/EventsEditor";
 import { BlogEditor } from "@/components/admin/BlogEditor";
+import { ExtracurricularEditor } from "@/components/admin/ExtracurricularEditor";
+import { NavigationEditor } from "@/components/admin/NavigationEditor";
 import Navigation from "@/components/Navigation";
 
 export default function Admin() {
@@ -52,7 +54,7 @@ export default function Admin() {
       
       <Navigation />
       
-      <header className="border-b glass-card relative z-10">
+      <header className="border-b glass-card relative z-[60]">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold gradient-text">Content Management</h1>
           <div className="flex items-center gap-4">
@@ -68,7 +70,7 @@ export default function Admin() {
       <main className="container mx-auto px-4 pt-24 pb-8 relative z-10">
         <div className="glass-card rounded-2xl p-6">
           <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 gap-2">
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-2">
               <TabsTrigger value="hero">Hero</TabsTrigger>
               <TabsTrigger value="about">About</TabsTrigger>
               <TabsTrigger value="experience">Experience</TabsTrigger>
@@ -76,6 +78,8 @@ export default function Admin() {
               <TabsTrigger value="certificates">Certificates</TabsTrigger>
               <TabsTrigger value="skills">Skills</TabsTrigger>
               <TabsTrigger value="events">Events</TabsTrigger>
+              <TabsTrigger value="activities">Activities</TabsTrigger>
+              <TabsTrigger value="navigation">Menu</TabsTrigger>
               <TabsTrigger value="blog">Blog</TabsTrigger>
             </TabsList>
 
@@ -109,6 +113,14 @@ export default function Admin() {
 
           <TabsContent value="blog">
             <BlogEditor />
+          </TabsContent>
+
+          <TabsContent value="activities">
+            <ExtracurricularEditor />
+          </TabsContent>
+
+          <TabsContent value="navigation">
+            <NavigationEditor />
           </TabsContent>
           </Tabs>
         </div>
