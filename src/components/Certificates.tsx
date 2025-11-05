@@ -30,8 +30,9 @@ const Certificates = () => {
   };
   return (
     <section id="certificates" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+      {/* Enhanced gradient orbs */}
+      <div className="absolute top-0 left-0 w-[650px] h-[650px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-0 right-0 w-[700px] h-[700px] bg-gradient-to-tl from-accent/20 to-transparent rounded-full blur-3xl animate-pulse delay-700" />
       
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">

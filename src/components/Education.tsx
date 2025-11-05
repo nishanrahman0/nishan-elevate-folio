@@ -33,8 +33,9 @@ const Education = () => {
   };
   return (
     <section id="education" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      <div className="hidden md:block absolute top-20 right-20 w-32 h-32 border-2 border-primary/20 rounded-full animate-pulse" />
-      <div className="hidden md:block absolute bottom-40 left-20 w-24 h-24 border-2 border-accent/20 rounded-full animate-pulse delay-1000" />
+      {/* Enhanced gradient orbs */}
+      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-primary/20 to-transparent rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-accent/20 to-transparent rounded-full blur-3xl animate-pulse delay-1000" />
       
       <div className="container mx-auto max-w-4xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">

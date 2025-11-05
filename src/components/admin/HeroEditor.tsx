@@ -17,6 +17,7 @@ export function HeroEditor() {
   const [formData, setFormData] = useState({
     name: "",
     tagline: "",
+    site_title: "",
     profile_image_url: "",
     logo_url: "",
     linkedin_url: "",
@@ -43,6 +44,7 @@ export function HeroEditor() {
         setFormData({
           name: data.name || "",
           tagline: data.tagline || "",
+          site_title: data.site_title || "",
           profile_image_url: data.profile_image_url || "",
           logo_url: data.logo_url || "",
           linkedin_url: data.linkedin_url || "",
@@ -72,6 +74,9 @@ export function HeroEditor() {
 
       if (error) throw error;
 
+      // Update document title
+      document.title = formData.site_title || formData.name;
+
       toast({
         title: "Success",
         description: "Hero section updated successfully",
@@ -99,6 +104,15 @@ export function HeroEditor() {
           <CardDescription>Edit your homepage hero content</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="site_title">Website Title (Browser Tab)</Label>
+            <Input
+              id="site_title"
+              value={formData.site_title}
+              onChange={(e) => setFormData({ ...formData, site_title: e.target.value })}
+              placeholder="Nishan Rahman"
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input

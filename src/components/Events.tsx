@@ -50,9 +50,9 @@ const Events = () => {
 
   return (
     <section id="events" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      {/* Decorative gradient orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-l from-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      {/* Enhanced gradient orbs */}
+      <div className="absolute top-20 left-10 w-[700px] h-[700px] bg-gradient-to-r from-primary/20 to-transparent rounded-full blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-[750px] h-[750px] bg-gradient-to-l from-accent/20 to-transparent rounded-full blur-3xl pointer-events-none animate-pulse delay-700" />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12 animate-fade-in">

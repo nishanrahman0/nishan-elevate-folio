@@ -59,8 +59,8 @@ const Skills = () => {
   return (
     <section id="skills" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       {/* Animated gradient orbs */}
-      <div className="absolute top-40 left-10 w-72 h-72 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-l from-secondary/10 to-primary/10 rounded-full blur-3xl animate-pulse delay-1000" />
+      <div className="absolute top-40 left-10 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-[700px] h-[700px] bg-gradient-to-l from-accent/20 to-primary/20 rounded-full blur-3xl animate-pulse delay-1000" />
       
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">

@@ -38,9 +38,9 @@ const Experience = () => {
   };
   return (
     <section id="experience" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      {/* Decorative corner elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-primary/10 to-transparent rounded-br-full" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-accent/10 to-transparent rounded-tl-full" />
+      {/* Enhanced gradient orbs */}
+      <div className="absolute top-0 left-0 w-[700px] h-[700px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-0 right-0 w-[650px] h-[650px] bg-gradient-to-tl from-accent/20 to-transparent rounded-full blur-3xl animate-pulse delay-500" />
       
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -13,6 +15,19 @@ import AdminPanel from "@/components/AdminPanel";
 import { ChatBot } from "@/components/ChatBot";
 
 const Index = () => {
+  useEffect(() => {
+    const fetchSiteTitle = async () => {
+      const { data } = await supabase
+        .from("hero_content")
+        .select("site_title, name")
+        .maybeSingle();
+      
+      if (data) {
+        document.title = data.site_title || data.name || "Nishan Rahman";
+      }
+    };
+    fetchSiteTitle();
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       {/* Decorative gradient background */}
