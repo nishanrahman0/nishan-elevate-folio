@@ -248,6 +248,39 @@ export type Database = {
         }
         Relationships: []
       }
+      extracurricular_activities: {
+        Row: {
+          color_gradient: string
+          created_at: string
+          display_order: number | null
+          icon_name: string
+          id: string
+          organization: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          color_gradient?: string
+          created_at?: string
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          organization: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          color_gradient?: string
+          created_at?: string
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          organization?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       extracurricular_content: {
         Row: {
           content: string
@@ -277,6 +310,7 @@ export type Database = {
           id: string
           instagram_url: string | null
           linkedin_url: string | null
+          logo_url: string | null
           name: string
           profile_image_url: string | null
           tagline: string
@@ -289,6 +323,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           name: string
           profile_image_url?: string | null
           tagline: string
@@ -301,6 +336,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           name?: string
           profile_image_url?: string | null
           tagline?: string
