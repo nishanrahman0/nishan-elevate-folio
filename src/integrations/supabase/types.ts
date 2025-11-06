@@ -255,6 +255,7 @@ export type Database = {
           display_order: number | null
           icon_name: string
           id: string
+          image_url: string | null
           organization: string
           title: string
           updated_at: string
@@ -265,6 +266,7 @@ export type Database = {
           display_order?: number | null
           icon_name?: string
           id?: string
+          image_url?: string | null
           organization: string
           title: string
           updated_at?: string
@@ -275,6 +277,7 @@ export type Database = {
           display_order?: number | null
           icon_name?: string
           id?: string
+          image_url?: string | null
           organization?: string
           title?: string
           updated_at?: string
@@ -425,6 +428,42 @@ export type Database = {
           email?: string | null
           id?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      running_ads: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          description: string
+          display_order: number | null
+          id: string
+          image_url: string | null
+          link_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          description: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          description?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

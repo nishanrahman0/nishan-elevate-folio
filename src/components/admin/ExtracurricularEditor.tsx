@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Trash2, Edit2, Plus } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 interface Activity {
   id: string;
@@ -14,6 +15,7 @@ interface Activity {
   icon_name: string;
   color_gradient: string;
   display_order: number;
+  image_url?: string | null;
 }
 
 export function ExtracurricularEditor() {
@@ -27,6 +29,7 @@ export function ExtracurricularEditor() {
     icon_name: "Users",
     color_gradient: "from-primary to-secondary",
     display_order: 0,
+    image_url: "",
   });
 
   useEffect(() => {
@@ -75,6 +78,7 @@ export function ExtracurricularEditor() {
         icon_name: "Users",
         color_gradient: "from-primary to-secondary",
         display_order: 0,
+        image_url: "",
       });
       setEditingId(null);
       fetchActivities();
@@ -95,6 +99,7 @@ export function ExtracurricularEditor() {
       icon_name: activity.icon_name,
       color_gradient: activity.color_gradient,
       display_order: activity.display_order,
+      image_url: activity.image_url || "",
     });
   };
 
@@ -173,6 +178,11 @@ export function ExtracurricularEditor() {
               onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
             />
           </div>
+          <ImageUpload
+            currentImageUrl={formData.image_url}
+            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+            label="Activity Image (optional)"
+          />
           <div className="flex gap-2">
             <Button onClick={handleSave}>
               {editingId ? <Edit2 className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -189,6 +199,7 @@ export function ExtracurricularEditor() {
                     icon_name: "Users",
                     color_gradient: "from-primary to-secondary",
                     display_order: 0,
+                    image_url: "",
                   });
                 }}
               >

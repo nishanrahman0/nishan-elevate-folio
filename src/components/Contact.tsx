@@ -6,6 +6,8 @@ import { Phone, Mail, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
+import { useQuery } from "@tanstack/react-query";
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -14,6 +16,18 @@ const Contact = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: contactContent } = useQuery({
+    queryKey: ["contact-content"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_content")
+        .select("*")
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,9 +79,14 @@ const Contact = () => {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">Get In Touch</span>
+            <span className="gradient-text">{contactContent?.heading || "Get In Touch"}</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
+          {contactContent?.description && (
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-4">
+              {contactContent.description}
+            </p>
+          )}
+          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-4" />
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 items-start">
@@ -80,8 +99,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Phone</p>
-                  <a href="tel:+8801601944455" className="text-lg font-semibold text-foreground hover:text-primary transition-colors">
-                    +880 1601 944455
+                  <a href={`tel:${contactContent?.phone || "+8801601944455"}`} className="text-lg font-semibold text-foreground hover:text-primary transition-colors">
+                    {contactContent?.phone || "+880 1601 944455"}
                   </a>
                 </div>
               </div>
@@ -94,8 +113,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <a href="mailto:mdnishanrahman0@gmail.com" className="text-lg font-semibold text-foreground hover:text-primary transition-colors break-all">
-                    mdnishanrahman0@gmail.com
+                  <a href={`mailto:${contactContent?.email || "mdnishanrahman0@gmail.com"}`} className="text-lg font-semibold text-foreground hover:text-primary transition-colors break-all">
+                    {contactContent?.email || "mdnishanrahman0@gmail.com"}
                   </a>
                 </div>
               </div>

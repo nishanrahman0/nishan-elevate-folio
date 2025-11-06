@@ -15,6 +15,9 @@ import { EventsEditor } from "@/components/admin/EventsEditor";
 import { BlogEditor } from "@/components/admin/BlogEditor";
 import { ExtracurricularEditor } from "@/components/admin/ExtracurricularEditor";
 import { NavigationEditor } from "@/components/admin/NavigationEditor";
+import { ThemeEditor } from "@/components/admin/ThemeEditor";
+import { ContactEditor } from "@/components/admin/ContactEditor";
+import { AdsEditor } from "@/components/admin/AdsEditor";
 import Navigation from "@/components/Navigation";
 
 export default function Admin() {
@@ -70,17 +73,20 @@ export default function Admin() {
       <main className="container mx-auto px-4 pt-24 pb-8 relative z-10">
         <div className="glass-card rounded-2xl p-6">
           <Tabs value={tab} onValueChange={(v) => { setTab(v); setSearchParams({ tab: v }, { replace: true }); }} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-2">
-              <TabsTrigger value="hero">Hero</TabsTrigger>
-              <TabsTrigger value="about">About</TabsTrigger>
-              <TabsTrigger value="experience">Experience</TabsTrigger>
-              <TabsTrigger value="education">Education</TabsTrigger>
-              <TabsTrigger value="certificates">Certificates</TabsTrigger>
-              <TabsTrigger value="skills">Skills</TabsTrigger>
-              <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="activities">Activities</TabsTrigger>
-              <TabsTrigger value="navigation">Menu</TabsTrigger>
-              <TabsTrigger value="blog">Blog</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-1 h-auto flex-wrap">
+              <TabsTrigger value="hero" className="text-xs sm:text-sm">Hero</TabsTrigger>
+              <TabsTrigger value="navigation" className="text-xs sm:text-sm">Menu</TabsTrigger>
+              <TabsTrigger value="theme" className="text-xs sm:text-sm">Theme</TabsTrigger>
+              <TabsTrigger value="about" className="text-xs sm:text-sm">About</TabsTrigger>
+              <TabsTrigger value="skills" className="text-xs sm:text-sm">Skills</TabsTrigger>
+              <TabsTrigger value="experience" className="text-xs sm:text-sm">Experience</TabsTrigger>
+              <TabsTrigger value="education" className="text-xs sm:text-sm">Education</TabsTrigger>
+              <TabsTrigger value="certificates" className="text-xs sm:text-sm">Certificates</TabsTrigger>
+              <TabsTrigger value="activities" className="text-xs sm:text-sm">Activities</TabsTrigger>
+              <TabsTrigger value="events" className="text-xs sm:text-sm">Events</TabsTrigger>
+              <TabsTrigger value="blog" className="text-xs sm:text-sm">Blog</TabsTrigger>
+              <TabsTrigger value="contact" className="text-xs sm:text-sm">Contact</TabsTrigger>
+              <TabsTrigger value="ads" className="text-xs sm:text-sm">Ads</TabsTrigger>
             </TabsList>
 
           <TabsContent value="hero">
@@ -121,6 +127,18 @@ export default function Admin() {
 
           <TabsContent value="navigation">
             <NavigationEditor />
+          </TabsContent>
+
+          <TabsContent value="theme">
+            <ThemeEditor />
+          </TabsContent>
+
+          <TabsContent value="contact">
+            <ContactEditor />
+          </TabsContent>
+
+          <TabsContent value="ads">
+            <AdsEditor />
           </TabsContent>
           </Tabs>
         </div>

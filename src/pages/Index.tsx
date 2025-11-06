@@ -7,12 +7,12 @@ import Education from "@/components/Education";
 import Certificates from "@/components/Certificates";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
-import Events from "@/components/Events";
 import Extracurricular from "@/components/Extracurricular";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import AdminPanel from "@/components/AdminPanel";
 import { ChatBot } from "@/components/ChatBot";
+import RunningAds from "@/components/RunningAds";
 
 const Index = () => {
   useEffect(() => {
@@ -45,8 +45,8 @@ const Index = () => {
       <Certificates />
       <Skills />
       <Experience />
-      <Events />
       <Extracurricular />
+      <RunningAds />
       <Contact />
       <Footer />
       <ChatBot />
