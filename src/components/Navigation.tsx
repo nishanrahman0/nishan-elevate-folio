@@ -66,14 +66,25 @@ const Navigation = () => {
 
 const handleNavClick = (href: string, isRoute?: boolean) => {
   setIsOpen(false);
-  if (isRoute) {
+  
+  // If it's a route (like /education, /skills), navigate to it
+  if (isRoute || href.startsWith('/')) {
     navigate(href);
     return;
   }
+  
+  // For anchor links like #about
   if (location.pathname !== "/") {
-    navigate(`/${href}`);
+    // Navigate to homepage with the anchor
+    navigate("/");
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
     return;
   }
+  
+  // On homepage, just scroll to the element
   const element = document.querySelector(href);
   element?.scrollIntoView({ behavior: "smooth" });
 };
