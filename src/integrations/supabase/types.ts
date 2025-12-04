@@ -431,6 +431,42 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string
+          display_order: number | null
+          icon_name: string
+          id: string
+          image_url: string | null
+          link_url: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          display_order?: number | null
+          icon_name?: string
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       running_ads: {
         Row: {
           active: boolean | null
