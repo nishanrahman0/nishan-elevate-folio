@@ -18,6 +18,7 @@ import { NavigationEditor } from "@/components/admin/NavigationEditor";
 import { ThemeEditor } from "@/components/admin/ThemeEditor";
 import { ContactEditor } from "@/components/admin/ContactEditor";
 import { AdsEditor } from "@/components/admin/AdsEditor";
+import { ProjectsEditor } from "@/components/admin/ProjectsEditor";
 import Navigation from "@/components/Navigation";
 
 export default function Admin() {
@@ -85,6 +86,7 @@ export default function Admin() {
               <TabsTrigger value="activities" className="text-xs sm:text-sm">Activities</TabsTrigger>
               <TabsTrigger value="events" className="text-xs sm:text-sm">Events</TabsTrigger>
               <TabsTrigger value="blog" className="text-xs sm:text-sm">Blog</TabsTrigger>
+              <TabsTrigger value="projects" className="text-xs sm:text-sm">Projects</TabsTrigger>
               <TabsTrigger value="contact" className="text-xs sm:text-sm">Contact</TabsTrigger>
               <TabsTrigger value="ads" className="text-xs sm:text-sm">Ads</TabsTrigger>
             </TabsList>
@@ -139,6 +141,10 @@ export default function Admin() {
 
           <TabsContent value="ads">
             <AdsEditor />
+          </TabsContent>
+
+          <TabsContent value="projects">
+            <ProjectsEditor />
           </TabsContent>
           </Tabs>
         </div>
