@@ -305,6 +305,30 @@ export type Database = {
         }
         Relationships: []
       }
+      footer_content: {
+        Row: {
+          copyright_text: string
+          created_at: string | null
+          id: string
+          show_year: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          copyright_text?: string
+          created_at?: string | null
+          id?: string
+          show_year?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          copyright_text?: string
+          created_at?: string | null
+          id?: string
+          show_year?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       hero_content: {
         Row: {
           created_at: string | null
