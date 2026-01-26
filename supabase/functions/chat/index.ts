@@ -5,6 +5,28 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const PORTFOLIO_CONTEXT = `You are the AI assistant for Nishan Rahman's portfolio website.
+
+## About Nishan Rahman:
+- Name: Nishan Rahman
+- Role: Data Analyst | AI Agent Developer
+- Currently studying Management Studies at the University of Rajshahi, Bangladesh
+- Passionate about solving business problems with data-driven solutions and modern productivity tools
+- Strong skills in Data Analytics, Visualization, and AI tools
+
+## Contact Information:
+- LinkedIn: linkedin.com/in/nishanrahmanrumgt/
+- GitHub: github.com/nishanrahman0
+- Facebook: facebook.com/nishan.rahman.2024
+- Instagram: instagram.com/mdnishanrahman
+
+## Key Points:
+- Management Studies student with focus on data analytics
+- Skilled in AI tools and modern productivity solutions
+- Interested in business problem-solving through data
+
+Keep responses helpful, concise, and friendly. If asked about specific details not mentioned here, politely suggest the visitor explore the relevant sections of the portfolio website.`;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -27,7 +49,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: "You are a helpful portfolio assistant. You can help visitors learn about the portfolio owner's skills, experience, and education. Keep responses concise and friendly." },
+          { role: "system", content: PORTFOLIO_CONTEXT },
           ...messages,
         ],
         stream: true,
