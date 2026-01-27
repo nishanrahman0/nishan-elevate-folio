@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Zap } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
 
 interface Skill {
@@ -135,72 +135,88 @@ export function SkillsEditor() {
   }, {} as Record<string, Skill[]>);
 
   if (loading) {
-    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-yellow-400" /></div>;
   }
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Edit" : "Add"} Skill</CardTitle>
-          <CardDescription>Manage your skills</CardDescription>
+      <Card className="border-0 bg-gradient-to-br from-yellow-500/10 via-orange-500/10 to-red-500/10 backdrop-blur-sm shadow-xl">
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 text-white">
+              <Zap className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-xl bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                {editingId ? "Edit" : "Add"} Skill
+              </CardTitle>
+              <CardDescription>Manage your skills</CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-6">
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category" className="text-foreground/80">Category</Label>
               <Input
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 placeholder="e.g., Data Analytics & Visualization"
+                className="bg-background/50 border-white/20 focus:border-yellow-500/50"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="skill-name">Skill Name</Label>
+              <Label htmlFor="skill-name" className="text-foreground/80">Skill Name</Label>
               <Input
                 id="skill-name"
                 value={formData.skill_name}
                 onChange={(e) => setFormData({ ...formData, skill_name: e.target.value })}
+                className="bg-background/50 border-white/20 focus:border-yellow-500/50"
               />
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="icon-name">Icon Name</Label>
+              <Label htmlFor="icon-name" className="text-foreground/80">Icon Name</Label>
               <Input
                 id="icon-name"
                 value={formData.icon_name}
                 onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
                 placeholder="BarChart3, Code, Palette, etc."
+                className="bg-background/50 border-white/20 focus:border-yellow-500/50"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="gradient">Color Gradient</Label>
+              <Label htmlFor="gradient" className="text-foreground/80">Color Gradient</Label>
               <Input
                 id="gradient"
                 value={formData.color_gradient}
                 onChange={(e) => setFormData({ ...formData, color_gradient: e.target.value })}
                 placeholder="from-primary to-secondary"
+                className="bg-background/50 border-white/20 focus:border-yellow-500/50"
               />
             </div>
           </div>
-          <ImageUpload
-            currentImageUrl={formData.image_url}
-            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-            label="Skill Image (optional)"
-          />
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            <ImageUpload
+              currentImageUrl={formData.image_url}
+              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+              label="🎨 Skill Image (optional)"
+            />
+          </div>
           <div className="space-y-2">
-            <Label htmlFor="skill_link_url">Link URL (optional)</Label>
+            <Label htmlFor="skill_link_url" className="text-foreground/80">Link URL (optional)</Label>
             <Input
               id="skill_link_url"
               value={formData.link_url}
               onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
               placeholder="https://..."
+              className="bg-background/50 border-white/20 focus:border-yellow-500/50"
             />
           </div>
-          <div className="flex gap-2">
-            <Button onClick={handleSave}>
+          <div className="flex gap-2 pt-4">
+            <Button onClick={handleSave} className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700">
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
               {editingId ? "Update" : "Add"} Skill
             </Button>
@@ -208,7 +224,7 @@ export function SkillsEditor() {
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
                 setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
-              }}>
+              }} className="border-white/20">
                 Cancel
               </Button>
             )}
@@ -216,24 +232,27 @@ export function SkillsEditor() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Current Skills</CardTitle>
+      <Card className="border-0 bg-white/5 backdrop-blur-sm">
+        <CardHeader className="border-b border-white/10">
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-xl">⚡</span>
+            Current Skills
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <div className="space-y-6">
             {Object.entries(groupedSkills).map(([category, categorySkills]) => (
-              <div key={category}>
-                <h3 className="font-semibold mb-3">{category}</h3>
+              <div key={category} className="space-y-3">
+                <h3 className="font-semibold text-yellow-400 border-b border-yellow-500/20 pb-2">{category}</h3>
                 <div className="space-y-2">
                   {categorySkills.map((skill) => (
-                    <div key={skill.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <span>{skill.skill_name}</span>
+                    <div key={skill.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border border-white/10 hover:border-yellow-500/30 transition-all">
+                      <span className="text-foreground">{skill.skill_name}</span>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleEdit(skill)}>
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(skill)} className="border-white/20 hover:bg-yellow-500/20 hover:text-yellow-400">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => handleDelete(skill.id)}>
+                        <Button variant="destructive" size="sm" onClick={() => handleDelete(skill.id)} className="bg-red-500/20 text-red-400 hover:bg-red-500/30">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

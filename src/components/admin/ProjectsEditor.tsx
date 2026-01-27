@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2, Edit2, Plus } from "lucide-react";
+import { Loader2, Trash2, Edit2, Plus, FolderOpen } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -131,28 +131,38 @@ export function ProjectsEditor() {
   };
 
   if (loading) {
-    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-orange-400" /></div>;
   }
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Edit" : "Add"} Project</CardTitle>
-          <CardDescription>Manage your projects</CardDescription>
+      <Card className="border-0 bg-gradient-to-br from-orange-500/10 via-amber-500/10 to-yellow-500/10 backdrop-blur-sm shadow-xl">
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 text-white">
+              <FolderOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-xl bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
+                {editingId ? "Edit" : "Add"} Project
+              </CardTitle>
+              <CardDescription>Manage your projects</CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title" className="text-foreground/80">Title</Label>
             <Input
               id="title"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Project Title"
+              className="bg-background/50 border-white/20 focus:border-orange-500/50"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="text-foreground/80">Description</Label>
             <ReactQuill
               theme="snow"
               value={formData.description}
@@ -160,73 +170,79 @@ export function ProjectsEditor() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="icon_name">Icon Name (Lucide)</Label>
+            <Label htmlFor="icon_name" className="text-foreground/80">Icon Name (Lucide)</Label>
             <Input
               id="icon_name"
               value={formData.icon_name}
               onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
               placeholder="FolderOpen"
+              className="bg-background/50 border-white/20 focus:border-orange-500/50"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Project Image</Label>
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
+            <Label className="text-foreground/80">🖼️ Project Image</Label>
             <ImageUpload
               currentImageUrl={formData.image_url}
               onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="link_url">Link URL (optional)</Label>
+            <Label htmlFor="link_url" className="text-foreground/80">Link URL (optional)</Label>
             <Input
               id="link_url"
               value={formData.link_url}
               onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
               placeholder="https://example.com"
+              className="bg-background/50 border-white/20 focus:border-orange-500/50"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="display_order">Display Order</Label>
+            <Label htmlFor="display_order" className="text-foreground/80">Display Order</Label>
             <Input
               id="display_order"
               type="number"
               value={formData.display_order}
               onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })}
+              className="bg-background/50 border-white/20 focus:border-orange-500/50"
             />
           </div>
-          <div className="flex gap-2">
-            <Button onClick={handleSave}>
+          <div className="flex gap-2 pt-4">
+            <Button onClick={handleSave} className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700">
               {editingId ? <Edit2 className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
               {editingId ? "Update" : "Add"} Project
             </Button>
             {editingId && (
-              <Button variant="outline" onClick={resetForm}>Cancel</Button>
+              <Button variant="outline" onClick={resetForm} className="border-white/20">Cancel</Button>
             )}
           </div>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Current Projects</CardTitle>
+      <Card className="border-0 bg-white/5 backdrop-blur-sm">
+        <CardHeader className="border-b border-white/10">
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-xl">📁</span>
+            Current Projects
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <div className="space-y-4">
             {projects.map((project) => (
-              <div key={project.id} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={project.id} className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-orange-500/5 to-amber-500/5 border border-white/10 hover:border-orange-500/30 transition-all">
                 <div className="flex items-center gap-4">
                   {project.image_url && (
-                    <img src={project.image_url} alt={project.title} className="w-16 h-16 object-cover rounded" />
+                    <img src={project.image_url} alt={project.title} className="w-16 h-16 object-cover rounded-lg border border-white/20" />
                   )}
                   <div>
-                    <h3 className="font-semibold">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground">{project.icon_name}</p>
+                    <h3 className="font-semibold text-foreground">{project.title}</h3>
+                    <p className="text-sm text-orange-400">{project.icon_name}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(project)}>
+                  <Button variant="ghost" size="sm" onClick={() => handleEdit(project)} className="hover:bg-orange-500/20 hover:text-orange-400">
                     <Edit2 className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => handleDelete(project.id)}>
+                  <Button variant="ghost" size="sm" onClick={() => handleDelete(project.id)} className="hover:bg-red-500/20 hover:text-red-400">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>

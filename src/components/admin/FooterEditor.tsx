@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, PanelBottom } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 export function FooterEditor() {
@@ -86,33 +86,42 @@ export function FooterEditor() {
   };
 
   if (loading) {
-    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-slate-400" /></div>;
   }
 
   return (
-    <Card className="border-0 shadow-none bg-transparent">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl">Footer Settings</CardTitle>
-        <CardDescription>Customize your footer copyright text</CardDescription>
+    <Card className="border-0 bg-gradient-to-br from-slate-500/10 via-gray-500/10 to-zinc-500/10 backdrop-blur-sm shadow-xl">
+      <CardHeader className="border-b border-white/10 bg-gradient-to-r from-slate-500/20 to-gray-500/20 rounded-t-lg">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-slate-500 to-gray-600 text-white">
+            <PanelBottom className="h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-xl bg-gradient-to-r from-slate-400 to-gray-400 bg-clip-text text-transparent">
+              Footer Settings
+            </CardTitle>
+            <CardDescription>Customize your footer copyright text</CardDescription>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         <div className="space-y-2">
-          <Label htmlFor="copyright_text">Copyright Text</Label>
+          <Label htmlFor="copyright_text" className="text-foreground/80">Copyright Text</Label>
           <Input
             id="copyright_text"
             value={formData.copyright_text}
             onChange={(e) => setFormData({ ...formData, copyright_text: e.target.value })}
             placeholder="© 2025 Your Name. All rights reserved."
-            className="bg-background/50"
+            className="bg-background/50 border-white/20 focus:border-slate-500/50"
           />
           <p className="text-xs text-muted-foreground">
             This text appears in the footer of your website
           </p>
         </div>
         
-        <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30">
+        <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-slate-500/10 to-gray-500/10 border border-slate-500/20">
           <div className="space-y-0.5">
-            <Label htmlFor="show_year">Auto-update Year</Label>
+            <Label htmlFor="show_year" className="text-foreground/80">Auto-update Year</Label>
             <p className="text-xs text-muted-foreground">
               Automatically update the year in copyright text
             </p>
@@ -124,7 +133,7 @@ export function FooterEditor() {
           />
         </div>
 
-        <Button onClick={handleSave} disabled={saving} className="w-full">
+        <Button onClick={handleSave} disabled={saving} className="w-full bg-gradient-to-r from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700">
           {saving ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
