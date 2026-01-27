@@ -41,10 +41,12 @@ import { ContactEditor } from "@/components/admin/ContactEditor";
 import { AdsEditor } from "@/components/admin/AdsEditor";
 import { ProjectsEditor } from "@/components/admin/ProjectsEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
+import { DashboardOverview } from "@/components/admin/DashboardOverview";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
-  { id: "hero", label: "Hero & Branding", icon: Sparkles, description: "Logo, name, profile & social links", color: "from-violet-500 to-purple-500" },
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, description: "Overview & statistics", color: "from-violet-500 to-purple-500" },
+  { id: "hero", label: "Hero & Branding", icon: Sparkles, description: "Logo, name, profile & social links", color: "from-fuchsia-500 to-pink-500" },
   { id: "navigation", label: "Navigation", icon: Globe, description: "Menu items & routes", color: "from-blue-500 to-cyan-500" },
   { id: "theme", label: "Theme & Colors", icon: Palette, description: "Customize appearance", color: "from-pink-500 to-rose-500" },
   { id: "about", label: "About Section", icon: User, description: "About me content", color: "from-emerald-500 to-teal-500" },
@@ -66,7 +68,7 @@ export default function Admin() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState<string>(searchParams.get("tab") || "hero");
+  const [activeTab, setActiveTab] = useState<string>(searchParams.get("tab") || "dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
@@ -105,6 +107,7 @@ export default function Admin() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case "dashboard": return <DashboardOverview />;
       case "hero": return <HeroEditor />;
       case "about": return <AboutEditor />;
       case "experience": return <ExperienceEditor />;
@@ -120,7 +123,7 @@ export default function Admin() {
       case "ads": return <AdsEditor />;
       case "projects": return <ProjectsEditor />;
       case "footer": return <FooterEditor />;
-      default: return <HeroEditor />;
+      default: return <DashboardOverview />;
     }
   };
 
