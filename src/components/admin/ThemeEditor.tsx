@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Palette, RotateCcw, Save } from "lucide-react";
 
 export function ThemeEditor() {
   const { toast } = useToast();
@@ -124,79 +125,103 @@ export function ThemeEditor() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Theme Customization</CardTitle>
-        <CardDescription>Customize your website's color scheme</CardDescription>
+    <Card className="border-0 bg-gradient-to-br from-violet-500/10 via-purple-500/10 to-fuchsia-500/10 backdrop-blur-sm shadow-xl">
+      <CardHeader className="border-b border-white/10 bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-t-lg">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white">
+            <Palette className="h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-xl bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              Theme Customization
+            </CardTitle>
+            <CardDescription>Customize your website's color scheme</CardDescription>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="primary-color">Primary Color</Label>
+          <div className="p-4 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 space-y-3">
+            <Label htmlFor="primary-color" className="text-foreground/80 flex items-center gap-2">
+              🎨 Primary Color
+            </Label>
             <div className="flex gap-2">
               <Input
                 id="primary-color"
                 type="color"
                 value={hslToHex(colors.primary)}
                 onChange={(e) => handleColorChange('primary', hexToHsl(e.target.value))}
-                className="w-20 h-10 cursor-pointer"
+                className="w-20 h-10 cursor-pointer border-white/20 p-1"
               />
               <Input
                 value={colors.primary}
                 onChange={(e) => handleColorChange('primary', e.target.value)}
                 placeholder="250 80% 60%"
+                className="bg-background/50 border-white/20"
               />
             </div>
-            <div className="h-10 rounded-md" style={{ backgroundColor: `hsl(${colors.primary})` }} />
+            <div className="h-10 rounded-lg shadow-inner" style={{ backgroundColor: `hsl(${colors.primary})` }} />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="secondary-color">Secondary Color</Label>
+          <div className="p-4 rounded-xl bg-gradient-to-r from-secondary/10 to-secondary/5 border border-secondary/20 space-y-3">
+            <Label htmlFor="secondary-color" className="text-foreground/80 flex items-center gap-2">
+              🌈 Secondary Color
+            </Label>
             <div className="flex gap-2">
               <Input
                 id="secondary-color"
                 type="color"
                 value={hslToHex(colors.secondary)}
                 onChange={(e) => handleColorChange('secondary', hexToHsl(e.target.value))}
-                className="w-20 h-10 cursor-pointer"
+                className="w-20 h-10 cursor-pointer border-white/20 p-1"
               />
               <Input
                 value={colors.secondary}
                 onChange={(e) => handleColorChange('secondary', e.target.value)}
                 placeholder="220 70% 55%"
+                className="bg-background/50 border-white/20"
               />
             </div>
-            <div className="h-10 rounded-md" style={{ backgroundColor: `hsl(${colors.secondary})` }} />
+            <div className="h-10 rounded-lg shadow-inner" style={{ backgroundColor: `hsl(${colors.secondary})` }} />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="accent-color">Accent Color</Label>
+          <div className="p-4 rounded-xl bg-gradient-to-r from-accent/10 to-accent/5 border border-accent/20 space-y-3">
+            <Label htmlFor="accent-color" className="text-foreground/80 flex items-center gap-2">
+              ✨ Accent Color
+            </Label>
             <div className="flex gap-2">
               <Input
                 id="accent-color"
                 type="color"
                 value={hslToHex(colors.accent)}
                 onChange={(e) => handleColorChange('accent', hexToHsl(e.target.value))}
-                className="w-20 h-10 cursor-pointer"
+                className="w-20 h-10 cursor-pointer border-white/20 p-1"
               />
               <Input
                 value={colors.accent}
                 onChange={(e) => handleColorChange('accent', e.target.value)}
                 placeholder="280 70% 65%"
+                className="bg-background/50 border-white/20"
               />
             </div>
-            <div className="h-10 rounded-md" style={{ backgroundColor: `hsl(${colors.accent})` }} />
+            <div className="h-10 rounded-lg shadow-inner" style={{ backgroundColor: `hsl(${colors.accent})` }} />
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button onClick={applyTheme}>Apply Theme</Button>
-          <Button onClick={resetTheme} variant="outline">Reset to Default</Button>
+        <div className="flex gap-2 pt-4">
+          <Button onClick={applyTheme} className="flex-1 bg-gradient-to-r from-violet-500 to-fuchsia-600 hover:from-violet-600 hover:to-fuchsia-700">
+            <Save className="mr-2 h-4 w-4" />
+            Apply Theme
+          </Button>
+          <Button onClick={resetTheme} variant="outline" className="border-white/20 hover:bg-white/10">
+            <RotateCcw className="mr-2 h-4 w-4" />
+            Reset
+          </Button>
         </div>
 
-        <div className="bg-muted p-4 rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            Note: Theme changes are saved in your browser. Use HSL format (e.g., "250 80% 60%") for colors.
+        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20">
+          <p className="text-sm text-muted-foreground flex items-center gap-2">
+            💡 <span>Theme changes are saved in your browser. Use HSL format (e.g., "250 80% 60%") for colors.</span>
           </p>
         </div>
       </CardContent>

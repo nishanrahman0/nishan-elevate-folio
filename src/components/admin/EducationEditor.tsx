@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, GraduationCap } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
 
 interface Education {
@@ -126,64 +126,79 @@ export function EducationEditor() {
   };
 
   if (loading) {
-    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+    return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-blue-400" /></div>;
   }
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{editingId ? "Edit" : "Add"} Education</CardTitle>
-          <CardDescription>Manage your education information</CardDescription>
+      <Card className="border-0 bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-teal-500/10 backdrop-blur-sm shadow-xl">
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 text-white">
+              <GraduationCap className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                {editingId ? "Edit" : "Add"} Education
+              </CardTitle>
+              <CardDescription>Manage your education information</CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-6">
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="institution">Institution</Label>
+              <Label htmlFor="institution" className="text-foreground/80">Institution</Label>
               <Input
                 id="institution"
                 value={formData.institution}
                 onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+                className="bg-background/50 border-white/20 focus:border-blue-500/50"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="degree">Degree</Label>
+              <Label htmlFor="degree" className="text-foreground/80">Degree</Label>
               <Input
                 id="degree"
                 value={formData.degree}
                 onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
+                className="bg-background/50 border-white/20 focus:border-blue-500/50"
               />
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="duration">Duration</Label>
+            <Label htmlFor="duration" className="text-foreground/80">Duration</Label>
             <Input
               id="duration"
               value={formData.duration}
               onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+              className="bg-background/50 border-white/20 focus:border-blue-500/50"
             />
           </div>
-          <ImageUpload
-            currentImageUrl={formData.logo_url}
-            onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
-            label="Institution Logo"
-          />
-          <ImageUpload
-            currentImageUrl={formData.image_url}
-            onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-            label="Campus Image"
-          />
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-4">
+            <ImageUpload
+              currentImageUrl={formData.logo_url}
+              onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
+              label="🏫 Institution Logo"
+            />
+            <ImageUpload
+              currentImageUrl={formData.image_url}
+              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+              label="🏛️ Campus Image"
+            />
+          </div>
           <div className="space-y-2">
-            <Label htmlFor="link_url">Link URL (optional)</Label>
+            <Label htmlFor="link_url" className="text-foreground/80">Link URL (optional)</Label>
             <Input
               id="link_url"
               value={formData.link_url}
               onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
               placeholder="https://..."
+              className="bg-background/50 border-white/20 focus:border-blue-500/50"
             />
           </div>
-          <div className="flex gap-2">
-            <Button onClick={handleSave}>
+          <div className="flex gap-2 pt-4">
+            <Button onClick={handleSave} className="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700">
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
               {editingId ? "Update" : "Add"} Education
             </Button>
@@ -191,7 +206,7 @@ export function EducationEditor() {
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
                 setFormData({ institution: "", degree: "", duration: "", logo_url: "", image_url: "", link_url: "" });
-              }}>
+              }} className="border-white/20">
                 Cancel
               </Button>
             )}
@@ -199,29 +214,32 @@ export function EducationEditor() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Current Education</CardTitle>
+      <Card className="border-0 bg-white/5 backdrop-blur-sm">
+        <CardHeader className="border-b border-white/10">
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-xl">🎓</span>
+            Current Education
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <div className="space-y-4">
             {educationList.map((edu) => (
-              <div key={edu.id} className="flex items-start justify-between p-4 border rounded-lg">
+              <div key={edu.id} className="flex items-start justify-between p-4 rounded-xl bg-gradient-to-r from-blue-500/5 to-cyan-500/5 border border-white/10 hover:border-blue-500/30 transition-all">
                 <div className="flex gap-4">
                   {edu.logo_url && (
-                    <img src={edu.logo_url} alt="Logo" className="w-16 h-16 object-contain" />
+                    <img src={edu.logo_url} alt="Logo" className="w-16 h-16 object-contain rounded-lg border border-white/20" />
                   )}
                   <div>
-                    <h3 className="font-semibold">{edu.institution}</h3>
+                    <h3 className="font-semibold text-foreground">{edu.institution}</h3>
                     <p className="text-sm text-muted-foreground">{edu.degree}</p>
-                    <p className="text-sm text-muted-foreground">{edu.duration}</p>
+                    <p className="text-sm text-blue-400">{edu.duration}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => handleEdit(edu)}>
+                  <Button variant="outline" size="sm" onClick={() => handleEdit(edu)} className="border-white/20 hover:bg-blue-500/20 hover:text-blue-400">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={() => handleDelete(edu.id)}>
+                  <Button variant="destructive" size="sm" onClick={() => handleDelete(edu.id)} className="bg-red-500/20 text-red-400 hover:bg-red-500/30">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
