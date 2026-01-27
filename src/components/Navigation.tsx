@@ -125,7 +125,7 @@ const handleNavClick = (href: string, isRoute?: boolean) => {
                 {item.label}
               </a>
             ))}
-            {user ? (
+            {user && (
               <>
                 <Button onClick={() => navigate("/admin")} variant="ghost" size="sm">
                   Admin
@@ -135,11 +135,6 @@ const handleNavClick = (href: string, isRoute?: boolean) => {
                   Logout
                 </Button>
               </>
-            ) : (
-              <Button onClick={() => navigate("/auth")} variant="ghost" size="sm">
-                <LogIn className="h-4 w-4 mr-2" />
-                Login
-              </Button>
             )}
           </div>
 
@@ -170,15 +165,10 @@ const handleNavClick = (href: string, isRoute?: boolean) => {
                   {item.label}
                 </a>
               ))}
-              {user ? (
+              {user && (
                 <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start">
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
-                </Button>
-              ) : (
-                <Button onClick={() => navigate("/auth")} variant="ghost" size="sm" className="w-full justify-start">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
                 </Button>
               )}
             </div>
