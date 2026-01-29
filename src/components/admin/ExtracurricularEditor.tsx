@@ -16,6 +16,7 @@ interface Activity {
   color_gradient: string;
   display_order: number;
   image_url?: string | null;
+  logo_url?: string | null;
 }
 
 export function ExtracurricularEditor() {
@@ -30,6 +31,7 @@ export function ExtracurricularEditor() {
     color_gradient: "from-primary to-secondary",
     display_order: 0,
     image_url: "",
+    logo_url: "",
   });
 
   useEffect(() => {
@@ -79,6 +81,7 @@ export function ExtracurricularEditor() {
         color_gradient: "from-primary to-secondary",
         display_order: 0,
         image_url: "",
+        logo_url: "",
       });
       setEditingId(null);
       fetchActivities();
@@ -100,6 +103,7 @@ export function ExtracurricularEditor() {
       color_gradient: activity.color_gradient,
       display_order: activity.display_order,
       image_url: activity.image_url || "",
+      logo_url: activity.logo_url || "",
     });
   };
 
@@ -196,12 +200,21 @@ export function ExtracurricularEditor() {
               className="bg-background/50 border-white/20 focus:border-rose-500/50"
             />
           </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <ImageUpload
-              currentImageUrl={formData.image_url}
-              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-              label="🎭 Activity Image (optional)"
-            />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <ImageUpload
+                currentImageUrl={formData.logo_url}
+                onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
+                label="🏢 Organization Logo"
+              />
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <ImageUpload
+                currentImageUrl={formData.image_url}
+                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                label="🎭 Activity Image (optional)"
+              />
+            </div>
           </div>
           <div className="flex gap-2 pt-4">
             <Button onClick={handleSave} className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700">
@@ -220,6 +233,7 @@ export function ExtracurricularEditor() {
                     color_gradient: "from-primary to-secondary",
                     display_order: 0,
                     image_url: "",
+                    logo_url: "",
                   });
                 }}
                 className="border-white/20"

@@ -1,6 +1,24 @@
 import { useState, useEffect } from "react";
-import { Code } from "lucide-react";
-import * as Icons from "lucide-react";
+import { 
+  Code, 
+  Database, 
+  BarChart3, 
+  Brain, 
+  Wrench, 
+  Globe, 
+  Palette, 
+  Terminal, 
+  Cloud, 
+  Smartphone, 
+  Lock, 
+  Cog,
+  PenTool,
+  FileSpreadsheet,
+  LineChart,
+  Server,
+  Cpu,
+  Layers
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -22,6 +40,69 @@ interface SkillCategory {
   color: string;
   skills: string[];
 }
+
+// Map category names to appropriate icons
+const getCategoryIcon = (categoryName: string) => {
+  const lowerCategory = categoryName.toLowerCase();
+  
+  if (lowerCategory.includes("programming") || lowerCategory.includes("coding") || lowerCategory.includes("development")) {
+    return Code;
+  }
+  if (lowerCategory.includes("data") && lowerCategory.includes("analy")) {
+    return BarChart3;
+  }
+  if (lowerCategory.includes("database") || lowerCategory.includes("sql")) {
+    return Database;
+  }
+  if (lowerCategory.includes("ai") || lowerCategory.includes("machine learning") || lowerCategory.includes("artificial")) {
+    return Brain;
+  }
+  if (lowerCategory.includes("web") || lowerCategory.includes("frontend") || lowerCategory.includes("front-end")) {
+    return Globe;
+  }
+  if (lowerCategory.includes("design") || lowerCategory.includes("ui") || lowerCategory.includes("ux")) {
+    return Palette;
+  }
+  if (lowerCategory.includes("tool") || lowerCategory.includes("productivity")) {
+    return Wrench;
+  }
+  if (lowerCategory.includes("terminal") || lowerCategory.includes("command") || lowerCategory.includes("cli")) {
+    return Terminal;
+  }
+  if (lowerCategory.includes("cloud") || lowerCategory.includes("aws") || lowerCategory.includes("azure")) {
+    return Cloud;
+  }
+  if (lowerCategory.includes("mobile") || lowerCategory.includes("app")) {
+    return Smartphone;
+  }
+  if (lowerCategory.includes("security") || lowerCategory.includes("cyber")) {
+    return Lock;
+  }
+  if (lowerCategory.includes("devops") || lowerCategory.includes("automation")) {
+    return Cog;
+  }
+  if (lowerCategory.includes("visual") || lowerCategory.includes("graphic")) {
+    return PenTool;
+  }
+  if (lowerCategory.includes("excel") || lowerCategory.includes("spreadsheet") || lowerCategory.includes("sheet")) {
+    return FileSpreadsheet;
+  }
+  if (lowerCategory.includes("business") || lowerCategory.includes("intelligence") || lowerCategory.includes("bi")) {
+    return LineChart;
+  }
+  if (lowerCategory.includes("backend") || lowerCategory.includes("server")) {
+    return Server;
+  }
+  if (lowerCategory.includes("hardware") || lowerCategory.includes("embedded")) {
+    return Cpu;
+  }
+  if (lowerCategory.includes("framework") || lowerCategory.includes("library")) {
+    return Layers;
+  }
+  
+  // Default icon
+  return Code;
+};
 
 const Skills = () => {
   const { isAdmin } = useAuth();
@@ -49,7 +130,8 @@ const Skills = () => {
 
       const categories = Object.entries(grouped).map(([category, skills]) => {
         const firstSkill = skills[0];
-        const IconComponent = (Icons as any)[firstSkill.icon_name] || Code;
+        // Use auto-detection based on category name instead of stored icon
+        const IconComponent = getCategoryIcon(category);
         return {
           category,
           icon: IconComponent,

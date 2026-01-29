@@ -24,7 +24,8 @@ import {
   LayoutDashboard,
   Sparkles,
   Globe,
-  Copyright
+  Copyright,
+  Search
 } from "lucide-react";
 import { HeroEditor } from "@/components/admin/HeroEditor";
 import { AboutEditor } from "@/components/admin/AboutEditor";
@@ -41,6 +42,7 @@ import { ContactEditor } from "@/components/admin/ContactEditor";
 import { AdsEditor } from "@/components/admin/AdsEditor";
 import { ProjectsEditor } from "@/components/admin/ProjectsEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
+import { SEOEditor } from "@/components/admin/SEOEditor";
 import { DashboardOverview } from "@/components/admin/DashboardOverview";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +51,7 @@ const menuItems = [
   { id: "hero", label: "Hero & Branding", icon: Sparkles, description: "Logo, name, profile & social links", color: "from-fuchsia-500 to-pink-500" },
   { id: "navigation", label: "Navigation", icon: Globe, description: "Menu items & routes", color: "from-blue-500 to-cyan-500" },
   { id: "theme", label: "Theme & Colors", icon: Palette, description: "Customize appearance", color: "from-pink-500 to-rose-500" },
+  { id: "seo", label: "SEO Settings", icon: Search, description: "Meta tags & Open Graph", color: "from-teal-500 to-emerald-500" },
   { id: "about", label: "About Section", icon: User, description: "About me content", color: "from-emerald-500 to-teal-500" },
   { id: "skills", label: "Skills", icon: Zap, description: "Your skills list", color: "from-amber-500 to-orange-500" },
   { id: "experience", label: "Experience", icon: Briefcase, description: "Work history", color: "from-indigo-500 to-blue-500" },
@@ -119,6 +122,7 @@ export default function Admin() {
       case "activities": return <ExtracurricularEditor />;
       case "navigation": return <NavigationEditor />;
       case "theme": return <ThemeEditor />;
+      case "seo": return <SEOEditor />;
       case "contact": return <ContactEditor />;
       case "ads": return <AdsEditor />;
       case "projects": return <ProjectsEditor />;

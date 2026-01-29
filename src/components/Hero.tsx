@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mail, Linkedin, Github, Facebook, Instagram } from "lucide-react";
+import { Mail, Linkedin, Github, Facebook, Instagram, Download } from "lucide-react";
 import * as Icons from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,6 +16,7 @@ const Hero = () => {
   const [heroData, setHeroData] = useState({
     name: "Nishan Rahman",
     tagline: "Aspiring Data Analyst | Tech Explorer | AI Enthusiast",
+    resume_url: "",
     linkedin_url: "",
     github_url: "",
     facebook_url: "",
@@ -38,6 +39,7 @@ const Hero = () => {
       setHeroData({
         name: data.name,
         tagline: data.tagline,
+        resume_url: (data as any).resume_url || "",
         linkedin_url: data.linkedin_url || "",
         github_url: data.github_url || "",
         facebook_url: data.facebook_url || "",
@@ -94,7 +96,7 @@ const Hero = () => {
               {heroData.tagline}
             </p>
             
-            <div className="flex justify-center md:justify-start mb-8">
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
               <Button 
                 variant="hero" 
                 size="lg" 
@@ -104,6 +106,19 @@ const Hero = () => {
                 <Mail className="mr-2 h-5 w-5 group-hover:animate-bounce" />
                 Contact Me
               </Button>
+              {heroData.resume_url && (
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  asChild
+                  className="group border-primary/50 hover:bg-primary/10"
+                >
+                  <a href={heroData.resume_url} target="_blank" rel="noopener noreferrer" download>
+                    <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                    Download CV
+                  </a>
+                </Button>
+              )}
             </div>
 
             {/* Social Links */}

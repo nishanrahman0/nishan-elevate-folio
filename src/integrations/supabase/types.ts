@@ -217,6 +217,7 @@ export type Database = {
           id: string
           image_url: string | null
           link_url: string | null
+          logo_url: string | null
           title: string
           updated_at: string | null
         }
@@ -230,6 +231,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           link_url?: string | null
+          logo_url?: string | null
           title: string
           updated_at?: string | null
         }
@@ -243,6 +245,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           link_url?: string | null
+          logo_url?: string | null
           title?: string
           updated_at?: string | null
         }
@@ -256,6 +259,7 @@ export type Database = {
           icon_name: string
           id: string
           image_url: string | null
+          logo_url: string | null
           organization: string
           title: string
           updated_at: string
@@ -267,6 +271,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          logo_url?: string | null
           organization: string
           title: string
           updated_at?: string
@@ -278,6 +283,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          logo_url?: string | null
           organization?: string
           title?: string
           updated_at?: string
@@ -340,6 +346,7 @@ export type Database = {
           logo_url: string | null
           name: string
           profile_image_url: string | null
+          resume_url: string | null
           site_title: string | null
           tagline: string
           updated_at: string | null
@@ -354,6 +361,7 @@ export type Database = {
           logo_url?: string | null
           name: string
           profile_image_url?: string | null
+          resume_url?: string | null
           site_title?: string | null
           tagline: string
           updated_at?: string | null
@@ -368,6 +376,7 @@ export type Database = {
           logo_url?: string | null
           name?: string
           profile_image_url?: string | null
+          resume_url?: string | null
           site_title?: string | null
           tagline?: string
           updated_at?: string | null
@@ -523,6 +532,39 @@ export type Database = {
           image_url?: string | null
           link_url?: string | null
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      seo_settings: {
+        Row: {
+          created_at: string
+          id: string
+          keywords: string | null
+          meta_description: string | null
+          meta_title: string | null
+          og_image_url: string | null
+          page_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image_url?: string | null
+          page_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image_url?: string | null
+          page_name?: string
           updated_at?: string
         }
         Relationships: []
