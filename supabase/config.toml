@@ -2,3 +2,6 @@ project_id = "ciltyfogebheitfvenwv"
 
 [functions.send-contact-message]
 verify_jwt = false
+
+[functions.chat]
+verify_jwt = false

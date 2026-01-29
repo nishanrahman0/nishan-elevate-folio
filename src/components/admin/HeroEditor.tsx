@@ -20,6 +20,7 @@ export function HeroEditor() {
     site_title: "",
     profile_image_url: "",
     logo_url: "",
+    resume_url: "",
     linkedin_url: "",
     github_url: "",
     facebook_url: "",
@@ -47,6 +48,7 @@ export function HeroEditor() {
           site_title: data.site_title || "",
           profile_image_url: data.profile_image_url || "",
           logo_url: data.logo_url || "",
+          resume_url: (data as any).resume_url || "",
           linkedin_url: data.linkedin_url || "",
           github_url: data.github_url || "",
           facebook_url: data.facebook_url || "",
@@ -161,6 +163,18 @@ export function HeroEditor() {
               onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
               label="Logo (appears in navigation)"
             />
+          </div>
+
+          <div className="p-4 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 space-y-4">
+            <h3 className="font-semibold text-green-400 flex items-center gap-2">
+              📄 Resume / CV
+            </h3>
+            <ImageUpload
+              currentImageUrl={formData.resume_url}
+              onImageUploaded={(url) => setFormData({ ...formData, resume_url: url })}
+              label="Upload Resume (PDF or Image)"
+            />
+            <p className="text-xs text-muted-foreground">Upload your CV/Resume file. Visitors can download it from the hero section.</p>
           </div>
 
           <div className="p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 space-y-4">

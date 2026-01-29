@@ -1,57 +1,160 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const PORTFOLIO_CONTEXT = `You are the AI assistant for Nishan Rahman's portfolio website. Answer questions accurately based on the information below.
+async function fetchPortfolioData() {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  // Fetch all portfolio data in parallel
+  const [
+    heroResult,
+    skillsResult,
+    experiencesResult,
+    activitiesResult,
+    educationResult,
+    certificatesResult,
+    eventsResult,
+    projectsResult,
+    contactResult,
+    aboutResult,
+  ] = await Promise.all([
+    supabase.from("hero_content").select("*").maybeSingle(),
+    supabase.from("skills").select("*").order("display_order"),
+    supabase.from("experiences").select("*").order("display_order"),
+    supabase.from("extracurricular_activities").select("*").order("display_order"),
+    supabase.from("education").select("*"),
+    supabase.from("certificates").select("*").order("display_order"),
+    supabase.from("events").select("*").order("display_order"),
+    supabase.from("projects").select("*").order("display_order"),
+    supabase.from("contact_content").select("*").maybeSingle(),
+    supabase.from("about_content").select("*").maybeSingle(),
+  ]);
+
+  return {
+    hero: heroResult.data,
+    skills: skillsResult.data || [],
+    experiences: experiencesResult.data || [],
+    activities: activitiesResult.data || [],
+    education: educationResult.data || [],
+    certificates: certificatesResult.data || [],
+    events: eventsResult.data || [],
+    projects: projectsResult.data || [],
+    contact: contactResult.data,
+    about: aboutResult.data,
+  };
+}
+
+function buildDynamicContext(data: any) {
+  const hero = data.hero;
+  const name = hero?.name || "Nishan Rahman";
+  const tagline = hero?.tagline || "Data Analyst & AI Developer";
+
+  // Group skills by category
+  const skillsByCategory: Record<string, string[]> = {};
+  data.skills.forEach((skill: any) => {
+    if (!skillsByCategory[skill.category]) {
+      skillsByCategory[skill.category] = [];
+    }
+    skillsByCategory[skill.category].push(skill.skill_name);
+  });
+
+  const skillsText = Object.entries(skillsByCategory)
+    .map(([category, skills]) => `- ${category}: ${skills.join(", ")}`)
+    .join("\n");
+
+  // Format experiences
+  const experiencesText = data.experiences
+    .map((exp: any) => `- ${exp.title} at ${exp.company} (${exp.duration}): ${exp.description.replace(/<[^>]*>/g, '')}`)
+    .join("\n");
+
+  // Format activities  
+  const activitiesText = data.activities
+    .map((act: any) => `- ${act.title} at ${act.organization}`)
+    .join("\n");
+
+  // Format education
+  const educationText = data.education
+    .map((edu: any) => `- ${edu.degree} from ${edu.institution} (${edu.duration})`)
+    .join("\n");
+
+  // Format certificates
+  const certificatesText = data.certificates
+    .map((cert: any) => `- ${cert.title} by ${cert.issuer}`)
+    .join("\n");
+
+  // Format events
+  const eventsText = data.events
+    .map((evt: any) => `- ${evt.title}: ${evt.description.replace(/<[^>]*>/g, '')}`)
+    .join("\n");
+
+  // Format projects
+  const projectsText = data.projects
+    .map((proj: any) => `- ${proj.title}: ${proj.description.replace(/<[^>]*>/g, '')}`)
+    .join("\n");
+
+  const contact = data.contact;
+  const contactText = contact
+    ? `Email: ${contact.email || "Not provided"}, Phone: ${contact.phone || "Not provided"}`
+    : "Contact information available on the website";
+
+  const aboutText = data.about?.content?.replace(/<[^>]*>/g, '') || "";
+
+  return `You are the AI assistant for ${name}'s portfolio website. Answer questions accurately and specifically based on the ACTUAL portfolio data below. NEVER say you don't have specific information if it's provided below.
 
 ## Personal Information:
-- Full Name: Md Nishan Rahman
-- Role: Data Analyst | AI Agent Developer
-- Location: Rajshahi, Bangladesh
-- Email: mdnishanrahman0@gmail.com
+- Full Name: ${name}
+- Role/Tagline: ${tagline}
+- Email: ${contact?.email || "mdnishanrahman0@gmail.com"}
+${contact?.phone ? `- Phone: ${contact.phone}` : ""}
+
+## About:
+${aboutText || "A passionate professional focused on data analytics and AI development."}
 
 ## Education:
-- Currently studying Management Studies at the University of Rajshahi, Bangladesh
-- Focus areas: Business Administration, Data Analytics, Strategic Management
+${educationText || "Currently studying at University of Rajshahi, Bangladesh"}
 
-## Professional Skills:
-- Data Analytics: Excel, Google Sheets, Power BI, Tableau, SQL
-- Programming: Python, R for data analysis
-- AI Tools: ChatGPT, Claude, Gemini, AI automation tools
-- Productivity: Notion, Trello, Slack, Google Workspace
-- Design: Canva, Figma basics
+## Skills by Category:
+${skillsText || "Various technical and professional skills"}
 
-## Interests & Expertise:
-- Solving business problems with data-driven solutions
-- Building AI-powered automation and agents
-- Modern productivity tools and workflows
-- Data visualization and storytelling
+## Professional Experience:
+${experiencesText || "Building experience in data analytics and AI"}
 
-## Social Media & Contact:
-- LinkedIn: linkedin.com/in/nishanrahmanrumgt/
-- GitHub: github.com/nishanrahman0
-- Facebook: facebook.com/nishan.rahman.2024
-- Instagram: instagram.com/mdnishanrahman
+## Extracurricular Activities:
+${activitiesText || "Active in various clubs and organizations"}
 
-## Portfolio Sections:
-- Skills: Technical and soft skills with categories
-- Experience: Work history and projects
-- Education: Academic background
-- Certificates: Professional certifications and courses
-- Events: Workshops, seminars, and activities attended
-- Activities: Extracurricular involvement and club memberships
-- Blog: Articles and insights
-- Projects: Portfolio of completed work
+## Certifications:
+${certificatesText || "Various professional certifications"}
+
+## Events & Workshops Attended:
+${eventsText || "Participated in various workshops and seminars"}
+
+## Projects:
+${projectsText || "Working on various data analytics and AI projects"}
+
+## Contact Information:
+${contactText}
+
+## Social Media:
+- LinkedIn: ${hero?.linkedin_url || "linkedin.com/in/nishanrahmanrumgt/"}
+- GitHub: ${hero?.github_url || "github.com/nishanrahman0"}
+- Facebook: ${hero?.facebook_url || "facebook.com/nishan.rahman.2024"}
+- Instagram: ${hero?.instagram_url || "instagram.com/mdnishanrahman"}
 
 ## Response Guidelines:
-- Be helpful, concise, and friendly
-- If asked about specific details not listed here, suggest exploring the relevant section of the portfolio
-- For contact inquiries, provide the email and social links
-- Highlight the data analytics and AI focus when discussing professional capabilities
-- Keep responses conversational but professional`;
+- Be helpful, specific, and friendly
+- ALWAYS use the actual data provided above to answer questions
+- For activities questions, list the SPECIFIC activities from the data above
+- For skills questions, list the SPECIFIC skills by category
+- For experience questions, describe the SPECIFIC roles and companies
+- Keep responses conversational but informative
+- If asked about something not in the data, politely say you don't have that specific information`;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -66,6 +169,10 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
+    // Fetch real portfolio data from database
+    const portfolioData = await fetchPortfolioData();
+    const dynamicContext = buildDynamicContext(portfolioData);
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -75,7 +182,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: PORTFOLIO_CONTEXT },
+          { role: "system", content: dynamicContext },
           ...messages,
         ],
         stream: true,

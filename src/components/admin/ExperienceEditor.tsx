@@ -17,6 +17,7 @@ interface Experience {
   description: string;
   icon_name: string;
   image_url?: string;
+  logo_url?: string;
   display_order: number;
 }
 
@@ -32,6 +33,7 @@ export function ExperienceEditor() {
     description: "",
     icon_name: "Briefcase",
     image_url: "",
+    logo_url: "",
     link_url: "",
   });
 
@@ -81,7 +83,7 @@ export function ExperienceEditor() {
         description: editingId ? "Experience updated" : "Experience added",
       });
 
-      setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "", link_url: "" });
+      setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "", logo_url: "", link_url: "" });
       setEditingId(null);
       fetchExperiences();
     } catch (error: any) {
@@ -102,6 +104,7 @@ export function ExperienceEditor() {
       description: exp.description,
       icon_name: exp.icon_name,
       image_url: exp.image_url || "",
+      logo_url: exp.logo_url || "",
       link_url: (exp as any).link_url || "",
     });
   };
@@ -200,12 +203,21 @@ export function ExperienceEditor() {
               placeholder="Describe the role, impact, and tools..."
             />
           </div>
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <ImageUpload
-              currentImageUrl={formData.image_url}
-              onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-              label="🖼️ Experience Image"
-            />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <ImageUpload
+                currentImageUrl={formData.logo_url}
+                onImageUploaded={(url) => setFormData({ ...formData, logo_url: url })}
+                label="🏢 Organization Logo"
+              />
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <ImageUpload
+                currentImageUrl={formData.image_url}
+                onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
+                label="🖼️ Experience Image"
+              />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="exp_link_url" className="text-foreground/80">Link URL (optional)</Label>
@@ -225,7 +237,7 @@ export function ExperienceEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "", link_url: "" });
+                setFormData({ title: "", company: "", duration: "", description: "", icon_name: "Briefcase", image_url: "", logo_url: "", link_url: "" });
               }} className="border-white/20">
                 Cancel
               </Button>
