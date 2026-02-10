@@ -173,8 +173,10 @@ export function HeroEditor() {
               currentImageUrl={formData.resume_url}
               onImageUploaded={(url) => setFormData({ ...formData, resume_url: url })}
               label="Upload Resume (PDF or Image)"
+              accept="application/pdf,image/*"
+              allowNonImage={true}
             />
-            <p className="text-xs text-muted-foreground">Upload your CV/Resume file. Visitors can download it from the hero section.</p>
+            <p className="text-xs text-muted-foreground">Upload your CV/Resume file (PDF supported). Visitors can download it from the hero section.</p>
           </div>
 
           <div className="p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 space-y-4">
