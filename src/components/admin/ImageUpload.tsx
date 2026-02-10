@@ -15,7 +15,7 @@ interface ImageUploadProps {
   allowNonImage?: boolean;
 }
 
-export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image" }: ImageUploadProps) {
+export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image", accept = "image/*", allowNonImage = false }: ImageUploadProps) {
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(currentImageUrl || "");
@@ -26,8 +26,10 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image" 
     const file = event.target.files?.[0];
     if (!file) return;
 
+    const isImage = file.type.startsWith('image/');
+
     // Validate file type
-    if (!file.type.startsWith('image/')) {
+    if (!isImage && !allowNonImage) {
       toast({
         title: "Invalid file",
         description: "Please upload an image file",
@@ -36,23 +38,64 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image" 
       return;
     }
 
-    // Validate file size (5MB limit)
-    if (file.size > 5 * 1024 * 1024) {
+    // Validate file size (10MB limit for non-images, 5MB for images)
+    const maxSize = allowNonImage ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+    if (file.size > maxSize) {
       toast({
         title: "File too large",
-        description: "Please upload an image smaller than 5MB",
+        description: `Please upload a file smaller than ${allowNonImage ? '10' : '5'}MB`,
         variant: "destructive",
       });
       return;
     }
 
-    // Show cropper
+    // For non-image files, upload directly without cropping
+    if (!isImage) {
+      await uploadFileDirect(file);
+      return;
+    }
+
+    // Show cropper for images
     setOriginalFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImageToCrop(reader.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  const uploadFileDirect = async (file: File) => {
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('portfolio-images')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('portfolio-images')
+        .getPublicUrl(fileName);
+
+      setPreview(publicUrl);
+      onImageUploaded(publicUrl);
+
+      toast({
+        title: "Success",
+        description: "File uploaded successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Upload failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleCropComplete = async (croppedBlob: Blob) => {
