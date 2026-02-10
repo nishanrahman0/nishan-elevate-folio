@@ -142,13 +142,22 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
     onImageUploaded("");
   };
 
+  const isPreviewImage = preview && (preview.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i) || preview.startsWith('data:image'));
+
   return (
     <>
       <div className="space-y-2">
         <Label>{label}</Label>
         {preview ? (
           <div className="relative inline-block">
-            <img src={preview} alt="Preview" className="max-w-xs max-h-48 rounded-lg border" />
+            {isPreviewImage ? (
+              <img src={preview} alt="Preview" className="max-w-xs max-h-48 rounded-lg border" />
+            ) : (
+              <div className="flex items-center gap-2 p-3 rounded-lg border bg-muted/50 max-w-xs">
+                <Upload className="h-5 w-5 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground truncate">{preview.split('/').pop()?.split('?')[0]}</span>
+              </div>
+            )}
             <Button
               variant="destructive"
               size="sm"
@@ -162,7 +171,7 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
           <div className="flex items-center gap-2">
             <Input
               type="file"
-              accept="image/*"
+              accept={accept}
               onChange={handleFileUpload}
               disabled={uploading}
               className="max-w-xs"
