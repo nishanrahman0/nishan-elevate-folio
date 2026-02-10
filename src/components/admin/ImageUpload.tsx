@@ -11,6 +11,8 @@ interface ImageUploadProps {
   currentImageUrl?: string;
   onImageUploaded: (url: string) => void;
   label?: string;
+  accept?: string;
+  allowNonImage?: boolean;
 }
 
 export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image" }: ImageUploadProps) {
