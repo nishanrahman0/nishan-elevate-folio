@@ -119,9 +119,15 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
-  
+
   html {
     scroll-behavior: smooth;
+  }
+
+  html *,
+  html *::before,
+  html *::after {
+    transition: background-color 0.4s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   }
 }
 
