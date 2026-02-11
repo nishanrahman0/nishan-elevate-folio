@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Menu, X, LogOut, LogIn } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -125,6 +126,7 @@ const handleNavClick = (href: string, isRoute?: boolean) => {
                 {item.label}
               </a>
             ))}
+            <ThemeToggle />
             {user && (
               <>
                 <Button onClick={() => navigate("/admin")} variant="ghost" size="sm">
@@ -165,6 +167,7 @@ const handleNavClick = (href: string, isRoute?: boolean) => {
                   {item.label}
                 </a>
               ))}
+              <ThemeToggle />
               {user && (
                 <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start">
                   <LogOut className="h-4 w-4 mr-2" />
