@@ -38,33 +38,77 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_comments: {
+        Row: {
+          approved: boolean | null
+          author_email: string | null
+          author_name: string
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+        }
+        Insert: {
+          approved?: boolean | null
+          author_email?: string | null
+          author_name: string
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+        }
+        Update: {
+          approved?: boolean | null
+          author_email?: string | null
+          author_name?: string
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_posts: {
         Row: {
+          category: string | null
           content: string
           created_at: string | null
           id: string
           images: Json | null
           published: boolean | null
+          tags: string[] | null
           title: string
           updated_at: string | null
           videos: Json | null
         }
         Insert: {
+          category?: string | null
           content: string
           created_at?: string | null
           id?: string
           images?: Json | null
           published?: boolean | null
+          tags?: string[] | null
           title: string
           updated_at?: string | null
           videos?: Json | null
         }
         Update: {
+          category?: string | null
           content?: string
           created_at?: string | null
           id?: string
           images?: Json | null
           published?: boolean | null
+          tags?: string[] | null
           title?: string
           updated_at?: string | null
           videos?: Json | null
