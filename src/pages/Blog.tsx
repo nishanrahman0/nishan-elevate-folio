@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import AdSense from "@/components/AdSense";
 
 interface BlogPost {
   id: string;
@@ -170,6 +171,9 @@ const Blog = () => {
               </div>
             )}
 
+            {/* Ad before article body */}
+            <AdSense adFormat="rectangle" className="mb-4" />
+
             {post.images && post.images.length > 0 && (
               <div className="mb-6">
                 <img
@@ -199,6 +203,9 @@ const Blog = () => {
               className="prose prose-lg max-w-none text-foreground"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
+
+            {/* Ad after article content */}
+            <AdSense adFormat="horizontal" className="mt-6" />
 
             {/* Comments */}
             <div className="mt-8 pt-6 border-t border-border/50">
@@ -257,6 +264,9 @@ const Blog = () => {
                 </div>
               )}
             </div>
+
+            {/* Ad at bottom of article */}
+            <AdSense adFormat="horizontal" className="mt-4" />
           </div>
         </CardContent>
       </Card>
@@ -440,71 +450,81 @@ const Blog = () => {
                 </Card>
               )}
 
-              {/* Grid of Posts */}
-              {gridPosts.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {gridPosts.map(post => {
+               {/* Ad between featured and grid */}
+               <AdSense adFormat="horizontal" />
+
+               {/* Grid of Posts */}
+               {gridPosts.length > 0 && (
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                   {gridPosts.map((post, index) => {
                     const img = getPostImage(post);
                     const readTime = estimateReadTime(post.content);
                     const comments = getPostComments(post.id);
 
                     return (
-                      <Card
-                        key={post.id}
-                        className="glass-card overflow-hidden cursor-pointer group hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                        onClick={() => setExpandedPost(post.id)}
-                      >
-                        <CardContent className="p-0">
-                          <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-                            {img ? (
-                              <img
-                                src={img}
-                                alt={post.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">
-                                <Newspaper className="h-10 w-10 text-muted-foreground/20" />
-                              </div>
-                            )}
-                            <Badge className="absolute top-3 left-3 text-xs" variant="secondary">
-                              {post.category}
-                            </Badge>
-                          </div>
-                          <div className="p-5">
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="h-3 w-3" />
-                                {format(new Date(post.created_at), "MMM d, yyyy")}
-                              </span>
-                              <span>·</span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {readTime} min
-                              </span>
-                            </div>
-                            <h3 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
-                              {post.title}
-                            </h3>
-                            <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
-                              {getExcerpt(post.content, 100)}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              {post.tags.length > 0 && (
-                                <div className="flex gap-1">
-                                  {post.tags.slice(0, 2).map(tag => (
-                                    <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0">{tag}</Badge>
-                                  ))}
+                      <React.Fragment key={post.id}>
+                        <Card
+                          className="glass-card overflow-hidden cursor-pointer group hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                          onClick={() => setExpandedPost(post.id)}
+                        >
+                          <CardContent className="p-0">
+                            <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                              {img ? (
+                                <img
+                                  src={img}
+                                  alt={post.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">
+                                  <Newspaper className="h-10 w-10 text-muted-foreground/20" />
                                 </div>
                               )}
-                              <span className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
-                                <MessageCircle className="h-3 w-3" />
-                                {comments.length}
-                              </span>
+                              <Badge className="absolute top-3 left-3 text-xs" variant="secondary">
+                                {post.category}
+                              </Badge>
                             </div>
+                            <div className="p-5">
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="h-3 w-3" />
+                                  {format(new Date(post.created_at), "MMM d, yyyy")}
+                                </span>
+                                <span>·</span>
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {readTime} min
+                                </span>
+                              </div>
+                              <h3 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                                {post.title}
+                              </h3>
+                              <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
+                                {getExcerpt(post.content, 100)}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                {post.tags.length > 0 && (
+                                  <div className="flex gap-1">
+                                    {post.tags.slice(0, 2).map(tag => (
+                                      <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0">{tag}</Badge>
+                                    ))}
+                                  </div>
+                                )}
+                                <span className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
+                                  <MessageCircle className="h-3 w-3" />
+                                  {comments.length}
+                                </span>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                        {/* Insert ad after every 3rd post */}
+                        {(index + 1) % 3 === 0 && index < gridPosts.length - 1 && (
+                          <div className="col-span-full">
+                            <AdSense adFormat="horizontal" />
                           </div>
-                        </CardContent>
-                      </Card>
+                        )}
+                      </React.Fragment>
                     );
                   })}
                 </div>
