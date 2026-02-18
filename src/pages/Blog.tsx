@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Search, Clock, Tag, MessageCircle, Send, TrendingUp, Newspaper } from "lucide-react";
+import { Calendar, Search, Clock, Tag, MessageCircle, Send, TrendingUp, Newspaper, Eye } from "lucide-react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,6 +25,7 @@ interface BlogPost {
   created_at: string;
   category: string;
   tags: string[];
+  view_count: number;
 }
 
 interface BlogComment {
@@ -78,6 +79,7 @@ const Blog = () => {
         videos: Array.isArray(p.videos) ? p.videos : [],
         tags: p.tags || [],
         category: p.category || "General",
+        view_count: p.view_count || 0,
       })) as BlogPost[];
     },
   });
@@ -134,6 +136,18 @@ const Blog = () => {
     return null;
   };
 
+  const handleExpandPost = async (postId: string) => {
+    setExpandedPost(postId);
+    // Increment view count
+    try {
+      const current = filtered?.find(p => p.id === postId)?.view_count || 0;
+      await supabase.from('blog_posts').update({ view_count: current + 1 } as any).eq('id', postId);
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+    } catch (e) {
+      // silently fail
+    }
+  };
+
   const renderExpandedPost = (post: BlogPost) => {
     const readTime = estimateReadTime(post.content);
     const comments = getPostComments(post.id);
@@ -158,6 +172,10 @@ const Blog = () => {
               <span className="flex items-center gap-1">
                 <Clock className="h-3.5 w-3.5" />
                 {readTime} min read
+              </span>
+              <span className="flex items-center gap-1">
+                <Eye className="h-3.5 w-3.5" />
+                {post.view_count} views
               </span>
             </div>
 
@@ -312,7 +330,7 @@ const Blog = () => {
                     <span
                       key={post.id}
                       className="cursor-pointer hover:text-foreground transition-colors"
-                      onClick={() => setExpandedPost(post.id)}
+                      onClick={() => handleExpandPost(post.id)}
                     >
                       {post.title}
                     </span>
@@ -395,7 +413,7 @@ const Blog = () => {
               {featuredPost && (
                 <Card
                   className="glass-card overflow-hidden cursor-pointer group hover:shadow-xl transition-all duration-300"
-                  onClick={() => setExpandedPost(featuredPost.id)}
+                  onClick={() => handleExpandPost(featuredPost.id)}
                 >
                   <CardContent className="p-0">
                     <div className="grid md:grid-cols-2 gap-0">
@@ -440,6 +458,10 @@ const Blog = () => {
                         )}
                         <div className="flex items-center gap-3 mt-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
+                            <Eye className="h-3 w-3" />
+                            {featuredPost.view_count}
+                          </span>
+                          <span className="flex items-center gap-1">
                             <MessageCircle className="h-3 w-3" />
                             {getPostComments(featuredPost.id).length}
                           </span>
@@ -465,7 +487,7 @@ const Blog = () => {
                       <React.Fragment key={post.id}>
                         <Card
                           className="glass-card overflow-hidden cursor-pointer group hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                          onClick={() => setExpandedPost(post.id)}
+                          onClick={() => handleExpandPost(post.id)}
                         >
                           <CardContent className="p-0">
                             <div className="relative aspect-[16/10] overflow-hidden bg-muted">
@@ -510,10 +532,16 @@ const Blog = () => {
                                     ))}
                                   </div>
                                 )}
-                                <span className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
-                                  <MessageCircle className="h-3 w-3" />
-                                  {comments.length}
-                                </span>
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground ml-auto">
+                                  <span className="flex items-center gap-1">
+                                    <Eye className="h-3 w-3" />
+                                    {post.view_count}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <MessageCircle className="h-3 w-3" />
+                                    {comments.length}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </CardContent>
