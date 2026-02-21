@@ -7,14 +7,6 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 
 interface Project {
   id: string;
@@ -51,11 +43,10 @@ const Projects = () => {
     return IconComponent || FolderOpen;
   };
 
-  const getAllImages = (project: Project): string[] => {
-    const imgs: string[] = [];
-    if (project.image_url) imgs.push(project.image_url);
-    if (project.images) imgs.push(...project.images);
-    return imgs;
+  const getCoverImage = (project: Project): string | null => {
+    if (project.image_url) return project.image_url;
+    if (project.images && project.images.length > 0) return project.images[0];
+    return null;
   };
 
   return (
@@ -72,55 +63,37 @@ const Projects = () => {
             )}
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {projects.map((project, index) => {
               const IconComponent = getIcon(project.icon_name);
-              const allImages = getAllImages(project);
-              const Wrapper = project.link_url ? 'a' : 'div';
-              const wrapperProps = project.link_url ? { href: project.link_url, target: "_blank", rel: "noopener noreferrer" } : {};
-              
+              const coverImage = getCoverImage(project);
+
               return (
-                <Wrapper
+                <div
                   key={project.id}
-                  {...wrapperProps}
-                  className="glass-card rounded-2xl p-6 hover:scale-105 transition-transform animate-fade-in-up group block"
-                  style={{ animationDelay: `${index * 150}ms` }}
+                  onClick={() => navigate(`/projects/${project.id}`)}
+                  className="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-transform animate-fade-in-up group cursor-pointer"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {allImages.length > 1 ? (
-                    <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
-                      <Carousel
-                        opts={{ loop: true }}
-                        plugins={[Autoplay({ delay: 3000 })]}
-                        className="w-full"
-                      >
-                        <CarouselContent>
-                          {allImages.map((img, i) => (
-                            <CarouselItem key={i}>
-                              <img src={img} alt={`${project.title} - ${i + 1}`} className="w-full h-48 object-cover rounded-lg" />
-                            </CarouselItem>
-                          ))}
-                        </CarouselContent>
-                        <CarouselPrevious className="left-2" />
-                        <CarouselNext className="right-2" />
-                      </Carousel>
-                    </div>
-                  ) : allImages.length === 1 ? (
-                    <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
-                      <img src={allImages[0]} alt={project.title} className="w-full h-48 object-cover rounded-lg" />
+                  {coverImage ? (
+                    <div className="aspect-square overflow-hidden">
+                      <img
+                        src={coverImage}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
                     </div>
                   ) : (
-                    <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
-                      <IconComponent className="h-8 w-8 text-white" />
+                    <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
+                      <IconComponent className="h-16 w-16 text-primary/60" />
                     </div>
                   )}
-                
-                  <h3 className="text-xl font-bold text-foreground mb-2">{project.title}</h3>
-                
-                  <div 
-                    className="prose prose-sm md:prose-base max-w-none text-foreground"
-                    dangerouslySetInnerHTML={{ __html: project.description }}
-                  />
-                </Wrapper>
+                  <div className="p-3 md:p-4">
+                    <h3 className="text-sm md:text-base font-bold text-foreground text-center line-clamp-2">
+                      {project.title}
+                    </h3>
+                  </div>
+                </div>
               );
             })}
           </div>
