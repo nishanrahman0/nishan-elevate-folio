@@ -519,6 +519,7 @@ export type Database = {
           icon_name: string
           id: string
           image_url: string | null
+          images: Json | null
           link_url: string | null
           title: string
           updated_at: string | null
@@ -530,6 +531,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          images?: Json | null
           link_url?: string | null
           title: string
           updated_at?: string | null
@@ -541,6 +543,7 @@ export type Database = {
           icon_name?: string
           id?: string
           image_url?: string | null
+          images?: Json | null
           link_url?: string | null
           title?: string
           updated_at?: string | null

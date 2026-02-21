@@ -7,6 +7,14 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 interface Project {
   id: string;
@@ -14,6 +22,7 @@ interface Project {
   description: string;
   icon_name: string;
   image_url?: string;
+  images?: string[];
   link_url?: string;
 }
 
@@ -33,13 +42,20 @@ const Projects = () => {
       .order("display_order");
 
     if (data) {
-      setProjects(data);
+      setProjects(data.map(d => ({ ...d, images: (d.images as string[]) || [] })));
     }
   };
 
   const getIcon = (iconName: string) => {
     const IconComponent = (Icons as any)[iconName];
     return IconComponent || FolderOpen;
+  };
+
+  const getAllImages = (project: Project): string[] => {
+    const imgs: string[] = [];
+    if (project.image_url) imgs.push(project.image_url);
+    if (project.images) imgs.push(...project.images);
+    return imgs;
   };
 
   return (
@@ -59,6 +75,7 @@ const Projects = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => {
               const IconComponent = getIcon(project.icon_name);
+              const allImages = getAllImages(project);
               const Wrapper = project.link_url ? 'a' : 'div';
               const wrapperProps = project.link_url ? { href: project.link_url, target: "_blank", rel: "noopener noreferrer" } : {};
               
@@ -69,9 +86,27 @@ const Projects = () => {
                   className="glass-card rounded-2xl p-6 hover:scale-105 transition-transform animate-fade-in-up group block"
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
-                  {project.image_url ? (
+                  {allImages.length > 1 ? (
                     <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
-                      <img src={project.image_url} alt={project.title} className="w-full h-48 object-cover rounded-lg" />
+                      <Carousel
+                        opts={{ loop: true }}
+                        plugins={[Autoplay({ delay: 3000 })]}
+                        className="w-full"
+                      >
+                        <CarouselContent>
+                          {allImages.map((img, i) => (
+                            <CarouselItem key={i}>
+                              <img src={img} alt={`${project.title} - ${i + 1}`} className="w-full h-48 object-cover rounded-lg" />
+                            </CarouselItem>
+                          ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="left-2" />
+                        <CarouselNext className="right-2" />
+                      </Carousel>
+                    </div>
+                  ) : allImages.length === 1 ? (
+                    <div className="rounded-xl mb-4 p-1 bg-gradient-to-br from-primary/20 to-accent/20">
+                      <img src={allImages[0]} alt={project.title} className="w-full h-48 object-cover rounded-lg" />
                     </div>
                   ) : (
                     <div className="p-4 bg-gradient-to-br from-primary to-accent rounded-xl w-fit mb-4 group-hover:shadow-lg transition-shadow">
