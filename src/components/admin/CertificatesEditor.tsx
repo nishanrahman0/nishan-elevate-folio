@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Edit, Trash2, Award } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Award, Eye, EyeOff } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
 
 interface Certificate {
@@ -15,6 +15,7 @@ interface Certificate {
   icon_emoji: string;
   image_url?: string;
   display_order: number;
+  hidden: boolean;
 }
 
 export function CertificatesEditor() {
@@ -217,15 +218,22 @@ export function CertificatesEditor() {
         <CardContent className="pt-4">
           <div className="space-y-4">
             {certificates.map((cert) => (
-              <div key={cert.id} className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-amber-500/5 to-yellow-500/5 border border-white/10 hover:border-amber-500/30 transition-all">
+              <div key={cert.id} className={`flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-amber-500/5 to-yellow-500/5 border border-white/10 hover:border-amber-500/30 transition-all ${cert.hidden ? 'opacity-50' : ''}`}>
                 <div className="flex items-center gap-4">
                   <span className="text-3xl">{cert.icon_emoji}</span>
                   <div>
                     <h3 className="font-semibold text-foreground">{cert.title}</h3>
                     <p className="text-sm text-amber-400">{cert.issuer}</p>
+                    {cert.hidden && <p className="text-xs text-muted-foreground">Hidden</p>}
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={async () => {
+                    await supabase.from("certificates").update({ hidden: !cert.hidden }).eq("id", cert.id);
+                    fetchCertificates();
+                  }} className="border-white/20 hover:bg-amber-500/20 hover:text-amber-400" title={cert.hidden ? "Show" : "Hide"}>
+                    {cert.hidden ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                   <Button variant="outline" size="sm" onClick={() => handleEdit(cert)} className="border-white/20 hover:bg-amber-500/20 hover:text-amber-400">
                     <Edit className="h-4 w-4" />
                   </Button>

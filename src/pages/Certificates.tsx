@@ -29,6 +29,7 @@ const Certificates = () => {
     const { data } = await supabase
       .from("certificates")
       .select("*")
+      .eq("hidden", false)
       .order("display_order");
 
     if (data) {
