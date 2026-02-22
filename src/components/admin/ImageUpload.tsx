@@ -55,13 +55,20 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
       return;
     }
 
-    // Show cropper for images
+    // Store file for potential cropping choice
     setOriginalFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImageToCrop(reader.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleUploadOriginal = async () => {
+    if (!originalFile) return;
+    setImageToCrop(null);
+    await uploadFileDirect(originalFile);
+    setOriginalFile(null);
   };
 
   const uploadFileDirect = async (file: File) => {
@@ -189,6 +196,7 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
             setImageToCrop(null);
             setOriginalFile(null);
           }}
+          onUploadOriginal={handleUploadOriginal}
         />
       )}
     </>

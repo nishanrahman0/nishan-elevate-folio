@@ -32,16 +32,12 @@ const AdSense = ({ adSlot = "", adFormat = "auto", className = "" }: AdSenseProp
         </div>
         <ins
           className="adsbygoogle block"
-          style={{ display: "block" }}
+          style={{ display: "block", minHeight: "90px" }}
           data-ad-client="ca-pub-3332518473430238" 
           data-ad-slot={adSlot}
           data-ad-format={adFormat}
           data-full-width-responsive="true"
         />
-        {/* Placeholder shown when no AdSense ID is configured */}
-        <div className="min-h-[90px] flex items-center justify-center text-muted-foreground/30 text-sm">
-          <span>Ad Space</span>
-        </div>
       </div>
     </div>
   );
