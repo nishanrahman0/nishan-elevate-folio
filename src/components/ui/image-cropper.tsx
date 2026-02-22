@@ -8,10 +8,11 @@ interface ImageCropperProps {
   image: string;
   onCropComplete: (croppedImage: Blob) => void;
   onClose: () => void;
+  onUploadOriginal?: () => void;
   aspectRatio?: number;
 }
 
-export function ImageCropper({ image, onCropComplete, onClose, aspectRatio = 4 / 3 }: ImageCropperProps) {
+export function ImageCropper({ image, onCropComplete, onClose, onUploadOriginal, aspectRatio = 4 / 3 }: ImageCropperProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
@@ -107,10 +108,15 @@ export function ImageCropper({ image, onCropComplete, onClose, aspectRatio = 4 /
             />
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="flex gap-2">
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
+          {onUploadOriginal && (
+            <Button variant="secondary" onClick={onUploadOriginal}>
+              Upload Original
+            </Button>
+          )}
           <Button onClick={handleCrop}>Apply Crop</Button>
         </DialogFooter>
       </DialogContent>
