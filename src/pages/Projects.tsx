@@ -16,6 +16,8 @@ interface Project {
   image_url?: string;
   images?: string[];
   link_url?: string;
+  client_url?: string;
+  github_url?: string;
 }
 
 const Projects = () => {
@@ -104,12 +106,19 @@ const Projects = () => {
                         variant="outline"
                         size="sm"
                         className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open(project.link_url, "_blank");
-                        }}
+                        onClick={() => window.open(project.link_url, "_blank")}
                       >
                         Live
+                      </Button>
+                    )}
+                    {project.client_url && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
+                        onClick={() => window.open(project.client_url, "_blank")}
+                      >
+                        Client
                       </Button>
                     )}
                   </div>
