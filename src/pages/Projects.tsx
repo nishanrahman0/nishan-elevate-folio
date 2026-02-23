@@ -63,7 +63,7 @@ const Projects = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project, index) => {
               const IconComponent = getIcon(project.icon_name);
               const coverImage = getCoverImage(project);
@@ -71,27 +71,47 @@ const Projects = () => {
               return (
                 <div
                   key={project.id}
-                  onClick={() => navigate(`/projects/${project.id}`)}
-                  className="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-transform animate-fade-in-up group cursor-pointer"
+                  className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden animate-fade-in-up hover:border-primary/40 transition-colors"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {coverImage ? (
-                    <div className="aspect-square overflow-hidden">
+                    <div className="aspect-video overflow-hidden m-4 rounded-xl">
                       <img
                         src={coverImage}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   ) : (
-                    <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
+                    <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20 m-4 rounded-xl">
                       <IconComponent className="h-16 w-16 text-primary/60" />
                     </div>
                   )}
-                  <div className="p-3 md:p-4">
-                    <h3 className="text-sm md:text-base font-bold text-foreground text-center line-clamp-2">
-                      {project.title}
-                    </h3>
+                  <h3 className="text-lg md:text-xl font-bold text-primary text-center px-4 pt-2">
+                    {project.title}
+                  </h3>
+                  <div className="flex items-center justify-center gap-3 p-4 pt-3 pb-6 flex-wrap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
+                      onClick={() => navigate(`/projects/${project.id}`)}
+                    >
+                      Details
+                    </Button>
+                    {project.link_url && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(project.link_url, "_blank");
+                        }}
+                      >
+                        Live
+                      </Button>
+                    )}
                   </div>
                 </div>
               );
