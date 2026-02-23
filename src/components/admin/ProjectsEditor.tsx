@@ -18,6 +18,8 @@ interface Project {
   image_url?: string;
   images?: string[];
   link_url?: string;
+  client_url?: string;
+  github_url?: string;
   display_order: number;
 }
 
@@ -33,6 +35,8 @@ export function ProjectsEditor() {
     image_url: "",
     images: [] as string[],
     link_url: "",
+    client_url: "",
+    github_url: "",
     display_order: 0,
   });
 
@@ -67,6 +71,8 @@ export function ProjectsEditor() {
         image_url: formData.image_url || null,
         images: formData.images,
         link_url: formData.link_url || null,
+        client_url: formData.client_url || null,
+        github_url: formData.github_url || null,
       };
 
       if (editingId) {
@@ -102,6 +108,8 @@ export function ProjectsEditor() {
       image_url: "",
       images: [],
       link_url: "",
+      client_url: "",
+      github_url: "",
       display_order: 0,
     });
     setEditingId(null);
@@ -116,6 +124,8 @@ export function ProjectsEditor() {
       image_url: project.image_url || "",
       images: (project.images as string[]) || [],
       link_url: project.link_url || "",
+      client_url: project.client_url || "",
+      github_url: project.github_url || "",
       display_order: project.display_order,
     });
   };
@@ -215,12 +225,32 @@ export function ProjectsEditor() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="link_url" className="text-foreground/80">Link URL (optional)</Label>
+            <Label htmlFor="link_url" className="text-foreground/80">Live URL (optional)</Label>
             <Input
               id="link_url"
               value={formData.link_url}
               onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
-              placeholder="https://example.com"
+              placeholder="https://live-project.com"
+              className="bg-background/50 border-white/20 focus:border-orange-500/50"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="client_url" className="text-foreground/80">Client URL (optional)</Label>
+            <Input
+              id="client_url"
+              value={formData.client_url}
+              onChange={(e) => setFormData({ ...formData, client_url: e.target.value })}
+              placeholder="https://github.com/user/client-repo"
+              className="bg-background/50 border-white/20 focus:border-orange-500/50"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="github_url" className="text-foreground/80">GitHub URL (optional)</Label>
+            <Input
+              id="github_url"
+              value={formData.github_url}
+              onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+              placeholder="https://github.com/user/project"
               className="bg-background/50 border-white/20 focus:border-orange-500/50"
             />
           </div>

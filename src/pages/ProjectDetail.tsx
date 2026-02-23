@@ -106,17 +106,26 @@ const ProjectDetail = () => {
                   dangerouslySetInnerHTML={{ __html: project.description }}
                 />
 
-                {project.link_url && (
-                  <a
-                    href={project.link_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    View Project
-                  </a>
-                )}
+                <div className="flex flex-wrap gap-3 mt-8">
+                  {project.link_url && (
+                    <a href={project.link_url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold hover:opacity-90 transition-opacity">
+                      <ExternalLink className="h-4 w-4" /> Live
+                    </a>
+                  )}
+                  {project.client_url && (
+                    <a href={project.client_url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary text-primary font-semibold hover:bg-primary/10 transition-colors">
+                      <ExternalLink className="h-4 w-4" /> Client
+                    </a>
+                  )}
+                  {project.github_url && (
+                    <a href={project.github_url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary text-primary font-semibold hover:bg-primary/10 transition-colors">
+                      <ExternalLink className="h-4 w-4" /> GitHub
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           )}

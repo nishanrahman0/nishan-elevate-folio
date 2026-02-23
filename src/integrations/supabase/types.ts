@@ -516,9 +516,11 @@ export type Database = {
       }
       projects: {
         Row: {
+          client_url: string | null
           created_at: string | null
           description: string
           display_order: number | null
+          github_url: string | null
           icon_name: string
           id: string
           image_url: string | null
@@ -528,9 +530,11 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          client_url?: string | null
           created_at?: string | null
           description: string
           display_order?: number | null
+          github_url?: string | null
           icon_name?: string
           id?: string
           image_url?: string | null
@@ -540,9 +544,11 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          client_url?: string | null
           created_at?: string | null
           description?: string
           display_order?: number | null
+          github_url?: string | null
           icon_name?: string
           id?: string
           image_url?: string | null
