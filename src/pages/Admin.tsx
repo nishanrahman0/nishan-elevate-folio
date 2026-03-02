@@ -35,7 +35,7 @@ import { CertificatesEditor } from "@/components/admin/CertificatesEditor";
 import { SkillsEditor } from "@/components/admin/SkillsEditor";
 import { EventsEditor } from "@/components/admin/EventsEditor";
 import { BlogEditor } from "@/components/admin/BlogEditor";
-import { ExtracurricularEditor } from "@/components/admin/ExtracurricularEditor";
+import { ActivitiesEditor } from "@/components/admin/ActivitiesEditor";
 import { NavigationEditor } from "@/components/admin/NavigationEditor";
 import { ThemeEditor } from "@/components/admin/ThemeEditor";
 import { ContactEditor } from "@/components/admin/ContactEditor";
@@ -119,7 +119,7 @@ export default function Admin() {
       case "skills": return <SkillsEditor />;
       case "events": return <EventsEditor />;
       case "blog": return <BlogEditor />;
-      case "activities": return <ExtracurricularEditor />;
+      case "activities": return <ActivitiesEditor />;
       case "navigation": return <NavigationEditor />;
       case "theme": return <ThemeEditor />;
       case "seo": return <SEOEditor />;

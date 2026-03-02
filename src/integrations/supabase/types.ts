@@ -38,6 +38,127 @@ export type Database = {
         }
         Relationships: []
       }
+      activity_organizations: {
+        Row: {
+          banner_url: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          hidden: boolean
+          id: string
+          logo_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          banner_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          hidden?: boolean
+          id?: string
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          banner_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          hidden?: boolean
+          id?: string
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      activity_roles: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          organization_id: string
+          role_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          organization_id: string
+          role_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          organization_id?: string
+          role_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_roles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "activity_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      activity_tasks: {
+        Row: {
+          client_url: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          images: Json | null
+          link_url: string | null
+          role_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          client_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          images?: Json | null
+          link_url?: string | null
+          role_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          client_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          images?: Json | null
+          link_url?: string | null
+          role_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_tasks_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "activity_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_comments: {
         Row: {
           approved: boolean | null
@@ -467,6 +588,7 @@ export type Database = {
         Row: {
           created_at: string
           display_order: number | null
+          hidden: boolean
           href: string
           id: string
           is_route: boolean
@@ -476,6 +598,7 @@ export type Database = {
         Insert: {
           created_at?: string
           display_order?: number | null
+          hidden?: boolean
           href: string
           id?: string
           is_route?: boolean
@@ -485,6 +608,7 @@ export type Database = {
         Update: {
           created_at?: string
           display_order?: number | null
+          hidden?: boolean
           href?: string
           id?: string
           is_route?: boolean
