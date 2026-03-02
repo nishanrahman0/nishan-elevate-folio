@@ -117,6 +117,20 @@ export function NavigationEditor() {
     }
   };
 
+  const handleToggleHidden = async (item: NavItem) => {
+    try {
+      const { error } = await supabase
+        .from("navigation_items")
+        .update({ hidden: !item.hidden })
+        .eq("id", item.id);
+      if (error) throw error;
+      toast({ title: "Success", description: `Menu item ${item.hidden ? "shown" : "hidden"}` });
+      fetchNavItems();
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    }
+  };
+
   if (loading) {
     return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-lime-400" /></div>;
   }
@@ -213,14 +227,17 @@ export function NavigationEditor() {
         <CardContent className="pt-4">
           <div className="space-y-4">
             {navItems.map((item) => (
-              <div key={item.id} className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-lime-500/5 to-green-500/5 border border-white/10 hover:border-lime-500/30 transition-all">
+              <div key={item.id} className={`flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-lime-500/5 to-green-500/5 border border-white/10 hover:border-lime-500/30 transition-all ${item.hidden ? 'opacity-50' : ''}`}>
                 <div>
-                  <h3 className="font-semibold text-foreground">{item.label}</h3>
+                  <h3 className="font-semibold text-foreground">{item.label} {item.hidden && <span className="text-xs text-muted-foreground">(Hidden)</span>}</h3>
                   <p className="text-sm text-lime-400">
                     {item.href} {item.is_route && <span className="text-green-400">(Route)</span>}
                   </p>
                 </div>
                 <div className="flex gap-2">
+                  <Button variant="ghost" size="sm" onClick={() => handleToggleHidden(item)} className="hover:bg-lime-500/20">
+                    {item.hidden ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleEdit(item)} className="hover:bg-lime-500/20 hover:text-lime-400">
                     <Edit2 className="h-4 w-4" />
                   </Button>
