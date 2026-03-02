@@ -333,15 +333,15 @@ export function ActivitiesEditor() {
                                 <Button variant="ghost" size="sm" onClick={() => handleDeleteTask(task.id)} className="h-7 hover:bg-red-500/20"><Trash2 className="h-3 w-3" /></Button>
                               </div>
                             </div>
-                          )))}
+                          ))}
                         </div>
                       )}
                     </div>
-                  )))}
+                  ))}
                 </div>
               )}
             </div>
-          )))}
+          ))}
         </CardContent>
       </Card>
     </div>
