@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2, Edit2, Plus, Menu } from "lucide-react";
+import { Loader2, Trash2, Edit2, Plus, Menu, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 interface NavItem {
@@ -14,6 +14,7 @@ interface NavItem {
   href: string;
   is_route: boolean;
   display_order: number;
+  hidden: boolean;
 }
 
 export function NavigationEditor() {
@@ -26,6 +27,7 @@ export function NavigationEditor() {
     href: "",
     is_route: false,
     display_order: 0,
+    hidden: false,
   });
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export function NavigationEditor() {
         href: "",
         is_route: false,
         display_order: 0,
+        hidden: false,
       });
       setEditingId(null);
       fetchNavItems();
@@ -92,6 +95,7 @@ export function NavigationEditor() {
       href: item.href,
       is_route: item.is_route,
       display_order: item.display_order,
+      hidden: item.hidden,
     });
   };
 
@@ -187,6 +191,7 @@ export function NavigationEditor() {
                     href: "",
                     is_route: false,
                     display_order: 0,
+                    hidden: false,
                   });
                 }}
                 className="border-white/20"
