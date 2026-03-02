@@ -31,6 +31,7 @@ const Navigation = () => {
       const { data, error } = await supabase
         .from("navigation_items")
         .select("*")
+        .eq("hidden", false)
         .order("display_order", { ascending: true });
       
       if (error) throw error;
