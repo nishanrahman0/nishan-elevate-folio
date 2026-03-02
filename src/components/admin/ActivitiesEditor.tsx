@@ -304,7 +304,7 @@ export function ActivitiesEditor() {
                                   {taskForm.images.map((img, i) => (
                                     <div key={i} className="relative group">
                                       <img src={img} alt="" className="w-20 h-20 object-cover rounded-lg" />
-                                      <button onClick={() => removeTaskImage(i)} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">×</button>
+                                      <button onClick={() => removeTaskImage(i)} className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">{"×"}</button>
                                     </div>
                                   ))}
                                 </div>
