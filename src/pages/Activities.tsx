@@ -170,7 +170,7 @@ const Activities = () => {
 
                   {/* Role Tabs */}
                   {org.roles.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-3 mb-8">
                       {org.roles.map((role) => (
                         <Button
                           key={role.id}
