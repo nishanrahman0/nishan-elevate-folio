@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, FileText, Download } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -20,6 +20,7 @@ interface TaskDetail {
   description: string | null;
   image_url: string | null;
   images: string[];
+  files: string[];
   link_url: string | null;
   client_url: string | null;
 }
@@ -38,7 +39,7 @@ const ActivityTaskDetail = () => {
         .eq("id", id)
         .maybeSingle();
       if (data) {
-        setTask({ ...data, images: (data.images as string[]) || [], description: data.description, image_url: data.image_url, link_url: data.link_url, client_url: data.client_url });
+        setTask({ ...data, images: (data.images as string[]) || [], files: (data.files as string[]) || [], description: data.description, image_url: data.image_url, link_url: data.link_url, client_url: data.client_url });
       }
     };
     fetch();
@@ -90,6 +91,33 @@ const ActivityTaskDetail = () => {
 
           {task.description && (
             <div className="prose prose-lg dark:prose-invert max-w-none mb-8" dangerouslySetInnerHTML={{ __html: task.description }} />
+          )}
+
+          {/* Files Section */}
+          {task.files.length > 0 && (
+            <div className="mb-8 space-y-4">
+              <h3 className="text-lg font-semibold text-foreground">Attached Files</h3>
+              <div className="grid gap-4">
+                {task.files.map((fileUrl, i) => {
+                  const fileName = fileUrl.split('/').pop()?.split('?')[0] || `File ${i + 1}`;
+                  const isPdf = fileUrl.toLowerCase().includes('.pdf');
+                  return (
+                    <div key={i} className="space-y-2">
+                      {isPdf && (
+                        <iframe src={fileUrl} className="w-full h-[600px] rounded-xl border border-border/50" title={fileName} />
+                      )}
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-card/50 border border-border/30">
+                        <FileText className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span className="text-sm text-foreground/80 truncate flex-1">{fileName}</span>
+                        <Button size="sm" variant="outline" className="rounded-full gap-2" onClick={() => window.open(fileUrl, '_blank')}>
+                          <Download className="h-3 w-3" /> {isPdf ? 'View' : 'Download'}
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           )}
 
           <div className="flex gap-3 flex-wrap">

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, FileText, Download } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -31,6 +31,7 @@ const ProjectDetail = () => {
       return {
         ...data,
         images: (data.images as string[]) || [],
+        files: (data.files as string[]) || [],
       };
     },
     enabled: !!id,
@@ -105,6 +106,33 @@ const ProjectDetail = () => {
                   className="prose prose-sm md:prose-lg max-w-none text-foreground"
                   dangerouslySetInnerHTML={{ __html: project.description }}
                 />
+
+                {/* Files Section */}
+                {project.files && project.files.length > 0 && (
+                  <div className="mt-8 space-y-4">
+                    <h3 className="text-lg font-semibold text-foreground">Attached Files</h3>
+                    <div className="grid gap-4">
+                      {project.files.map((fileUrl: string, i: number) => {
+                        const fileName = fileUrl.split('/').pop()?.split('?')[0] || `File ${i + 1}`;
+                        const isPdf = fileUrl.toLowerCase().includes('.pdf');
+                        return (
+                          <div key={i} className="space-y-2">
+                            {isPdf && (
+                              <iframe src={fileUrl} className="w-full h-[600px] rounded-xl border border-border/50" title={fileName} />
+                            )}
+                            <div className="flex items-center gap-3 p-3 rounded-xl bg-card/50 border border-border/30">
+                              <FileText className="h-5 w-5 text-primary flex-shrink-0" />
+                              <span className="text-sm text-foreground/80 truncate flex-1">{fileName}</span>
+                              <Button size="sm" variant="outline" className="rounded-full gap-2" onClick={() => window.open(fileUrl, '_blank')}>
+                                <Download className="h-3 w-3" /> {isPdf ? 'View' : 'Download'}
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex flex-wrap gap-3 mt-8">
                   {project.link_url && (

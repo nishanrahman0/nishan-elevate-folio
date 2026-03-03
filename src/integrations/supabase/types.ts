@@ -115,6 +115,7 @@ export type Database = {
           created_at: string
           description: string | null
           display_order: number | null
+          files: Json | null
           id: string
           image_url: string | null
           images: Json | null
@@ -128,6 +129,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           display_order?: number | null
+          files?: Json | null
           id?: string
           image_url?: string | null
           images?: Json | null
@@ -141,6 +143,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           display_order?: number | null
+          files?: Json | null
           id?: string
           image_url?: string | null
           images?: Json | null
@@ -644,6 +647,7 @@ export type Database = {
           created_at: string | null
           description: string
           display_order: number | null
+          files: Json | null
           github_url: string | null
           icon_name: string
           id: string
@@ -658,6 +662,7 @@ export type Database = {
           created_at?: string | null
           description: string
           display_order?: number | null
+          files?: Json | null
           github_url?: string | null
           icon_name?: string
           id?: string
@@ -672,6 +677,7 @@ export type Database = {
           created_at?: string | null
           description?: string
           display_order?: number | null
+          files?: Json | null
           github_url?: string | null
           icon_name?: string
           id?: string

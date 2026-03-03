@@ -107,17 +107,19 @@ const Hero = () => {
                 Contact Me
               </Button>
               {heroData.resume_url && (
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  asChild
-                  className="group border-primary/50 hover:bg-primary/10"
-                >
-                  <a href={heroData.resume_url} target="_blank" rel="noopener noreferrer" download>
-                    <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-                    Download CV
-                  </a>
-                </Button>
+                <>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    asChild
+                    className="group border-primary/50 hover:bg-primary/10"
+                  >
+                    <a href={heroData.resume_url} target="_blank" rel="noopener noreferrer">
+                      <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                      View CV
+                    </a>
+                  </Button>
+                </>
               )}
             </div>
 

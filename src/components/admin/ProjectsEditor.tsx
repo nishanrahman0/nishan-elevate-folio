@@ -34,6 +34,7 @@ export function ProjectsEditor() {
     icon_name: "FolderOpen",
     image_url: "",
     images: [] as string[],
+    files: [] as string[],
     link_url: "",
     client_url: "",
     github_url: "",
@@ -52,7 +53,7 @@ export function ProjectsEditor() {
         .order("display_order", { ascending: true });
 
       if (error) throw error;
-      setProjects((data || []).map(d => ({ ...d, images: (d.images as string[]) || [] })));
+      setProjects((data || []).map(d => ({ ...d, images: (d.images as string[]) || [], files: (d.files as string[]) || [] })));
     } catch (error: any) {
       toast({
         title: "Error",
@@ -70,6 +71,7 @@ export function ProjectsEditor() {
         ...formData,
         image_url: formData.image_url || null,
         images: formData.images,
+        files: formData.files,
         link_url: formData.link_url || null,
         client_url: formData.client_url || null,
         github_url: formData.github_url || null,
@@ -107,6 +109,7 @@ export function ProjectsEditor() {
       icon_name: "FolderOpen",
       image_url: "",
       images: [],
+      files: [],
       link_url: "",
       client_url: "",
       github_url: "",
@@ -123,6 +126,7 @@ export function ProjectsEditor() {
       icon_name: project.icon_name,
       image_url: project.image_url || "",
       images: (project.images as string[]) || [],
+      files: (project as any).files || [],
       link_url: project.link_url || "",
       client_url: project.client_url || "",
       github_url: project.github_url || "",
@@ -222,6 +226,32 @@ export function ProjectsEditor() {
             <ImageUpload
               onImageUploaded={(url) => setFormData(prev => ({ ...prev, images: [...prev.images, url] }))}
               label="Add Image"
+            />
+          </div>
+          {/* Files Upload */}
+          <div className="space-y-4 p-4 rounded-xl bg-white/5 border border-white/10">
+            <Label className="flex items-center gap-2 text-foreground/80">
+              📎 Project Files (PDF, PPTX, etc.)
+            </Label>
+            {formData.files.map((fileUrl, index) => (
+              <div key={index} className="flex items-center gap-4 p-2 rounded-lg bg-background/30">
+                <span className="text-sm text-foreground/70 truncate flex-1">{fileUrl.split('/').pop()?.split('?')[0]}</span>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setFormData(prev => ({ ...prev, files: prev.files.filter((_, i) => i !== index) }))}
+                  className="bg-red-500/80 hover:bg-red-600"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <ImageUpload
+              onImageUploaded={(url) => setFormData(prev => ({ ...prev, files: [...prev.files, url] }))}
+              label="Add File"
+              accept=".pdf,.pptx,.ppt,.doc,.docx"
+              allowNonImage
             />
           </div>
           <div className="space-y-2">

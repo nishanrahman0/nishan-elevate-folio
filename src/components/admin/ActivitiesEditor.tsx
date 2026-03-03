@@ -35,6 +35,7 @@ interface Task {
   description: string | null;
   image_url: string | null;
   images: string[];
+  files: string[];
   link_url: string | null;
   client_url: string | null;
   display_order: number;
@@ -61,7 +62,7 @@ export function ActivitiesEditor() {
 
   // Task form
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  const [taskForm, setTaskForm] = useState({ title: "", description: "", image_url: "", images: [] as string[], link_url: "", client_url: "", display_order: 0, role_id: "" });
+  const [taskForm, setTaskForm] = useState({ title: "", description: "", image_url: "", images: [] as string[], files: [] as string[], link_url: "", client_url: "", display_order: 0, role_id: "" });
 
   useEffect(() => { fetchAll(); }, []);
 
@@ -74,7 +75,7 @@ export function ActivitiesEditor() {
       ]);
       setOrganizations(orgRes.data || []);
       setRoles(roleRes.data || []);
-      setTasks((taskRes.data || []).map(t => ({ ...t, images: (t.images as string[]) || [] })));
+      setTasks((taskRes.data || []).map(t => ({ ...t, images: (t.images as string[]) || [], files: (t.files as string[]) || [] })));
     } catch (e: any) {
       toast({ title: "Error", description: e.message, variant: "destructive" });
     } finally { setLoading(false); }
@@ -133,10 +134,10 @@ export function ActivitiesEditor() {
   };
 
   // --- Task CRUD ---
-  const resetTaskForm = () => { setTaskForm({ title: "", description: "", image_url: "", images: [], link_url: "", client_url: "", display_order: 0, role_id: "" }); setEditingTaskId(null); };
+  const resetTaskForm = () => { setTaskForm({ title: "", description: "", image_url: "", images: [], files: [], link_url: "", client_url: "", display_order: 0, role_id: "" }); setEditingTaskId(null); };
   const handleSaveTask = async (roleId: string) => {
     try {
-      const payload = { title: taskForm.title, description: taskForm.description || null, image_url: taskForm.image_url || null, images: taskForm.images, link_url: taskForm.link_url || null, client_url: taskForm.client_url || null, display_order: taskForm.display_order, role_id: roleId };
+      const payload = { title: taskForm.title, description: taskForm.description || null, image_url: taskForm.image_url || null, images: taskForm.images, files: taskForm.files, link_url: taskForm.link_url || null, client_url: taskForm.client_url || null, display_order: taskForm.display_order, role_id: roleId };
       if (editingTaskId) {
         const { role_id, ...updatePayload } = payload;
         const { error } = await supabase.from("activity_tasks").update(updatePayload).eq("id", editingTaskId);
@@ -150,7 +151,7 @@ export function ActivitiesEditor() {
       resetTaskForm(); fetchAll();
     } catch (e: any) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
   };
-  const handleEditTask = (task: Task) => { setEditingTaskId(task.id); setTaskForm({ title: task.title, description: task.description || "", image_url: task.image_url || "", images: task.images, link_url: task.link_url || "", client_url: task.client_url || "", display_order: task.display_order, role_id: task.role_id }); };
+  const handleEditTask = (task: Task) => { setEditingTaskId(task.id); setTaskForm({ title: task.title, description: task.description || "", image_url: task.image_url || "", images: task.images, files: task.files || [], link_url: task.link_url || "", client_url: task.client_url || "", display_order: task.display_order, role_id: task.role_id }); };
   const handleDeleteTask = async (id: string) => {
     const { error } = await supabase.from("activity_tasks").delete().eq("id", id);
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
@@ -158,6 +159,8 @@ export function ActivitiesEditor() {
   };
   const addTaskImage = (url: string) => { setTaskForm(f => ({ ...f, images: [...f.images, url] })); };
   const removeTaskImage = (index: number) => { setTaskForm(f => ({ ...f, images: f.images.filter((_, i) => i !== index) })); };
+  const addTaskFile = (url: string) => { setTaskForm(f => ({ ...f, files: [...f.files, url] })); };
+  const removeTaskFile = (index: number) => { setTaskForm(f => ({ ...f, files: f.files.filter((_, i) => i !== index) })); };
 
   if (loading) return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-rose-400" /></div>;
 
@@ -305,6 +308,21 @@ export function ActivitiesEditor() {
                                     <div key={i} className="relative group">
                                       <img src={img} alt="" className="w-20 h-20 object-cover rounded-lg" />
                                       <button onClick={() => removeTaskImage(i)} className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">{"×"}</button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            {/* Files Upload */}
+                            <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-2">
+                              <Label className="text-foreground/80">📎 Attached Files (PDF, PPTX, etc.)</Label>
+                              <ImageUpload currentImageUrl="" onImageUploaded={addTaskFile} label="Add File" accept=".pdf,.pptx,.ppt,.doc,.docx" allowNonImage />
+                              {taskForm.files.length > 0 && (
+                                <div className="space-y-1 mt-2">
+                                  {taskForm.files.map((file, i) => (
+                                    <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-background/30">
+                                      <span className="text-xs text-foreground/70 truncate flex-1">{file.split('/').pop()?.split('?')[0]}</span>
+                                      <button onClick={() => removeTaskFile(i)} className="bg-destructive text-destructive-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">{"×"}</button>
                                     </div>
                                   ))}
                                 </div>
