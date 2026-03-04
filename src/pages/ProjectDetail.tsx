@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ExternalLink, FileText, Download } from "lucide-react";
 import {
   Carousel,
@@ -13,6 +14,18 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+
+const getVideoEmbed = (url: string): string | null => {
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+  // Facebook video
+  if (url.includes("facebook.com") || url.includes("fb.watch")) {
+    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`;
+  }
+  // LinkedIn video (no embed support, fallback to link)
+  return null;
+};
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +45,8 @@ const ProjectDetail = () => {
         ...data,
         images: (data.images as string[]) || [],
         files: (data.files as string[]) || [],
+        tags: (data.tags as string[]) || [],
+        videos: (data.videos as string[]) || [],
       };
     },
     enabled: !!id,
@@ -98,14 +113,60 @@ const ProjectDetail = () => {
               ) : null}
 
               <div className="p-6 md:p-10">
-                <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-6">
+                <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-4">
                   {project.title}
                 </h1>
+
+                {project.tags && project.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.tags.map((tag: string) => (
+                      <Badge key={tag} variant="secondary">{tag}</Badge>
+                    ))}
+                  </div>
+                )}
 
                 <div
                   className="prose prose-sm md:prose-lg max-w-none text-foreground"
                   dangerouslySetInnerHTML={{ __html: project.description }}
                 />
+
+                {/* Videos Section */}
+                {project.videos && project.videos.length > 0 && (
+                  <div className="mt-8 space-y-4">
+                    <h3 className="text-lg font-semibold text-foreground">Videos</h3>
+                    <div className="grid gap-4">
+                      {project.videos.map((videoUrl: string, i: number) => {
+                        const embedUrl = getVideoEmbed(videoUrl);
+                        if (embedUrl) {
+                          return (
+                            <div key={i} className="aspect-video rounded-xl overflow-hidden border border-border/50">
+                              <iframe
+                                src={embedUrl}
+                                className="w-full h-full"
+                                allowFullScreen
+                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                                title={`Video ${i + 1}`}
+                              />
+                            </div>
+                          );
+                        }
+                        // Fallback for LinkedIn or unsupported
+                        return (
+                          <a
+                            key={i}
+                            href={videoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-4 rounded-xl bg-card/50 border border-border/30 hover:border-primary/40 transition-colors"
+                          >
+                            <ExternalLink className="h-5 w-5 text-primary" />
+                            <span className="text-sm text-foreground/80">Watch on {videoUrl.includes('linkedin') ? 'LinkedIn' : 'External Platform'}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Files Section */}
                 {project.files && project.files.length > 0 && (

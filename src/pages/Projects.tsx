@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { FolderOpen } from "lucide-react";
+import { FolderOpen, Play } from "lucide-react";
 import * as Icons from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -18,12 +19,23 @@ interface Project {
   link_url?: string;
   client_url?: string;
   github_url?: string;
+  tags?: string[];
+  videos?: string[];
 }
+
+const getVideoThumbnail = (url: string): string | null => {
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+  return null;
+};
 
 const Projects = () => {
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [allTags, setAllTags] = useState<string[]>([]);
+  const [activeTag, setActiveTag] = useState<string>("All");
 
   useEffect(() => {
     fetchProjects();
@@ -36,7 +48,17 @@ const Projects = () => {
       .order("display_order");
 
     if (data) {
-      setProjects(data.map(d => ({ ...d, images: (d.images as string[]) || [] })));
+      const mapped = data.map(d => ({
+        ...d,
+        images: (d.images as string[]) || [],
+        tags: (d.tags as string[]) || [],
+        videos: (d.videos as string[]) || [],
+      }));
+      setProjects(mapped);
+      // Extract unique tags
+      const tags = new Set<string>();
+      mapped.forEach(p => p.tags?.forEach((t: string) => tags.add(t)));
+      setAllTags(Array.from(tags));
     }
   };
 
@@ -48,8 +70,17 @@ const Projects = () => {
   const getCoverImage = (project: Project): string | null => {
     if (project.image_url) return project.image_url;
     if (project.images && project.images.length > 0) return project.images[0];
+    // Check for video thumbnail
+    if (project.videos && project.videos.length > 0) {
+      const thumb = getVideoThumbnail(project.videos[0]);
+      if (thumb) return thumb;
+    }
     return null;
   };
+
+  const filteredProjects = activeTag === "All"
+    ? projects
+    : projects.filter(p => p.tags?.includes(activeTag));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
@@ -65,10 +96,36 @@ const Projects = () => {
             )}
           </div>
 
+          {/* Tag filters */}
+          {allTags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-8">
+              <Button
+                variant={activeTag === "All" ? "default" : "outline"}
+                size="sm"
+                className="rounded-full"
+                onClick={() => setActiveTag("All")}
+              >
+                All
+              </Button>
+              {allTags.map(tag => (
+                <Button
+                  key={tag}
+                  variant={activeTag === tag ? "default" : "outline"}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => setActiveTag(tag)}
+                >
+                  {tag}
+                </Button>
+              ))}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {projects.map((project, index) => {
+            {filteredProjects.map((project, index) => {
               const IconComponent = getIcon(project.icon_name);
               const coverImage = getCoverImage(project);
+              const hasVideo = project.videos && project.videos.length > 0;
 
               return (
                 <div
@@ -77,12 +134,20 @@ const Projects = () => {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {coverImage ? (
-                    <div className="aspect-video overflow-hidden m-4 rounded-xl">
+                    <div className="aspect-video overflow-hidden m-4 rounded-xl relative group">
                       <img
                         src={coverImage}
                         alt={project.title}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                       />
+                      {hasVideo && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
+                            <Play className="h-6 w-6 text-primary-foreground ml-1" />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20 m-4 rounded-xl">
@@ -92,6 +157,13 @@ const Projects = () => {
                   <h3 className="text-lg md:text-xl font-bold text-primary text-center px-4 pt-2">
                     {project.title}
                   </h3>
+                  {project.tags && project.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 justify-center px-4 pt-2">
+                      {project.tags.map(tag => (
+                        <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                      ))}
+                    </div>
+                  )}
                   <div className="flex items-center justify-center gap-3 p-4 pt-3 pb-6 flex-wrap">
                     <Button
                       variant="outline"
