@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { ImageUpload } from "./ImageUpload";
-import { Trash2, FileText, Sparkles, X } from "lucide-react";
+import { Trash2, FileText, Sparkles, X, Linkedin } from "lucide-react";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 interface BlogPost {
@@ -37,6 +37,8 @@ export function BlogEditor() {
   const queryClient = useQueryClient();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagInput, setTagInput] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [importingLinkedin, setImportingLinkedin] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -199,10 +201,61 @@ export function BlogEditor() {
     setFormData(prev => ({ ...prev, videos: prev.videos.filter((_, i) => i !== index) }));
   };
 
+  const handleLinkedinImport = () => {
+    if (!linkedinUrl.trim()) return;
+    setImportingLinkedin(true);
+    // Pre-fill the form with LinkedIn post URL as reference
+    setFormData(prev => ({
+      ...prev,
+      content: prev.content + `\n<p><em>Originally posted on <a href="${linkedinUrl}" target="_blank" rel="noopener noreferrer">LinkedIn</a></em></p>`,
+      tags: prev.tags.includes("LinkedIn") ? prev.tags : [...prev.tags, "LinkedIn"],
+    }));
+    setLinkedinUrl("");
+    setImportingLinkedin(false);
+    toast.success("LinkedIn reference added. Paste your post content above.");
+  };
+
   const pendingComments = comments?.filter(c => !c.approved) || [];
 
   return (
     <div className="space-y-6">
+      {/* LinkedIn Import Card */}
+      <Card className="border-0 bg-gradient-to-br from-blue-500/10 via-blue-600/10 to-cyan-500/10 backdrop-blur-sm shadow-xl">
+        <CardHeader className="border-b border-white/10 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-t-lg">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+              <Linkedin className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Import from LinkedIn
+              </CardTitle>
+              <CardDescription>Paste your LinkedIn post URL to reference it in a blog post</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="flex gap-2">
+            <Input
+              value={linkedinUrl}
+              onChange={e => setLinkedinUrl(e.target.value)}
+              placeholder="https://www.linkedin.com/posts/..."
+              className="bg-background/50 border-white/20 focus:border-blue-500/50"
+            />
+            <Button
+              onClick={handleLinkedinImport}
+              disabled={importingLinkedin || !linkedinUrl.trim()}
+              className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 shrink-0"
+            >
+              <Linkedin className="mr-2 h-4 w-4" />
+              Import
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Paste the LinkedIn post URL, then write your blog content below. The blog post remains even if your LinkedIn account changes.
+          </p>
+        </CardContent>
+      </Card>
       <Card className="border-0 bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-indigo-500/10 backdrop-blur-sm shadow-xl">
         <CardHeader className="border-b border-white/10 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-t-lg">
           <div className="flex items-center gap-3">
