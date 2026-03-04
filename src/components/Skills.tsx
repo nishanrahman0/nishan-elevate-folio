@@ -57,7 +57,7 @@ const Skills = () => {
           category,
           icon: IconComponent,
           color: firstSkill.color_gradient,
-          skills: skills.map((s) => s.skill_name),
+          skills: skills.map((s) => ({ name: s.skill_name, image_url: (s as any).image_url, link_url: (s as any).link_url })),
         };
       });
 
@@ -93,14 +93,21 @@ const Skills = () => {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                {category.skills.map((skill, skillIndex) => (
-                  <span
-                    key={skillIndex}
-                    className="px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-full text-sm font-medium text-foreground hover:scale-105 transition-transform"
-                  >
-                    {skill}
-                  </span>
-                ))}
+                {category.skills.map((skill, skillIndex) => {
+                  const inner = (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 rounded-full text-sm font-medium text-foreground hover:scale-105 transition-transform">
+                      {skill.image_url && (
+                        <img src={skill.image_url} alt={skill.name} className="w-5 h-5 rounded-full object-cover" />
+                      )}
+                      {skill.name}
+                    </span>
+                  );
+                  return skill.link_url ? (
+                    <a key={skillIndex} href={skill.link_url} target="_blank" rel="noopener noreferrer">{inner}</a>
+                  ) : (
+                    <div key={skillIndex}>{inner}</div>
+                  );
+                })}
               </div>
             </div>
           ))}
