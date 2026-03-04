@@ -37,7 +37,7 @@ const Certificates = () => {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">Certificates</span>
+            <span className="gradient-text">Certifications</span>
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
         </div>

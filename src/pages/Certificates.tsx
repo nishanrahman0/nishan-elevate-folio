@@ -45,9 +45,9 @@ const Certificates = () => {
       <div className="pt-24 pb-16 min-h-screen relative z-10">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold gradient-text">Certificates</h1>
+            <h1 className="text-4xl md:text-5xl font-bold gradient-text">Certifications</h1>
             {isAdmin && (
-              <Button variant="outline" onClick={() => navigate("/admin?tab=certificates")}>Manage Certificates</Button>
+              <Button variant="outline" onClick={() => navigate("/admin?tab=certificates")}>Manage Certifications</Button>
             )}
           </div>
 

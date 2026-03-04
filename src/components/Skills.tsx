@@ -9,13 +9,21 @@ interface Skill {
   skill_name: string;
   icon_name: string;
   color_gradient: string;
+  image_url?: string;
+  link_url?: string;
+}
+
+interface SkillItem {
+  name: string;
+  image_url?: string;
+  link_url?: string;
 }
 
 interface SkillCategory {
   category: string;
   icon: any;
   color: string;
-  skills: string[];
+  skills: SkillItem[];
 }
 
 const Skills = () => {
