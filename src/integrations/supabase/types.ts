@@ -654,8 +654,10 @@ export type Database = {
           image_url: string | null
           images: Json | null
           link_url: string | null
+          tags: string[] | null
           title: string
           updated_at: string | null
+          videos: Json | null
         }
         Insert: {
           client_url?: string | null
@@ -669,8 +671,10 @@ export type Database = {
           image_url?: string | null
           images?: Json | null
           link_url?: string | null
+          tags?: string[] | null
           title: string
           updated_at?: string | null
+          videos?: Json | null
         }
         Update: {
           client_url?: string | null
@@ -684,8 +688,10 @@ export type Database = {
           image_url?: string | null
           images?: Json | null
           link_url?: string | null
+          tags?: string[] | null
           title?: string
           updated_at?: string | null
+          videos?: Json | null
         }
         Relationships: []
       }
