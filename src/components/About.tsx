@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-const floatingIcons = [
-  { label: "HTML", color: "#E44D26", textColor: "#fff", delay: 0, x: 58, y: 8 },
-  { label: "CSS", color: "#264DE4", textColor: "#fff", delay: 0.8, x: 30, y: 14 },
-  { label: "JS", color: "#F7DF1E", textColor: "#000", delay: 1.6, x: 75, y: 12 },
-  { label: "TS", color: "#3178C6", textColor: "#fff", delay: 0.4, x: 72, y: 28 },
-  { label: "React", color: "#61DAFB", textColor: "#000", delay: 1.2, x: 38, y: 5 },
-  { label: "AI", color: "#8B5CF6", textColor: "#fff", delay: 2, x: 18, y: 6 },
-  { label: "Data", color: "#10B981", textColor: "#fff", delay: 1.4, x: 80, y: 42 },
-  { label: "Biz", color: "#F59E0B", textColor: "#000", delay: 0.6, x: 12, y: 38 },
-];
+interface SkillIcon {
+  label: string;
+  image_url: string | null;
+  color: string;
+}
 
 const About = () => {
   const [content, setContent] = useState("");
+  const [skillIcons, setSkillIcons] = useState<SkillIcon[]>([]);
 
   useEffect(() => {
     fetchAboutContent();
+    fetchSkillIcons();
   }, []);
 
   const fetchAboutContent = async () => {
@@ -24,10 +21,41 @@ const About = () => {
       .from("about_content")
       .select("content")
       .maybeSingle();
+    if (data) setContent(data.content);
+  };
 
+  const fetchSkillIcons = async () => {
+    const { data } = await supabase
+      .from("skills")
+      .select("skill_name, image_url, color_gradient")
+      .order("display_order")
+      .limit(10);
     if (data) {
-      setContent(data.content);
+      const colors = ["#E44D26", "#264DE4", "#F7DF1E", "#3178C6", "#61DAFB", "#8B5CF6", "#10B981", "#F59E0B", "#EC4899", "#06B6D4"];
+      setSkillIcons(data.map((s, i) => ({
+        label: s.skill_name,
+        image_url: s.image_url,
+        color: colors[i % colors.length],
+      })));
     }
+  };
+
+  // Position icons in an arc around the top-right of the monitor
+  const getIconPosition = (index: number, total: number) => {
+    // Place icons in a semicircle above and to the right of the monitor
+    const positions = [
+      { x: 52, y: 5 },   // top center-right
+      { x: 68, y: 3 },   // top right
+      { x: 78, y: 12 },  // right upper
+      { x: 82, y: 26 },  // right middle
+      { x: 78, y: 40 },  // right lower
+      { x: 38, y: 3 },   // top center-left
+      { x: 25, y: 8 },   // left upper
+      { x: 18, y: 22 },  // left middle
+      { x: 85, y: 52 },  // far right lower
+      { x: 15, y: 38 },  // far left lower
+    ];
+    return positions[index % positions.length];
   };
 
   return (
@@ -45,130 +73,159 @@ const About = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Illustration Side */}
-          <div className="relative w-full h-[420px] md:h-[480px] animate-fade-in order-2 lg:order-1">
-            {/* Diagonal lines background */}
-            <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
-              {[...Array(6)].map((_, i) => (
-                <line
-                  key={i}
-                  x1={`${30 + i * 12}%`}
-                  y1="0%"
-                  x2={`${10 + i * 12}%`}
-                  y2="100%"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="text-primary"
-                />
+          <div className="relative w-full h-[420px] md:h-[500px] animate-fade-in order-2 lg:order-1">
+            {/* Subtle diagonal lines */}
+            <svg className="absolute inset-0 w-full h-full opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
+              {[...Array(5)].map((_, i) => (
+                <line key={i} x1={`${35 + i * 14}%`} y1="0%" x2={`${15 + i * 14}%`} y2="100%" stroke="currentColor" strokeWidth="1" className="text-primary" />
               ))}
             </svg>
 
-            {/* Person at desk - SVG illustration */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-              <svg width="320" height="300" viewBox="0 0 320 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xl">
-                {/* Chair */}
-                {/* Chair base/wheels */}
-                <ellipse cx="105" cy="280" rx="35" ry="6" fill="#D946A8" opacity="0.7"/>
-                <line x1="105" y1="280" x2="105" y2="250" stroke="#D946A8" strokeWidth="3"/>
-                <line x1="75" y1="283" x2="90" y2="275" stroke="#D946A8" strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="135" y1="283" x2="120" y2="275" stroke="#D946A8" strokeWidth="2.5" strokeLinecap="round"/>
-                {/* Chair seat */}
-                <path d="M65 245 Q105 260 145 245 L140 230 Q105 242 70 230 Z" fill="#F59E0B"/>
-                {/* Chair back */}
-                <path d="M68 230 Q62 185 72 170 Q90 155 105 160 L100 230" fill="#F59E0B"/>
-                <path d="M72 225 Q68 190 75 175 Q88 165 98 168 L95 225" fill="#DA8B09"/>
+            {/* Person at desk SVG - isometric style */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-[45%]">
+              <svg width="360" height="360" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xl">
+                
+                {/* === FLOOR SHADOW === */}
+                <ellipse cx="200" cy="370" rx="160" ry="18" fill="currentColor" className="text-primary/5" />
 
-                {/* Person body */}
-                {/* Legs */}
-                <path d="M100 245 L110 270 L120 270" stroke="#1E3A5F" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M120 245 L135 265 L148 268" stroke="#1E3A5F" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-                {/* Shoes */}
-                <ellipse cx="125" cy="271" rx="10" ry="5" fill="#EC4899"/>
-                <ellipse cx="152" cy="269" rx="10" ry="5" fill="#EC4899"/>
-
-                {/* Torso */}
-                <path d="M88 185 Q95 240 115 245 Q130 245 135 195" fill="#EC4899" opacity="0.9"/>
-                <path d="M92 190 Q98 235 113 242 Q125 240 130 198" fill="#DB2777"/>
-
-                {/* Arms */}
-                {/* Left arm reaching to keyboard */}
-                <path d="M92 200 Q80 215 95 225 Q130 230 160 215" stroke="#FBBF7A" strokeWidth="7" strokeLinecap="round" fill="none"/>
-                {/* Right arm reaching to keyboard */}
-                <path d="M130 200 Q145 215 170 210" stroke="#FBBF7A" strokeWidth="7" strokeLinecap="round" fill="none"/>
-                {/* Hands */}
-                <circle cx="160" cy="214" r="5" fill="#FBBF7A"/>
-                <circle cx="170" cy="209" r="5" fill="#FBBF7A"/>
-
-                {/* Head */}
-                <circle cx="110" cy="170" r="22" fill="#FBBF7A"/>
-                {/* Hair */}
-                <path d="M88 165 Q90 145 110 140 Q130 140 135 158 Q132 150 110 148 Q92 150 88 165" fill="#1E3A5F"/>
-                {/* Glasses */}
-                <circle cx="103" cy="170" r="6" stroke="#4B5563" strokeWidth="1.5" fill="none"/>
-                <circle cx="118" cy="170" r="6" stroke="#4B5563" strokeWidth="1.5" fill="none"/>
-                <line x1="109" y1="170" x2="112" y2="170" stroke="#4B5563" strokeWidth="1.5"/>
-
-                {/* Desk */}
-                {/* Desk top surface */}
-                <path d="M140 218 L300 195 L300 202 L140 225 Z" fill="#67E8F9" opacity="0.9"/>
-                <path d="M140 218 L300 195 L300 198 L140 221 Z" fill="#22D3EE"/>
+                {/* === DESK (isometric) === */}
+                {/* Desk top - flat surface, person sits behind it */}
+                <path d="M80 260 L320 240 L320 248 L80 268 Z" fill="#67E8F9" />
+                <path d="M80 260 L320 240 L320 243 L80 263 Z" fill="#22D3EE" />
+                {/* Desk front face */}
+                <path d="M80 263 L80 268 L320 248 L320 243 Z" fill="#0E7490" opacity="0.4" />
                 {/* Desk legs */}
-                <line x1="155" y1="225" x2="150" y2="285" stroke="#5EEAD4" strokeWidth="4"/>
-                <line x1="285" y1="200" x2="290" y2="275" stroke="#5EEAD4" strokeWidth="4"/>
+                <line x1="100" y1="268" x2="95" y2="355" stroke="#5EEAD4" strokeWidth="4" strokeLinecap="round" />
+                <line x1="300" y1="248" x2="305" y2="345" stroke="#5EEAD4" strokeWidth="4" strokeLinecap="round" />
+                <line x1="195" y1="258" x2="195" y2="355" stroke="#5EEAD4" strokeWidth="3" strokeLinecap="round" />
 
-                {/* Monitor */}
+                {/* === CHAIR === */}
+                {/* Chair wheels/base */}
+                <ellipse cx="148" cy="358" rx="32" ry="5" fill="#D946A8" opacity="0.5" />
+                <line x1="120" y1="360" x2="133" y2="352" stroke="#D946A8" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="176" y1="360" x2="163" y2="352" stroke="#D946A8" strokeWidth="2.5" strokeLinecap="round" />
+                {/* Chair pole */}
+                <line x1="148" y1="355" x2="148" y2="325" stroke="#D946A8" strokeWidth="3" />
+                {/* Chair seat */}
+                <path d="M115 318 Q148 330 181 318 L176 305 Q148 315 120 305 Z" fill="#F59E0B" />
+                {/* Chair back */}
+                <path d="M118 305 Q112 260 125 240 L155 240 Q168 260 162 305" fill="#F59E0B" />
+                <path d="M123 300 Q118 265 128 248 L150 248 Q160 265 155 300" fill="#DA8B09" />
+
+                {/* === PERSON (seated in chair, facing desk/monitor) === */}
+                {/* Person is facing right toward the monitor */}
+                
+                {/* Legs - bent at knees, feet under desk */}
+                <path d="M135 318 L145 340 L160 342" stroke="#1E3A5F" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                <path d="M160 318 L170 335 L185 338" stroke="#1E3A5F" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                {/* Shoes */}
+                <ellipse cx="165" cy="343" rx="10" ry="5" fill="#EC4899" />
+                <ellipse cx="190" cy="339" rx="10" ry="5" fill="#EC4899" />
+                
+                {/* Torso - seated upright, leaning slightly forward */}
+                <path d="M125 270 Q130 310 148 318 Q165 318 170 275" fill="#EC4899" />
+                <path d="M130 275 Q134 308 148 315 Q160 313 164 278" fill="#DB2777" />
+
+                {/* Left arm - reaching to keyboard on desk */}
+                <path d="M130 282 Q120 295 130 305 Q155 310 200 260" stroke="#FBBF7A" strokeWidth="8" strokeLinecap="round" fill="none" />
+                {/* Right arm */}
+                <path d="M165 282 Q180 295 210 258" stroke="#FBBF7A" strokeWidth="8" strokeLinecap="round" fill="none" />
+                {/* Hands on keyboard area */}
+                <circle cx="200" cy="258" r="5.5" fill="#FBBF7A" />
+                <circle cx="210" cy="256" r="5.5" fill="#FBBF7A" />
+
+                {/* Head - facing right toward screen */}
+                <circle cx="150" cy="248" r="24" fill="#FBBF7A" />
+                {/* Hair */}
+                <path d="M126 243 Q128 220 150 215 Q172 218 176 240 Q170 225 150 222 Q132 225 126 243" fill="#1E3A5F" />
+                {/* Side profile hint - ear */}
+                <ellipse cx="174" cy="250" rx="4" ry="6" fill="#E5A96A" />
+                {/* Glasses */}
+                <circle cx="142" cy="250" r="7" stroke="#4B5563" strokeWidth="1.8" fill="none" />
+                <circle cx="158" cy="249" r="7" stroke="#4B5563" strokeWidth="1.8" fill="none" />
+                <line x1="149" y1="250" x2="151" y2="249" stroke="#4B5563" strokeWidth="1.5" />
+                <line x1="165" y1="248" x2="174" y2="248" stroke="#4B5563" strokeWidth="1.5" />
+                {/* Eyes looking at screen */}
+                <circle cx="143" cy="249" r="1.5" fill="#1E293B" />
+                <circle cx="159" cy="248" r="1.5" fill="#1E293B" />
+                {/* Slight smile */}
+                <path d="M146 257 Q150 261 155 257" stroke="#C68A56" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+
+                {/* === MONITOR (on desk, in front of person) === */}
                 {/* Monitor screen */}
-                <rect x="175" y="140" width="100" height="70" rx="4" fill="#1E293B" stroke="#38BDF8" strokeWidth="2"/>
-                {/* Screen content - code lines */}
-                <rect x="182" y="150" width="60" height="3" rx="1" fill="#F97316" opacity="0.8"/>
-                <rect x="182" y="157" width="80" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
-                <rect x="182" y="163" width="70" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
-                <rect x="182" y="169" width="85" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
-                <rect x="182" y="175" width="50" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
-                <rect x="182" y="181" width="75" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
-                <rect x="182" y="187" width="60" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
-                <rect x="182" y="193" width="40" height="2" rx="1" fill="#94A3B8" opacity="0.5"/>
+                <rect x="220" y="175" width="110" height="78" rx="5" fill="#0F172A" stroke="#38BDF8" strokeWidth="2.5" />
+                {/* Screen glow */}
+                <rect x="220" y="175" width="110" height="78" rx="5" fill="#38BDF8" opacity="0.05" />
+                {/* Code lines on screen */}
+                <rect x="230" y="186" width="45" height="3.5" rx="1.5" fill="#F97316" opacity="0.9" />
+                <rect x="230" y="194" width="85" height="2.5" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="230" y="200" width="70" height="2.5" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="230" y="206" width="90" height="2.5" rx="1" fill="#38BDF8" opacity="0.3" />
+                <rect x="230" y="212" width="55" height="2.5" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="230" y="218" width="78" height="2.5" rx="1" fill="#10B981" opacity="0.3" />
+                <rect x="230" y="224" width="65" height="2.5" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="230" y="230" width="42" height="2.5" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="230" y="236" width="60" height="2.5" rx="1" fill="#8B5CF6" opacity="0.3" />
+                <rect x="230" y="242" width="35" height="2.5" rx="1" fill="#94A3B8" opacity="0.4" />
                 {/* Monitor stand */}
-                <rect x="218" y="210" width="14" height="10" fill="#64748B"/>
-                <rect x="210" y="218" width="30" height="4" rx="2" fill="#64748B"/>
+                <rect x="268" y="253" width="14" height="8" fill="#64748B" />
+                <rect x="260" y="259" width="30" height="4" rx="2" fill="#64748B" />
 
-                {/* Coffee mug */}
-                <rect x="265" y="205" width="15" height="14" rx="3" fill="#EA580C"/>
-                <path d="M280 208 Q288 211 280 216" stroke="#EA580C" strokeWidth="2" fill="none"/>
+                {/* === KEYBOARD === */}
+                <rect x="190" y="254" width="55" height="12" rx="3" fill="#E2E8F0" opacity="0.85" />
+                {/* Keys */}
+                <rect x="194" y="257" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.5" />
+                <rect x="202" y="257" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.5" />
+                <rect x="210" y="257" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.5" />
+                <rect x="218" y="257" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.5" />
+                <rect x="226" y="257" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.5" />
+                <rect x="234" y="257" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.5" />
+                <rect x="194" y="262" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="202" y="262" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="210" y="262" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="218" y="262" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="226" y="262" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.4" />
+                <rect x="234" y="262" width="6" height="3" rx="1" fill="#94A3B8" opacity="0.4" />
+
+                {/* === COFFEE MUG === */}
+                <rect x="310" y="248" width="14" height="14" rx="3" fill="#EA580C" />
+                <path d="M324 251 Q332 255 324 260" stroke="#EA580C" strokeWidth="2" fill="none" />
                 {/* Steam */}
-                <path d="M270 200 Q272 195 269 190" stroke="#94A3B8" strokeWidth="1" opacity="0.5" fill="none"/>
-                <path d="M275 201 Q277 194 274 188" stroke="#94A3B8" strokeWidth="1" opacity="0.5" fill="none"/>
-
-                {/* Keyboard */}
-                <rect x="155" y="212" width="45" height="10" rx="2" fill="#CBD5E1" opacity="0.8"/>
-                <rect x="157" y="214" width="5" height="3" rx="0.5" fill="#94A3B8" opacity="0.6"/>
-                <rect x="164" y="214" width="5" height="3" rx="0.5" fill="#94A3B8" opacity="0.6"/>
-                <rect x="171" y="214" width="5" height="3" rx="0.5" fill="#94A3B8" opacity="0.6"/>
-                <rect x="178" y="214" width="5" height="3" rx="0.5" fill="#94A3B8" opacity="0.6"/>
-                <rect x="185" y="214" width="5" height="3" rx="0.5" fill="#94A3B8" opacity="0.6"/>
-                <rect x="192" y="214" width="5" height="3" rx="0.5" fill="#94A3B8" opacity="0.6"/>
+                <path d="M314 243 Q316 237 313 231" stroke="#94A3B8" strokeWidth="1" opacity="0.4" fill="none" />
+                <path d="M319 244 Q321 236 318 229" stroke="#94A3B8" strokeWidth="1" opacity="0.4" fill="none" />
               </svg>
             </div>
 
-            {/* Floating skill icons */}
-            {floatingIcons.map((item, index) => (
-              <div
-                key={index}
-                className="absolute floating-icon"
-                style={{
-                  left: `${item.x}%`,
-                  top: `${item.y}%`,
-                  animationDelay: `${item.delay}s`,
-                  animationDuration: `${3 + (index % 3) * 0.5}s`,
-                }}
-              >
+            {/* Floating skill icons - positioned around the monitor area */}
+            {skillIcons.map((item, index) => {
+              const pos = getIconPosition(index, skillIcons.length);
+              return (
                 <div
-                  className="px-3 py-1.5 rounded-md text-xs font-bold shadow-lg transition-transform hover:scale-125 cursor-default"
-                  style={{ backgroundColor: item.color, color: item.textColor }}
+                  key={index}
+                  className="absolute floating-icon z-20"
+                  style={{
+                    left: `${pos.x}%`,
+                    top: `${pos.y}%`,
+                    animationDelay: `${index * 0.35}s`,
+                    animationDuration: `${3 + (index % 4) * 0.4}s`,
+                  }}
                 >
-                  {item.label}
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg shadow-lg backdrop-blur-sm border border-white/10 transition-transform hover:scale-110 cursor-default bg-background/80">
+                    {item.image_url ? (
+                      <img src={item.image_url} alt={item.label} className="w-5 h-5 rounded object-contain" />
+                    ) : (
+                      <div
+                        className="w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold text-white"
+                        style={{ backgroundColor: item.color }}
+                      >
+                        {item.label.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                    <span className="text-[11px] font-semibold text-foreground/80">{item.label}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Text Side */}
