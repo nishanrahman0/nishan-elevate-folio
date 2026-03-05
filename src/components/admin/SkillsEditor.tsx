@@ -98,8 +98,8 @@ export function SkillsEditor() {
       skill_name: skill.skill_name,
       icon_name: skill.icon_name,
       color_gradient: skill.color_gradient,
-      image_url: (skill as any).image_url || "",
-      link_url: (skill as any).link_url || "",
+      image_url: skill.image_url || "",
+      link_url: skill.link_url || "",
     });
   };
 
@@ -204,7 +204,7 @@ export function SkillsEditor() {
             <ImageUpload
               currentImageUrl={formData.image_url}
               onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-              label="🎨 Skill Image (optional)"
+              label="🖼️ Skill Logo (recommended - shows in About section)"
             />
           </div>
           <div className="space-y-2">
@@ -249,7 +249,16 @@ export function SkillsEditor() {
                 <div className="space-y-2">
                   {categorySkills.map((skill) => (
                     <div key={skill.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border border-white/10 hover:border-yellow-500/30 transition-all">
-                      <span className="text-foreground">{skill.skill_name}</span>
+                      <div className="flex items-center gap-3">
+                        {skill.image_url ? (
+                          <img src={skill.image_url} alt={skill.skill_name} className="w-6 h-6 rounded object-contain" />
+                        ) : (
+                          <div className="w-6 h-6 rounded bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
+                            {skill.skill_name.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                        <span className="text-foreground">{skill.skill_name}</span>
+                      </div>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm" onClick={() => handleEdit(skill)} className="border-white/20 hover:bg-yellow-500/20 hover:text-yellow-400">
                           <Edit className="h-4 w-4" />
