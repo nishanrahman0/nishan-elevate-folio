@@ -15,6 +15,8 @@ interface Skill {
   icon_name: string;
   color_gradient: string;
   display_order: number;
+  image_url: string | null;
+  link_url: string | null;
 }
 
 export function SkillsEditor() {
