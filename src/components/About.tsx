@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Code, BarChart3, Briefcase, Brain, Users, FileText } from "lucide-react";
-
-const floatingIcons = [
-  { icon: Code, label: "Technology", delay: 0, x: "left-[5%]", y: "top-[15%]" },
-  { icon: BarChart3, label: "Analytics", delay: 1, x: "left-[15%]", y: "bottom-[20%]" },
-  { icon: Briefcase, label: "Business", delay: 2, x: "right-[10%]", y: "top-[10%]" },
-  { icon: Brain, label: "AI Tools", delay: 0.5, x: "right-[5%]", y: "bottom-[25%]" },
-  { icon: Users, label: "Leadership", delay: 1.5, x: "left-[8%]", y: "top-[55%]" },
-  { icon: FileText, label: "Productivity", delay: 2.5, x: "right-[12%]", y: "top-[50%]" },
-];
+import aboutIllustration from "@/assets/about-illustration.png";
 
 const About = () => {
   const [content, setContent] = useState("");
