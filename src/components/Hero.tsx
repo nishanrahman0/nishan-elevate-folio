@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Mail, Linkedin, Github, Facebook, Instagram, Download } from "lucide-react";
+import { Mail, Linkedin, Github, Facebook, Instagram, Download, Eye, ChevronDown } from "lucide-react";
 import * as Icons from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,10 +23,23 @@ const Hero = () => {
     instagram_url: "",
   });
   const [customLinks, setCustomLinks] = useState<SocialLink[]>([]);
+  const [showCvMenu, setShowCvMenu] = useState(false);
+  const cvMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchHeroData();
     fetchCustomLinks();
+  }, []);
+
+  // Close CV menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (cvMenuRef.current && !cvMenuRef.current.contains(e.target as Node)) {
+        setShowCvMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchHeroData = async () => {
@@ -63,12 +76,21 @@ const Hero = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleDownloadCV = () => {
+    if (!heroData.resume_url) return;
+    const link = document.createElement("a");
+    link.href = heroData.resume_url;
+    link.download = "CV";
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setShowCvMenu(false);
+  };
+
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 animate-gradient" />
-      
-      {/* Decorative elements */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
       
@@ -107,61 +129,62 @@ const Hero = () => {
                 Contact Me
               </Button>
               {heroData.resume_url && (
-                <>
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    asChild
-                    className="group border-primary/50 hover:bg-primary/10"
-                  >
-                    <a href={heroData.resume_url} target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-                      View CV
-                    </a>
-                  </Button>
-                </>
+                <div className="relative" ref={cvMenuRef}>
+                  <div className="flex">
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      asChild
+                      className="group border-primary/50 hover:bg-primary/10 rounded-r-none border-r-0"
+                    >
+                      <a href={heroData.resume_url} target="_blank" rel="noopener noreferrer">
+                        <Eye className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                        View CV
+                      </a>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="border-primary/50 hover:bg-primary/10 rounded-l-none px-2"
+                      onClick={() => setShowCvMenu(!showCvMenu)}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  {showCvMenu && (
+                    <div className="absolute top-full mt-1 right-0 bg-background border border-border rounded-lg shadow-xl z-50 overflow-hidden min-w-[160px]">
+                      <button
+                        onClick={handleDownloadCV}
+                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm hover:bg-primary/10 transition-colors text-foreground"
+                      >
+                        <Download className="h-4 w-4" />
+                        Download CV
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
             {/* Social Links */}
             <div className="flex gap-4 justify-center md:justify-start">
               {heroData.linkedin_url && (
-                <a
-                  href={heroData.linkedin_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-                >
+                <a href={heroData.linkedin_url} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full glass-card hover:scale-110 transition-transform">
                   <Linkedin className="h-6 w-6 text-primary" />
                 </a>
               )}
               {heroData.github_url && (
-                <a
-                  href={heroData.github_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-                >
+                <a href={heroData.github_url} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full glass-card hover:scale-110 transition-transform">
                   <Github className="h-6 w-6 text-primary" />
                 </a>
               )}
               {heroData.facebook_url && (
-                <a
-                  href={heroData.facebook_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-                >
+                <a href={heroData.facebook_url} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full glass-card hover:scale-110 transition-transform">
                   <Facebook className="h-6 w-6 text-primary" />
                 </a>
               )}
               {heroData.instagram_url && (
-                <a
-                  href={heroData.instagram_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-full glass-card hover:scale-110 transition-transform"
-                >
+                <a href={heroData.instagram_url} target="_blank" rel="noopener noreferrer" className="p-3 rounded-full glass-card hover:scale-110 transition-transform">
                   <Instagram className="h-6 w-6 text-primary" />
                 </a>
               )}

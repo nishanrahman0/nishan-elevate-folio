@@ -13,7 +13,6 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import AdSense from "@/components/AdSense";
 
 interface BlogPost {
   id: string;
@@ -37,6 +36,14 @@ interface BlogComment {
   created_at: string;
 }
 
+interface RunningAd {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  link_url: string | null;
+}
+
 function estimateReadTime(content: string): number {
   const text = content.replace(/<[^>]*>/g, "");
   const words = text.split(/\s+/).filter(Boolean).length;
@@ -52,6 +59,35 @@ function getExcerpt(content: string, maxLength = 150): string {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength).trim() + "...";
 }
+
+const BlogAdUnit = ({ ad }: { ad: RunningAd }) => (
+  <div className="my-6 rounded-xl border border-border/30 bg-muted/20 backdrop-blur-sm overflow-hidden">
+    <div className="text-center py-1 text-[10px] text-muted-foreground/50 uppercase tracking-wider">
+      Advertisement
+    </div>
+    {ad.link_url ? (
+      <a href={ad.link_url} target="_blank" rel="noopener noreferrer" className="block">
+        {ad.image_url && (
+          <img src={ad.image_url} alt={ad.title} className="w-full max-h-[250px] object-cover" />
+        )}
+        <div className="p-4">
+          <h4 className="font-semibold text-foreground text-sm">{ad.title}</h4>
+          <p className="text-xs text-muted-foreground mt-1">{ad.description}</p>
+        </div>
+      </a>
+    ) : (
+      <div>
+        {ad.image_url && (
+          <img src={ad.image_url} alt={ad.title} className="w-full max-h-[250px] object-cover" />
+        )}
+        <div className="p-4">
+          <h4 className="font-semibold text-foreground text-sm">{ad.title}</h4>
+          <p className="text-xs text-muted-foreground mt-1">{ad.description}</p>
+        </div>
+      </div>
+    )}
+  </div>
+);
 
 const Blog = () => {
   const { isAdmin } = useAuth();
@@ -96,6 +132,19 @@ const Blog = () => {
     },
   });
 
+  const { data: blogAds } = useQuery({
+    queryKey: ["blog-ads"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("running_ads")
+        .select("*")
+        .eq("active", true)
+        .order("display_order");
+      if (error) throw error;
+      return data as RunningAd[];
+    },
+  });
+
   const submitComment = useMutation({
     mutationFn: async ({ postId, name, content }: { postId: string; name: string; content: string }) => {
       const { error } = await supabase.from("blog_comments").insert([{
@@ -136,16 +185,18 @@ const Blog = () => {
     return null;
   };
 
+  const getAdForSlot = (slotIndex: number): RunningAd | null => {
+    if (!blogAds || blogAds.length === 0) return null;
+    return blogAds[slotIndex % blogAds.length];
+  };
+
   const handleExpandPost = async (postId: string) => {
     setExpandedPost(postId);
-    // Increment view count
     try {
       const current = filtered?.find(p => p.id === postId)?.view_count || 0;
       await supabase.from('blog_posts').update({ view_count: current + 1 } as any).eq('id', postId);
       queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
-    } catch (e) {
-      // silently fail
-    }
+    } catch (e) {}
   };
 
   const renderExpandedPost = (post: BlogPost) => {
@@ -153,6 +204,9 @@ const Blog = () => {
     const comments = getPostComments(post.id);
     const form = getCommentForm(post.id);
     const showComments = expandedComments[post.id];
+    const ad1 = getAdForSlot(0);
+    const ad2 = getAdForSlot(1);
+    const ad3 = getAdForSlot(2);
 
     return (
       <Card className="glass-card overflow-hidden animate-fade-in">
@@ -190,7 +244,7 @@ const Blog = () => {
             )}
 
             {/* Ad before article body */}
-            <AdSense adFormat="rectangle" className="mb-4" />
+            {ad1 && <BlogAdUnit ad={ad1} />}
 
             {post.images && post.images.length > 0 && (
               <div className="mb-6">
@@ -223,7 +277,7 @@ const Blog = () => {
             />
 
             {/* Ad after article content */}
-            <AdSense adFormat="horizontal" className="mt-6" />
+            {ad2 && <BlogAdUnit ad={ad2} />}
 
             {/* Comments */}
             <div className="mt-8 pt-6 border-t border-border/50">
@@ -284,7 +338,7 @@ const Blog = () => {
             </div>
 
             {/* Ad at bottom of article */}
-            <AdSense adFormat="horizontal" className="mt-4" />
+            {ad3 && <BlogAdUnit ad={ad3} />}
           </div>
         </CardContent>
       </Card>
@@ -473,7 +527,7 @@ const Blog = () => {
               )}
 
                {/* Ad between featured and grid */}
-               <AdSense adFormat="horizontal" />
+               {getAdForSlot(0) && <BlogAdUnit ad={getAdForSlot(0)!} />}
 
                {/* Grid of Posts */}
                {gridPosts.length > 0 && (
@@ -549,7 +603,9 @@ const Blog = () => {
                         {/* Insert ad after every 3rd post */}
                         {(index + 1) % 3 === 0 && index < gridPosts.length - 1 && (
                           <div className="col-span-full">
-                            <AdSense adFormat="horizontal" />
+                            {getAdForSlot(Math.floor((index + 1) / 3)) && (
+                              <BlogAdUnit ad={getAdForSlot(Math.floor((index + 1) / 3))!} />
+                            )}
                           </div>
                         )}
                       </React.Fragment>

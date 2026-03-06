@@ -104,8 +104,16 @@ export function AboutEditor() {
           <ImageUpload
             currentImageUrl={imageUrl}
             onImageUploaded={setImageUrl}
-            label="📷 About Section Image"
+            label="🖼️ Center Illustration (Person at Desk)"
           />
+          <p className="text-xs text-muted-foreground mt-2">
+            This image appears as the center illustration in the About section. Upload a custom illustration to replace the default one.
+          </p>
+        </div>
+        <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+          <p className="text-sm text-muted-foreground">
+            💡 <strong>Floating skill icons</strong> around the illustration are pulled from your Skills. Manage them in the <strong>Skills</strong> editor — upload logos there and they'll appear as floating icons here.
+          </p>
         </div>
         <Button onClick={handleSave} disabled={saving} className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700">
           {saving ? (
