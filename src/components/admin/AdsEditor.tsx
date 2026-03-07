@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { ImageUpload } from "./ImageUpload";
-import { Trash2, Megaphone, Sparkles } from "lucide-react";
+import { Trash2, Megaphone, Sparkles, Code } from "lucide-react";
 
 interface RunningAd {
   id: string;
@@ -17,6 +17,7 @@ interface RunningAd {
   description: string;
   image_url: string | null;
   link_url: string | null;
+  ad_code: string | null;
   display_order: number;
   active: boolean;
 }
@@ -29,6 +30,7 @@ export function AdsEditor() {
     description: "",
     image_url: "",
     link_url: "",
+    ad_code: "",
     display_order: 0,
     active: true,
   });
@@ -47,12 +49,17 @@ export function AdsEditor() {
 
   const createMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const { error } = await supabase.from("running_ads").insert([data]);
+      const payload: any = { ...data };
+      if (!payload.ad_code) payload.ad_code = null;
+      if (!payload.image_url) payload.image_url = null;
+      if (!payload.link_url) payload.link_url = null;
+      const { error } = await supabase.from("running_ads").insert([payload]);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["running-ads-admin"] });
       queryClient.invalidateQueries({ queryKey: ["running-ads"] });
+      queryClient.invalidateQueries({ queryKey: ["blog-ads"] });
       toast.success("Ad created successfully");
       resetForm();
     },
@@ -61,12 +68,17 @@ export function AdsEditor() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: typeof formData }) => {
-      const { error } = await supabase.from("running_ads").update(data).eq("id", id);
+      const payload: any = { ...data };
+      if (!payload.ad_code) payload.ad_code = null;
+      if (!payload.image_url) payload.image_url = null;
+      if (!payload.link_url) payload.link_url = null;
+      const { error } = await supabase.from("running_ads").update(payload).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["running-ads-admin"] });
       queryClient.invalidateQueries({ queryKey: ["running-ads"] });
+      queryClient.invalidateQueries({ queryKey: ["blog-ads"] });
       toast.success("Ad updated successfully");
       resetForm();
     },
@@ -81,6 +93,7 @@ export function AdsEditor() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["running-ads-admin"] });
       queryClient.invalidateQueries({ queryKey: ["running-ads"] });
+      queryClient.invalidateQueries({ queryKey: ["blog-ads"] });
       toast.success("Ad deleted successfully");
     },
     onError: () => toast.error("Failed to delete ad"),
@@ -92,6 +105,7 @@ export function AdsEditor() {
       description: "",
       image_url: "",
       link_url: "",
+      ad_code: "",
       display_order: 0,
       active: true,
     });
@@ -105,6 +119,7 @@ export function AdsEditor() {
       description: ad.description,
       image_url: ad.image_url || "",
       link_url: ad.link_url || "",
+      ad_code: ad.ad_code || "",
       display_order: ad.display_order,
       active: ad.active,
     });
@@ -131,19 +146,20 @@ export function AdsEditor() {
               <CardTitle className="text-xl bg-gradient-to-r from-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
                 {editingId ? "Edit Ad" : "Create New Ad"}
               </CardTitle>
-              <CardDescription>Manage running advertisements</CardDescription>
+              <CardDescription>Add custom ads, AdSense, Monetag, Astra or any ad network code</CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-foreground/80">Title</Label>
+              <Label htmlFor="title" className="text-foreground/80">Title (internal label)</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
+                placeholder="e.g. Sidebar AdSense, Monetag Banner"
                 className="bg-background/50 border-white/20 focus:border-fuchsia-500/50"
               />
             </div>
@@ -159,16 +175,35 @@ export function AdsEditor() {
               />
             </div>
 
+            {/* Custom Ad Code - the key new feature */}
+            <div className="space-y-2 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+              <Label htmlFor="ad_code" className="text-foreground/80 flex items-center gap-2">
+                <Code className="h-4 w-4 text-amber-400" />
+                Custom Ad Code (HTML/Script)
+              </Label>
+              <p className="text-xs text-muted-foreground mb-2">
+                Paste any ad network code here — AdSense, Monetag, Astra, PropellerAds, etc. Leave empty for image-based ads.
+              </p>
+              <Textarea
+                id="ad_code"
+                value={formData.ad_code}
+                onChange={(e) => setFormData({ ...formData, ad_code: e.target.value })}
+                placeholder={'<script async src="https://pagead2.googlesyndication.com/..."></script>\n<ins class="adsbygoogle" ...></ins>'}
+                className="bg-background/50 border-white/20 focus:border-amber-500/50 font-mono text-xs min-h-[120px]"
+                rows={5}
+              />
+            </div>
+
             <div className="p-4 rounded-xl bg-white/5 border border-white/10">
               <ImageUpload
                 currentImageUrl={formData.image_url}
                 onImageUploaded={(url) => setFormData({ ...formData, image_url: url })}
-                label="📢 Ad Image"
+                label="📢 Ad Image (for image-based ads)"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="link_url" className="text-foreground/80">Link URL (optional)</Label>
+              <Label htmlFor="link_url" className="text-foreground/80">Link URL (optional, for image ads)</Label>
               <Input
                 id="link_url"
                 type="url"
@@ -231,6 +266,11 @@ export function AdsEditor() {
                 <div className="flex-1">
                   <h4 className="font-bold text-foreground">{ad.title}</h4>
                   <p className="text-sm text-muted-foreground line-clamp-2">{ad.description}</p>
+                  {ad.ad_code && (
+                    <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
+                      <Code className="h-3 w-3" /> Has custom ad code
+                    </p>
+                  )}
                   <p className="text-xs mt-2">
                     <span className={`px-2 py-1 rounded-full ${ad.active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                       {ad.active ? "Active" : "Inactive"}

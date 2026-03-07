@@ -45,19 +45,19 @@ const About = () => {
     }
   };
 
-  // Position icons in an arc around the illustration
+  // Position icons tightly around the illustration center
   const getIconPosition = (index: number) => {
     const positions = [
-      { x: 5, y: 8 },    // top left
-      { x: 25, y: 2 },   // top center-left
-      { x: 55, y: 0 },   // top center
-      { x: 75, y: 2 },   // top center-right
-      { x: 90, y: 10 },  // top right
-      { x: 92, y: 35 },  // right middle
-      { x: 88, y: 58 },  // right lower
-      { x: 0, y: 30 },   // left middle
-      { x: 2, y: 55 },   // left lower
-      { x: 45, y: 85 },  // bottom center
+      { x: 18, y: 12 },   // top left near monitor
+      { x: 38, y: 5 },    // top center-left
+      { x: 55, y: 3 },    // top center
+      { x: 70, y: 8 },    // top center-right
+      { x: 78, y: 20 },   // right upper
+      { x: 80, y: 38 },   // right middle
+      { x: 75, y: 55 },   // right lower
+      { x: 15, y: 28 },   // left middle
+      { x: 12, y: 48 },   // left lower
+      { x: 42, y: 70 },   // bottom center
     ];
     return positions[index % positions.length];
   };
