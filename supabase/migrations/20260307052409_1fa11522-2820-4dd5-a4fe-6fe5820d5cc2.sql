@@ -1,0 +1,1 @@
+ALTER TABLE public.running_ads ADD COLUMN ad_code TEXT DEFAULT NULL;

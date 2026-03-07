@@ -42,6 +42,7 @@ interface RunningAd {
   description: string;
   image_url: string | null;
   link_url: string | null;
+  ad_code: string | null;
 }
 
 function estimateReadTime(content: string): number {
@@ -60,12 +61,32 @@ function getExcerpt(content: string, maxLength = 150): string {
   return text.substring(0, maxLength).trim() + "...";
 }
 
+const CustomAdCode = ({ code }: { code: string }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!containerRef.current || !code) return;
+    containerRef.current.innerHTML = code;
+    const scripts = containerRef.current.querySelectorAll("script");
+    scripts.forEach((oldScript) => {
+      const newScript = document.createElement("script");
+      Array.from(oldScript.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+      newScript.textContent = oldScript.textContent;
+      oldScript.parentNode?.replaceChild(newScript, oldScript);
+    });
+  }, [code]);
+  return <div ref={containerRef} />;
+};
+
 const BlogAdUnit = ({ ad }: { ad: RunningAd }) => (
   <div className="my-6 rounded-xl border border-border/30 bg-muted/20 backdrop-blur-sm overflow-hidden">
     <div className="text-center py-1 text-[10px] text-muted-foreground/50 uppercase tracking-wider">
       Advertisement
     </div>
-    {ad.link_url ? (
+    {ad.ad_code ? (
+      <div className="p-4">
+        <CustomAdCode code={ad.ad_code} />
+      </div>
+    ) : ad.link_url ? (
       <a href={ad.link_url} target="_blank" rel="noopener noreferrer" className="block">
         {ad.image_url && (
           <img src={ad.image_url} alt={ad.title} className="w-full max-h-[250px] object-cover" />
@@ -272,7 +293,7 @@ const Blog = () => {
             )}
 
             <div
-              className="prose prose-lg max-w-none text-foreground"
+              className="prose prose-lg max-w-none text-foreground prose-headings:text-foreground prose-p:text-foreground/80 prose-strong:text-foreground prose-a:text-primary prose-img:rounded-xl"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 

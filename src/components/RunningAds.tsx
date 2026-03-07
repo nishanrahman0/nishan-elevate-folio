@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,9 +10,32 @@ interface RunningAd {
   description: string;
   image_url: string | null;
   link_url: string | null;
+  ad_code: string | null;
   display_order: number;
   active: boolean;
 }
+
+// Component to render custom ad code (HTML/scripts)
+const CustomAdCode = ({ code }: { code: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !code) return;
+    containerRef.current.innerHTML = code;
+    // Execute any script tags
+    const scripts = containerRef.current.querySelectorAll("script");
+    scripts.forEach((oldScript) => {
+      const newScript = document.createElement("script");
+      Array.from(oldScript.attributes).forEach((attr) =>
+        newScript.setAttribute(attr.name, attr.value)
+      );
+      newScript.textContent = oldScript.textContent;
+      oldScript.parentNode?.replaceChild(newScript, oldScript);
+    });
+  }, [code]);
+
+  return <div ref={containerRef} />;
+};
 
 const RunningAds = () => {
   const { data: ads } = useQuery({
@@ -22,7 +46,6 @@ const RunningAds = () => {
         .select("*")
         .eq("active", true)
         .order("display_order");
-      
       if (error) throw error;
       return data as RunningAd[];
     },
@@ -50,29 +73,38 @@ const RunningAds = () => {
               className="glass-card overflow-hidden hover:shadow-xl transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              {ad.image_url && (
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={ad.image_url}
-                    alt={ad.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
+              {/* Custom ad code takes priority */}
+              {ad.ad_code ? (
+                <CardContent className="p-4">
+                  <CustomAdCode code={ad.ad_code} />
+                </CardContent>
+              ) : (
+                <>
+                  {ad.image_url && (
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={ad.image_url}
+                        alt={ad.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold mb-2 gradient-text">{ad.title}</h3>
+                    <p className="text-muted-foreground mb-4">{ad.description}</p>
+                    {ad.link_url && (
+                      <a
+                        href={ad.link_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors"
+                      >
+                        Learn More <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                  </CardContent>
+                </>
               )}
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-2 gradient-text">{ad.title}</h3>
-                <p className="text-muted-foreground mb-4">{ad.description}</p>
-                {ad.link_url && (
-                  <a
-                    href={ad.link_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors"
-                  >
-                    Learn More <ExternalLink className="h-4 w-4" />
-                  </a>
-                )}
-              </CardContent>
             </Card>
           ))}
         </div>
