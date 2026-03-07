@@ -698,6 +698,7 @@ export type Database = {
       running_ads: {
         Row: {
           active: boolean | null
+          ad_code: string | null
           created_at: string
           description: string
           display_order: number | null
@@ -709,6 +710,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean | null
+          ad_code?: string | null
           created_at?: string
           description: string
           display_order?: number | null
@@ -720,6 +722,7 @@ export type Database = {
         }
         Update: {
           active?: boolean | null
+          ad_code?: string | null
           created_at?: string
           description?: string
           display_order?: number | null
