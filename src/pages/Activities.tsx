@@ -165,22 +165,51 @@ const Activities = () => {
 
           {/* Selected organization content */}
           {selectedOrgData && (
-            <div className="space-y-6 animate-fade-in">
-              {/* Banner & About */}
-              <div className="glass-card rounded-2xl p-6 md:p-8">
+          <div className="space-y-6 animate-fade-in">
+              {/* Organization Header Card */}
+              <div className="glass-card rounded-2xl overflow-hidden">
+                {/* Banner */}
                 {selectedOrgData.banner_url && (
-                  <div className="w-full h-32 md:h-44 rounded-xl overflow-hidden mb-6 -mt-2">
+                  <div className="w-full h-36 md:h-52 overflow-hidden relative">
                     <img src={selectedOrgData.banner_url} alt={selectedOrgData.name} className="w-full h-full object-cover" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                   </div>
                 )}
-                {selectedOrgData.description && (
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">About {selectedOrgData.name}</h3>
-                    <p className="text-foreground/70 text-sm md:text-base leading-relaxed">
-                      {selectedOrgData.description}
-                    </p>
+
+                <div className={`p-6 md:p-8 ${selectedOrgData.banner_url ? '-mt-16 relative z-10' : ''}`}>
+                  <div className="flex items-start gap-5">
+                    {/* Org Logo */}
+                    {selectedOrgData.logo_url && (
+                      <div className="shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-2xl border-4 border-background bg-card shadow-xl overflow-hidden">
+                        <img
+                          src={selectedOrgData.logo_url}
+                          alt={`${selectedOrgData.name} logo`}
+                          className="w-full h-full object-contain p-2"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0 pt-2">
+                      <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-1">
+                        {selectedOrgData.name}
+                      </h2>
+                      {selectedOrgData.roles.length > 0 && (
+                        <p className="text-sm text-muted-foreground">
+                          {selectedOrgData.roles.length} position{selectedOrgData.roles.length !== 1 ? 's' : ''}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                )}
+
+                  {/* About Section */}
+                  {selectedOrgData.description && (
+                    <div className="mt-6 p-5 rounded-xl bg-muted/30 border border-border/30">
+                      <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">About the Organization</h3>
+                      <p className="text-foreground/70 text-sm md:text-base leading-relaxed">
+                        {selectedOrgData.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Positions / Roles */}
