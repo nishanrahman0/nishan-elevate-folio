@@ -36,6 +36,7 @@ interface ActivityRole {
 interface Organization {
   id: string;
   name: string;
+  short_name?: string;
   description?: string;
   banner_url?: string;
   logo_url?: string;

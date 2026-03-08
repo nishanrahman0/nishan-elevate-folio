@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 interface Organization {
   id: string;
   name: string;
+  short_name: string | null;
   description: string | null;
   banner_url: string | null;
   logo_url: string | null;
