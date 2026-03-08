@@ -92,8 +92,8 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute left-1/2 top-[82%] -translate-x-1/2 -translate-y-1/2 w-[60%] h-[20%] rounded-full border border-border/30 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
-              <div className="absolute left-1/2 top-[82%] -translate-x-1/2 -translate-y-1/2 w-[48%] h-[14%] rounded-full border border-primary/15" />
+              <div className="absolute left-1/2 top-[75%] -translate-x-1/2 -translate-y-1/2 w-[60%] h-[20%] rounded-full border border-border/30 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
+              <div className="absolute left-1/2 top-[75%] -translate-x-1/2 -translate-y-1/2 w-[48%] h-[14%] rounded-full border border-primary/15" />
             </div>
 
             <img
@@ -108,7 +108,7 @@ const About = () => {
               return (
                 <div
                   key={index}
-                  className="absolute z-20"
+                  className="absolute z-[5]"
                   style={{
                     left: `${pos.x}%`,
                     top: `${pos.y}%`,
