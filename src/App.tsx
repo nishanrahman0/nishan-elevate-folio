@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { lazy, Suspense } from "react";
+import DynamicMeta from "@/components/DynamicMeta";
 import Index from "./pages/Index";
 
 // Lazy load all non-critical routes
