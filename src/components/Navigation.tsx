@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Menu, X, LogOut, ChevronRight } from "lucide-react";
-import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -150,7 +149,6 @@ const Navigation = () => {
                 </a>
               ))}
               <div className="ml-2 flex items-center gap-1">
-                <ThemeToggle />
                 {user && (
                   <>
                     <Button onClick={() => navigate("/admin")} variant="ghost" size="sm" className="text-xs">
@@ -202,10 +200,6 @@ const Navigation = () => {
                 ))}
               </div>
               <div className="border-t border-border pt-4 space-y-2">
-                <div className="flex items-center justify-between px-4">
-                  <span className="text-xs text-muted-foreground">Theme</span>
-                  <ThemeToggle />
-                </div>
                 {user && (
                   <>
                     <Button onClick={() => { setIsOpen(false); navigate("/admin"); }} variant="ghost" size="sm" className="w-full justify-start text-xs">
