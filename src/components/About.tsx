@@ -37,8 +37,10 @@ const About = () => {
       .limit(8);
     if (data) {
       const colors = [
-        "hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--secondary))",
-        "#E44D26", "#264DE4", "#F7DF1E", "#3178C6", "#61DAFB"
+        "hsl(var(--primary))",
+        "hsl(var(--accent))",
+        "hsl(var(--secondary))",
+        "hsl(var(--muted-foreground))",
       ];
       setSkillIcons(data.map((s, i) => ({
         label: s.skill_name,
@@ -49,15 +51,22 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Distribute icons in an ellipse around the computer/desk area (lower portion)
-    const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
-    const rx = 32; // horizontal radius (tighter around desk)
-    const ry = 18; // vertical radius (flatter ellipse)
-    const cx = 48; // center x
-    const cy = 72; // center y (shifted down to computer area)
+    // Keep icons on a focused top arc around the computer area (not below the person)
+    const safeTotal = Math.max(total, 1);
+    const t = safeTotal === 1 ? 0.5 : index / (safeTotal - 1);
+    const startAngle = (160 * Math.PI) / 180; // left side of arc
+    const endAngle = (20 * Math.PI) / 180; // right side of arc
+    const angle = startAngle + (endAngle - startAngle) * t;
+
+    const rx = 34;
+    const ry = 13;
+    const cx = 50;
+    const cy = 62;
+
     return {
       x: cx + rx * Math.cos(angle),
-      y: cy + ry * Math.sin(angle),
+      y: cy - ry * Math.sin(angle),
+      scale: 0.9 + 0.15 * Math.sin(t * Math.PI),
     };
   };
 
