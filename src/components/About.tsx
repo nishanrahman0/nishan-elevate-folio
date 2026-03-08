@@ -53,23 +53,19 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Scattered around the monitor/screen area (upper-center of illustration)
+    // Inside the monitor/head zone — tightly clustered around the screen
     const positions = [
-      { x: 20, y: 28 },  // left of monitor
-      { x: 30, y: 18 },  // upper-left
-      { x: 45, y: 12 },  // top-center-left
-      { x: 60, y: 12 },  // top-center-right
-      { x: 75, y: 18 },  // upper-right
-      { x: 84, y: 28 },  // right of monitor
-      { x: 15, y: 40 },  // mid-left
-      { x: 88, y: 40 },  // mid-right
+      { x: 30, y: 30 },  // left of head
+      { x: 42, y: 24 },  // above-left of monitor
+      { x: 55, y: 22 },  // top of monitor
+      { x: 68, y: 24 },  // above-right of monitor
+      { x: 74, y: 32 },  // right of head
+      { x: 34, y: 40 },  // left side of monitor
+      { x: 70, y: 40 },  // right side of monitor
+      { x: 52, y: 34 },  // center, just above monitor
     ];
     const pos = positions[index % positions.length];
-    return {
-      x: pos.x,
-      y: pos.y,
-      scale: 0.9 + 0.1 * Math.sin((index / total) * Math.PI),
-    };
+    return { x: pos.x, y: pos.y };
   };
 
   return (
@@ -104,11 +100,11 @@ const About = () => {
               return (
                 <div
                   key={index}
-                  className="absolute z-[5]"
+                  className="absolute z-20"
                   style={{
                     left: `${pos.x}%`,
                     top: `${pos.y}%`,
-                    transform: `translate(-50%, -50%) scale(${pos.scale})`,
+                    transform: `translate(-50%, -50%)`,
                     animationDelay: `${index * 0.35}s`,
                     animationDuration: `${3.2 + (index % 3) * 0.45}s`,
                   }}
