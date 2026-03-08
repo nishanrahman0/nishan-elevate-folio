@@ -72,6 +72,7 @@ const Activities = () => {
 
       const organized: Organization[] = orgs.map((org) => ({
         ...org,
+        short_name: (org as any).short_name || undefined,
         description: org.description || undefined,
         banner_url: org.banner_url || undefined,
         logo_url: org.logo_url || undefined,

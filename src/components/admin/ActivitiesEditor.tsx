@@ -181,10 +181,14 @@ export function ActivitiesEditor() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label className="text-foreground/80">Organization Name</Label>
               <Input value={orgForm.name} onChange={e => setOrgForm({ ...orgForm, name: e.target.value })} placeholder="Rajshahi University Career Club" className="bg-background/50 border-white/20" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-foreground/80">Short Name (for button)</Label>
+              <Input value={orgForm.short_name} onChange={e => setOrgForm({ ...orgForm, short_name: e.target.value })} placeholder="RUCC" className="bg-background/50 border-white/20" />
             </div>
             <div className="space-y-2">
               <Label className="text-foreground/80">Display Order</Label>
