@@ -1,0 +1,1 @@
+UPDATE hero_content SET logo_url = 'https://ciltyfogebheitfvenwv.supabase.co/storage/v1/object/public/portfolio-images/branding%2Fnr-logo.png', updated_at = now();
