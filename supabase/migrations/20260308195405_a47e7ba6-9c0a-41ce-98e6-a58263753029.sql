@@ -1,0 +1,1 @@
+ALTER TABLE hero_content ADD COLUMN show_site_name boolean NOT NULL DEFAULT true;
