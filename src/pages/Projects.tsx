@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { FolderOpen, Play } from "lucide-react";
+import { FolderOpen, Play, ExternalLink, Github, Search, ArrowRight, Eye } from "lucide-react";
 import * as Icons from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -24,7 +25,6 @@ interface Project {
 }
 
 const getVideoThumbnail = (url: string): string | null => {
-  // YouTube
   const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
   if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
   return null;
@@ -36,6 +36,7 @@ const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [activeTag, setActiveTag] = useState<string>("All");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchProjects();
@@ -55,7 +56,6 @@ const Projects = () => {
         videos: (d.videos as string[]) || [],
       }));
       setProjects(mapped);
-      // Extract unique tags
       const tags = new Set<string>();
       mapped.forEach(p => p.tags?.forEach((t: string) => tags.add(t)));
       setAllTags(Array.from(tags));
@@ -70,7 +70,6 @@ const Projects = () => {
   const getCoverImage = (project: Project): string | null => {
     if (project.image_url) return project.image_url;
     if (project.images && project.images.length > 0) return project.images[0];
-    // Check for video thumbnail
     if (project.videos && project.videos.length > 0) {
       const thumb = getVideoThumbnail(project.videos[0]);
       if (thumb) return thumb;
@@ -78,128 +77,214 @@ const Projects = () => {
     return null;
   };
 
-  const filteredProjects = activeTag === "All"
-    ? projects
-    : projects.filter(p => p.tags?.includes(activeTag));
+  const filtered = projects.filter(p => {
+    const matchesTag = activeTag === "All" || p.tags?.includes(activeTag);
+    const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase()) ||
+      p.description.toLowerCase().includes(search.toLowerCase());
+    return matchesTag && matchesSearch;
+  });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-gradient-to-tl from-accent/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-background relative">
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/[0.04] rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-accent/[0.04] rounded-full blur-[120px]" />
+      </div>
+
       <Navigation />
-      <div className="pt-24 pb-16 min-h-screen relative z-10">
+
+      <main className="relative z-10 pt-28 pb-20">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold gradient-text">Projects</h1>
-            {isAdmin && (
-              <Button variant="outline" onClick={() => navigate("/admin?tab=projects")}>Manage Projects</Button>
-            )}
+          {/* Header */}
+          <div className="mb-12">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20">
+                    <FolderOpen className="h-6 w-6 text-primary" />
+                  </div>
+                  <span className="text-sm font-medium text-primary tracking-wide uppercase">
+                    Portfolio
+                  </span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
+                  Projects
+                </h1>
+                <p className="text-muted-foreground mt-3 text-lg max-w-xl">
+                  Showcasing real-world projects built with modern tools and technologies.
+                </p>
+              </div>
+              {isAdmin && (
+                <Button variant="outline" size="sm" onClick={() => navigate("/admin?tab=projects")} className="shrink-0">
+                  Manage
+                </Button>
+              )}
+            </div>
+
+            {/* Stats */}
+            <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground text-2xl">{projects.length}</span>
+              <span className="-ml-4">projects</span>
+              <div className="w-px h-5 bg-border" />
+              <span className="font-semibold text-foreground text-2xl">{allTags.length}</span>
+              <span className="-ml-4">categories</span>
+            </div>
           </div>
 
-          {/* Tag filters */}
-          {allTags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-8">
-              <Button
-                variant={activeTag === "All" ? "default" : "outline"}
-                size="sm"
-                className="rounded-full"
+          {/* Search & Tag Filters */}
+          <div className="mb-10 flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search projects..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 bg-card border-border/60 h-10"
+              />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <button
                 onClick={() => setActiveTag("All")}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                  activeTag === "All"
+                    ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+                    : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
+                }`}
               >
                 All
-              </Button>
+              </button>
               {allTags.map(tag => (
-                <Button
+                <button
                   key={tag}
-                  variant={activeTag === tag ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => setActiveTag(tag)}
+                  onClick={() => setActiveTag(tag === activeTag ? "All" : tag)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                    activeTag === tag
+                      ? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+                      : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
+                  }`}
                 >
                   {tag}
-                </Button>
+                </button>
               ))}
             </div>
-          )}
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredProjects.map((project, index) => {
+          {/* Grid */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {filtered.map((project, index) => {
               const IconComponent = getIcon(project.icon_name);
               const coverImage = getCoverImage(project);
               const hasVideo = project.videos && project.videos.length > 0;
 
               return (
-                <div
+                <article
                   key={project.id}
-                  className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden animate-fade-in-up hover:border-primary/40 transition-colors"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className="group bg-card border border-border/60 rounded-2xl overflow-hidden hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 60}ms` }}
                 >
+                  {/* Cover */}
                   {coverImage ? (
-                    <div className="aspect-video overflow-hidden m-4 rounded-xl relative group">
+                    <div className="relative aspect-video overflow-hidden bg-muted">
                       <img
                         src={coverImage}
                         alt={project.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-card/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       {hasVideo && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center">
-                            <Play className="h-6 w-6 text-primary-foreground ml-1" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="w-14 h-14 rounded-full bg-primary/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                            <Play className="h-6 w-6 text-primary-foreground ml-0.5" />
                           </div>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20 m-4 rounded-xl">
-                      <IconComponent className="h-16 w-16 text-primary/60" />
+                    <div className="aspect-video bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 flex items-center justify-center">
+                      <IconComponent className="h-16 w-16 text-primary/40" />
                     </div>
                   )}
-                  <h3 className="text-lg md:text-xl font-bold text-primary text-center px-4 pt-2">
-                    {project.title}
-                  </h3>
-                  {project.tags && project.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 justify-center px-4 pt-2">
-                      {project.tags.map(tag => (
-                        <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
-                      ))}
+
+                  {/* Content */}
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
+                      {project.title}
+                    </h3>
+
+                    {project.tags && project.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 text-primary border border-primary/15">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-border/50">
+                      <button
+                        onClick={() => navigate(`/projects/${project.id}`)}
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        Details
+                      </button>
+                      {project.link_url && (
+                        <a
+                          href={project.link_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                          Live
+                        </a>
+                      )}
+                      {project.client_url && (
+                        <a
+                          href={project.client_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                          Client
+                        </a>
+                      )}
+                      {project.github_url && (
+                        <a
+                          href={project.github_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ml-auto p-2 rounded-lg bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+                        >
+                          <Github className="h-4 w-4" />
+                        </a>
+                      )}
                     </div>
-                  )}
-                  <div className="flex items-center justify-center gap-3 p-4 pt-3 pb-6 flex-wrap">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
-                      onClick={() => navigate(`/projects/${project.id}`)}
-                    >
-                      Details
-                    </Button>
-                    {project.link_url && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
-                        onClick={() => window.open(project.link_url, "_blank")}
-                      >
-                        Live
-                      </Button>
-                    )}
-                    {project.client_url && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="rounded-full px-5 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
-                        onClick={() => window.open(project.client_url, "_blank")}
-                      >
-                        Client
-                      </Button>
-                    )}
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>
+
+          {filtered.length === 0 && projects.length > 0 && (
+            <div className="text-center py-20">
+              <FolderOpen className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg">No projects match your search.</p>
+              <button
+                onClick={() => { setSearch(""); setActiveTag("All"); }}
+                className="text-primary text-sm mt-2 hover:underline"
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
         </div>
-      </div>
+      </main>
+
       <Footer />
     </div>
   );
