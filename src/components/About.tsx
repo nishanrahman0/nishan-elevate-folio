@@ -55,14 +55,14 @@ const About = () => {
   const getIconPosition = (index: number, total: number) => {
     // Tight ring around the monitor/screen area of the illustration
     const positions = [
-      { x: 18, y: 34 },  // left of monitor
-      { x: 28, y: 26 },  // upper-left
-      { x: 44, y: 22 },  // top-left of screen
-      { x: 60, y: 22 },  // top-right of screen
-      { x: 72, y: 28 },  // upper-right
-      { x: 78, y: 38 },  // right of monitor
-      { x: 24, y: 50 },  // lower-left
-      { x: 50, y: 54 },  // bottom center
+      { x: 16, y: 36 },  // left of monitor
+      { x: 30, y: 26 },  // upper-left
+      { x: 46, y: 20 },  // top-left of screen
+      { x: 64, y: 20 },  // top-right of screen
+      { x: 76, y: 28 },  // upper-right
+      { x: 80, y: 40 },  // right of monitor
+      { x: 22, y: 52 },  // lower-left
+      { x: 48, y: 56 },  // bottom center
     ];
     const pos = positions[index % positions.length];
     return { x: pos.x, y: pos.y };
