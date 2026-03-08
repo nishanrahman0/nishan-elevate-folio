@@ -53,16 +53,16 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Inside the monitor/head zone — tightly clustered around the screen
+    // Around the full illustration (person + desk) so icons stay anchored to the image
     const positions = [
-      { x: 30, y: 30 },  // left of head
-      { x: 42, y: 24 },  // above-left of monitor
-      { x: 55, y: 22 },  // top of monitor
-      { x: 68, y: 24 },  // above-right of monitor
-      { x: 74, y: 32 },  // right of head
-      { x: 34, y: 40 },  // left side of monitor
-      { x: 70, y: 40 },  // right side of monitor
-      { x: 52, y: 34 },  // center, just above monitor
+      { x: 22, y: 30 }, // left upper
+      { x: 36, y: 22 }, // top-left
+      { x: 52, y: 20 }, // top center
+      { x: 68, y: 22 }, // top-right
+      { x: 80, y: 30 }, // right upper
+      { x: 24, y: 48 }, // left mid
+      { x: 78, y: 48 }, // right mid
+      { x: 52, y: 56 }, // bottom center
     ];
     const pos = positions[index % positions.length];
     return { x: pos.x, y: pos.y };
