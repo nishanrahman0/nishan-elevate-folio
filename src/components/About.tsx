@@ -86,6 +86,12 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Illustration Side */}
           <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
+            {/* Orbit guides around computer area */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[78%] h-[30%] rounded-full border border-border/40 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
+              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[62%] h-[22%] rounded-full border border-primary/20" />
+            </div>
+
             {/* Center illustration image */}
             <img
               src={illustrationUrl}
@@ -104,11 +110,12 @@ const About = () => {
                   style={{
                     left: `${pos.x}%`,
                     top: `${pos.y}%`,
-                    animationDelay: `${index * 0.4}s`,
-                    animationDuration: `${3 + (index % 3) * 0.5}s`,
+                    transform: `translate(-50%, -50%) scale(${pos.scale})`,
+                    animationDelay: `${index * 0.35}s`,
+                    animationDuration: `${3.2 + (index % 3) * 0.45}s`,
                   }}
                 >
-                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg shadow-md backdrop-blur-sm border border-border/30 bg-card/90 hover:scale-110 transition-transform cursor-default">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl shadow-lg backdrop-blur-sm border border-border/40 bg-card/90 hover:scale-110 transition-transform cursor-default">
                     {item.image_url ? (
                       <img src={item.image_url} alt={item.label} className="w-5 h-5 rounded object-contain" />
                     ) : (
