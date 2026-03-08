@@ -34,9 +34,12 @@ const About = () => {
       .from("skills")
       .select("skill_name, image_url, color_gradient")
       .order("display_order")
-      .limit(10);
+      .limit(8);
     if (data) {
-      const colors = ["#E44D26", "#264DE4", "#F7DF1E", "#3178C6", "#61DAFB", "#8B5CF6", "#10B981", "#F59E0B", "#EC4899", "#06B6D4"];
+      const colors = [
+        "hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--secondary))",
+        "#E44D26", "#264DE4", "#F7DF1E", "#3178C6", "#61DAFB"
+      ];
       setSkillIcons(data.map((s, i) => ({
         label: s.skill_name,
         image_url: s.image_url,
@@ -45,21 +48,17 @@ const About = () => {
     }
   };
 
-  // Position icons tightly around the illustration center
-  const getIconPosition = (index: number) => {
-    const positions = [
-      { x: 18, y: 12 },   // top left near monitor
-      { x: 38, y: 5 },    // top center-left
-      { x: 55, y: 3 },    // top center
-      { x: 70, y: 8 },    // top center-right
-      { x: 78, y: 20 },   // right upper
-      { x: 80, y: 38 },   // right middle
-      { x: 75, y: 55 },   // right lower
-      { x: 15, y: 28 },   // left middle
-      { x: 12, y: 48 },   // left lower
-      { x: 42, y: 70 },   // bottom center
-    ];
-    return positions[index % positions.length];
+  const getIconPosition = (index: number, total: number) => {
+    // Distribute icons in an ellipse around the illustration
+    const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
+    const rx = 38; // horizontal radius
+    const ry = 35; // vertical radius
+    const cx = 48; // center x
+    const cy = 45; // center y
+    return {
+      x: cx + rx * Math.cos(angle),
+      y: cy + ry * Math.sin(angle),
+    };
   };
 
   return (
@@ -68,26 +67,27 @@ const About = () => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
       
       <div className="container mx-auto max-w-6xl relative z-10">
-        <div className="text-center mb-12 animate-fade-in">
+        <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">About Nishan</span>
+            <span className="gradient-text">About Me</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Illustration Side */}
-          <div className="relative w-full h-[420px] md:h-[500px] animate-fade-in order-2 lg:order-1 flex items-center justify-center">
+          <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
             {/* Center illustration image */}
             <img
               src={illustrationUrl}
               alt="Developer working at desk"
-              className="relative z-10 w-auto h-[300px] md:h-[380px] object-contain drop-shadow-2xl"
+              className="relative z-10 w-auto h-[280px] md:h-[340px] object-contain drop-shadow-2xl"
+              loading="lazy"
             />
 
             {/* Floating skill icons */}
             {skillIcons.map((item, index) => {
-              const pos = getIconPosition(index);
+              const pos = getIconPosition(index, skillIcons.length);
               return (
                 <div
                   key={index}
@@ -95,22 +95,22 @@ const About = () => {
                   style={{
                     left: `${pos.x}%`,
                     top: `${pos.y}%`,
-                    animationDelay: `${index * 0.35}s`,
-                    animationDuration: `${3 + (index % 4) * 0.4}s`,
+                    animationDelay: `${index * 0.4}s`,
+                    animationDuration: `${3 + (index % 3) * 0.5}s`,
                   }}
                 >
-                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg shadow-lg backdrop-blur-sm border border-white/10 transition-transform hover:scale-110 cursor-default bg-background/80">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg shadow-md backdrop-blur-sm border border-border/30 bg-card/90 hover:scale-110 transition-transform cursor-default">
                     {item.image_url ? (
                       <img src={item.image_url} alt={item.label} className="w-5 h-5 rounded object-contain" />
                     ) : (
                       <div
-                        className="w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold text-white"
+                        className="w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold text-primary-foreground"
                         style={{ backgroundColor: item.color }}
                       >
                         {item.label.slice(0, 2).toUpperCase()}
                       </div>
                     )}
-                    <span className="text-[11px] font-semibold text-foreground/80">{item.label}</span>
+                    <span className="text-[11px] font-semibold text-foreground/80 whitespace-nowrap">{item.label}</span>
                   </div>
                 </div>
               );
@@ -118,9 +118,9 @@ const About = () => {
           </div>
 
           {/* Text Side */}
-          <div className="glass-card rounded-2xl p-8 md:p-12 animate-fade-in-up order-1 lg:order-2">
+          <div className="glass-card rounded-2xl p-8 md:p-10 order-1 lg:order-2">
             <div 
-              className="prose prose-lg max-w-none text-foreground leading-relaxed"
+              className="prose prose-lg max-w-none text-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
