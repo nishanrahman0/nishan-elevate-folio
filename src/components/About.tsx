@@ -53,16 +53,16 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Scattered positions around the desk area — like the reference image
+    // Scattered around the monitor/screen area (upper-center of illustration)
     const positions = [
-      { x: 8,  y: 58 },  // far left, mid
-      { x: 18, y: 48 },  // left, upper
-      { x: 28, y: 38 },  // left-center, top
-      { x: 45, y: 34 },  // center-left, top
-      { x: 58, y: 34 },  // center-right, top
-      { x: 75, y: 42 },  // right, upper
-      { x: 85, y: 52 },  // far right, mid
-      { x: 78, y: 58 },  // right, lower
+      { x: 20, y: 28 },  // left of monitor
+      { x: 30, y: 18 },  // upper-left
+      { x: 45, y: 12 },  // top-center-left
+      { x: 60, y: 12 },  // top-center-right
+      { x: 75, y: 18 },  // upper-right
+      { x: 84, y: 28 },  // right of monitor
+      { x: 15, y: 40 },  // mid-left
+      { x: 88, y: 40 },  // mid-right
     ];
     const pos = positions[index % positions.length];
     return {
