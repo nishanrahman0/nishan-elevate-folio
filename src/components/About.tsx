@@ -64,7 +64,7 @@ const About = () => {
     const rx = 28;  // tight horizontal radius
     const ry = 8;   // very flat — stays at desk level
     const cx = 50;  // centered
-    const cy = 82;  // pushed way down to the desk/computer zone
+    const cy = 75;  // moved up to computer area
 
     return {
       x: cx + rx * Math.cos(angle),
