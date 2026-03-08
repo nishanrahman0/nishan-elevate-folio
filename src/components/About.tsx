@@ -53,22 +53,23 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Keep icons on a focused top arc around the computer area (not below the person)
+    // Tight arc strictly around the computer/desk area at the bottom of the illustration
     const safeTotal = Math.max(total, 1);
     const t = safeTotal === 1 ? 0.5 : index / (safeTotal - 1);
-    const startAngle = (160 * Math.PI) / 180;
-    const endAngle = (20 * Math.PI) / 180;
+    // Arc spans from lower-left to lower-right of the desk
+    const startAngle = (150 * Math.PI) / 180;
+    const endAngle = (30 * Math.PI) / 180;
     const angle = startAngle + (endAngle - startAngle) * t;
 
-    const rx = 34;
-    const ry = 13;
-    const cx = 50;
-    const cy = 62;
+    const rx = 28;  // tight horizontal radius
+    const ry = 8;   // very flat — stays at desk level
+    const cx = 50;  // centered
+    const cy = 82;  // pushed way down to the desk/computer zone
 
     return {
       x: cx + rx * Math.cos(angle),
       y: cy - ry * Math.sin(angle),
-      scale: 0.9 + 0.15 * Math.sin(t * Math.PI),
+      scale: 0.85 + 0.2 * Math.sin(t * Math.PI),
     };
   };
 
@@ -91,8 +92,8 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[78%] h-[30%] rounded-full border border-border/40 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
-              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[62%] h-[22%] rounded-full border border-primary/20" />
+              <div className="absolute left-1/2 top-[82%] -translate-x-1/2 -translate-y-1/2 w-[60%] h-[20%] rounded-full border border-border/30 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
+              <div className="absolute left-1/2 top-[82%] -translate-x-1/2 -translate-y-1/2 w-[48%] h-[14%] rounded-full border border-primary/15" />
             </div>
 
             <img
