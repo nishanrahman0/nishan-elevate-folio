@@ -18,6 +18,7 @@ export function HeroEditor() {
     name: "",
     tagline: "",
     site_title: "",
+    show_site_name: true,
     profile_image_url: "",
     logo_url: "",
     resume_url: "",
@@ -46,6 +47,7 @@ export function HeroEditor() {
           name: data.name || "",
           tagline: data.tagline || "",
           site_title: data.site_title || "",
+          show_site_name: (data as any).show_site_name ?? true,
           profile_image_url: data.profile_image_url || "",
           logo_url: data.logo_url || "",
           resume_url: (data as any).resume_url || "",
@@ -128,6 +130,19 @@ export function HeroEditor() {
                 placeholder="Nishan Rahman"
                 className="bg-background/50 border-white/20 focus:border-violet-500/50"
               />
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <div>
+                <Label className="text-foreground/80">Show Site Name in Navigation</Label>
+                <p className="text-xs text-muted-foreground mt-0.5">Display the website name next to the logo in the nav bar</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, show_site_name: !formData.show_site_name })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${formData.show_site_name ? 'bg-violet-500' : 'bg-muted'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.show_site_name ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
             </div>
             <div className="space-y-2">
               <Label htmlFor="name" className="text-foreground/80">Name</Label>
