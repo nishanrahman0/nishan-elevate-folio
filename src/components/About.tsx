@@ -53,18 +53,17 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Tight arc strictly around the computer/desk area at the bottom of the illustration
     const safeTotal = Math.max(total, 1);
     const t = safeTotal === 1 ? 0.5 : index / (safeTotal - 1);
-    // Arc spans from lower-left to lower-right of the desk
-    const startAngle = (150 * Math.PI) / 180;
-    const endAngle = (30 * Math.PI) / 180;
+    // Wide arc around the middle of the illustration (computer/desk zone)
+    const startAngle = (155 * Math.PI) / 180;
+    const endAngle = (25 * Math.PI) / 180;
     const angle = startAngle + (endAngle - startAngle) * t;
 
-    const rx = 28;  // tight horizontal radius
-    const ry = 8;   // very flat — stays at desk level
-    const cx = 50;  // centered
-    const cy = 68;
+    const rx = 40;  // wide enough to frame the desk
+    const ry = 12;
+    const cx = 50;
+    const cy = 55;  // vertically centered on the computer area
 
     return {
       x: cx + rx * Math.cos(angle),
@@ -92,8 +91,8 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[60%] h-[20%] rounded-full border border-border/30 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
-              <div className="absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[48%] h-[14%] rounded-full border border-primary/15" />
+              <div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[82%] h-[28%] rounded-full border border-border/20 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
+              <div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[66%] h-[20%] rounded-full border border-primary/10" />
             </div>
 
             <img
