@@ -18,6 +18,7 @@ const Navigation = () => {
   const [navItems, setNavItems] = useState<NavItem[]>([]);
   const [logoUrl, setLogoUrl] = useState("");
   const [siteName, setSiteName] = useState("");
+  const [showSiteName, setShowSiteName] = useState(true);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -50,12 +51,13 @@ const Navigation = () => {
     try {
       const { data, error } = await supabase
         .from("hero_content")
-        .select("logo_url, site_title, name")
+        .select("logo_url, site_title, name, show_site_name")
         .maybeSingle();
       
       if (error) throw error;
       setLogoUrl(data?.logo_url || "");
       setSiteName(data?.site_title || data?.name || "");
+      setShowSiteName((data as any)?.show_site_name ?? true);
     } catch (error) {
       console.error("Error fetching branding:", error);
     }
@@ -123,6 +125,9 @@ const Navigation = () => {
                 <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-sm">
                   {siteName.slice(0, 2).toUpperCase() || "NR"}
                 </div>
+              )}
+              {showSiteName && siteName && (
+                <span className="text-lg font-bold text-foreground hidden sm:inline">{siteName}</span>
               )}
             </a>
 

@@ -524,6 +524,7 @@ export type Database = {
           name: string
           profile_image_url: string | null
           resume_url: string | null
+          show_site_name: boolean
           site_title: string | null
           tagline: string
           updated_at: string | null
@@ -539,6 +540,7 @@ export type Database = {
           name: string
           profile_image_url?: string | null
           resume_url?: string | null
+          show_site_name?: boolean
           site_title?: string | null
           tagline: string
           updated_at?: string | null
@@ -554,6 +556,7 @@ export type Database = {
           name?: string
           profile_image_url?: string | null
           resume_url?: string | null
+          show_site_name?: boolean
           site_title?: string | null
           tagline?: string
           updated_at?: string | null
