@@ -132,12 +132,27 @@ const Activities = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-primary/15 to-transparent rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-accent/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+      {/* Animated particles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-16 left-[10%] w-1.5 h-1.5 bg-primary/40 rounded-full animate-float-slow" />
+        <div className="absolute top-28 left-[25%] w-1 h-1 bg-accent/50 rounded-full animate-float-medium" />
+        <div className="absolute top-20 right-[15%] w-2 h-2 bg-primary/30 rounded-full animate-float-fast" />
+        <div className="absolute top-36 right-[30%] w-1 h-1 bg-accent/40 rounded-full animate-float-slow delay-700" />
+        <div className="absolute top-12 left-[50%] w-1.5 h-1.5 bg-primary/25 rounded-full animate-float-medium delay-300" />
+        <div className="absolute top-40 left-[70%] w-1 h-1 bg-accent/35 rounded-full animate-float-fast delay-1000" />
+        <div className="absolute top-24 left-[40%] w-0.5 h-0.5 bg-primary/50 rounded-full animate-float-slow delay-500" />
+        <div className="absolute top-32 right-[45%] w-1.5 h-1.5 bg-accent/25 rounded-full animate-float-medium delay-700" />
+      </div>
+
       <Navigation />
       <div className="pt-24 pb-16 min-h-screen relative z-10">
         <div className="container mx-auto px-4 max-w-6xl">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div>
+          {/* Header with glow */}
+          <div className="flex items-center justify-between mb-8 relative">
+            <div className="absolute -top-8 -left-8 w-40 h-40 bg-primary/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
+            <div className="absolute -top-4 left-20 w-24 h-24 bg-accent/10 rounded-full blur-2xl animate-pulse delay-500 pointer-events-none" />
+            <div className="relative">
               <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-2">Activities</h1>
               <p className="text-muted-foreground text-sm md:text-base">Organizations & contributions</p>
             </div>
