@@ -124,9 +124,6 @@ const Navigation = () => {
                   {siteName.slice(0, 2).toUpperCase() || "NR"}
                 </div>
               )}
-              {siteName && (
-                <span className="text-lg font-bold text-foreground hidden sm:inline">{siteName}</span>
-              )}
             </a>
 
             {/* Desktop Navigation */}
