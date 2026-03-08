@@ -42,11 +42,13 @@ const About = () => {
         "hsl(var(--secondary))",
         "hsl(var(--muted-foreground))",
       ];
-      setSkillIcons(data.map((s, i) => ({
-        label: s.skill_name,
-        image_url: s.image_url,
-        color: colors[i % colors.length],
-      })));
+      setSkillIcons(
+        data.map((s, i) => ({
+          label: s.skill_name,
+          image_url: s.image_url,
+          color: colors[i % colors.length],
+        }))
+      );
     }
   };
 
@@ -54,8 +56,8 @@ const About = () => {
     // Keep icons on a focused top arc around the computer area (not below the person)
     const safeTotal = Math.max(total, 1);
     const t = safeTotal === 1 ? 0.5 : index / (safeTotal - 1);
-    const startAngle = (160 * Math.PI) / 180; // left side of arc
-    const endAngle = (20 * Math.PI) / 180; // right side of arc
+    const startAngle = (160 * Math.PI) / 180;
+    const endAngle = (20 * Math.PI) / 180;
     const angle = startAngle + (endAngle - startAngle) * t;
 
     const rx = 34;
@@ -71,10 +73,13 @@ const About = () => {
   };
 
   return (
-    <section id="about" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+    <section
+      id="about"
+      className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden"
+    >
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-      
+
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -84,15 +89,12 @@ const About = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Illustration Side */}
           <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
-            {/* Orbit guides around computer area */}
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[78%] h-[30%] rounded-full border border-border/40 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
               <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[62%] h-[22%] rounded-full border border-primary/20" />
             </div>
 
-            {/* Center illustration image */}
             <img
               src={illustrationUrl}
               alt="Developer working at desk"
@@ -100,7 +102,6 @@ const About = () => {
               loading="lazy"
             />
 
-            {/* Floating skill icons */}
             {skillIcons.map((item, index) => {
               const pos = getIconPosition(index, skillIcons.length);
               return (
@@ -133,158 +134,8 @@ const About = () => {
             })}
           </div>
 
-          {/* Text Side */}
           <div className="glass-card rounded-2xl p-8 md:p-10 order-1 lg:order-2">
-            <div 
-              className="prose prose-lg max-w-none text-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default About;
-
-import { supabase } from "@/integrations/supabase/client";
-import defaultIllustration from "@/assets/about-illustration.png";
-
-interface SkillIcon {
-  label: string;
-  image_url: string | null;
-  color: string;
-}
-
-const About = () => {
-  const [content, setContent] = useState("");
-  const [illustrationUrl, setIllustrationUrl] = useState<string>(defaultIllustration);
-  const [skillIcons, setSkillIcons] = useState<SkillIcon[]>([]);
-
-  useEffect(() => {
-    fetchAboutContent();
-    fetchSkillIcons();
-  }, []);
-
-  const fetchAboutContent = async () => {
-    const { data } = await supabase
-      .from("about_content")
-      .select("content, image_url")
-      .maybeSingle();
-    if (data) {
-      setContent(data.content);
-      if (data.image_url) setIllustrationUrl(data.image_url);
-    }
-  };
-
-  const fetchSkillIcons = async () => {
-    const { data } = await supabase
-      .from("skills")
-      .select("skill_name, image_url, color_gradient")
-      .order("display_order")
-      .limit(8);
-    if (data) {
-      const colors = [
-        "hsl(var(--primary))",
-        "hsl(var(--accent))",
-        "hsl(var(--secondary))",
-        "hsl(var(--muted-foreground))",
-      ];
-      setSkillIcons(data.map((s, i) => ({
-        label: s.skill_name,
-        image_url: s.image_url,
-        color: colors[i % colors.length],
-      })));
-    }
-  };
-
-  const getIconPosition = (index: number, total: number) => {
-    // Keep icons on a focused top arc around the computer area (not below the person)
-    const safeTotal = Math.max(total, 1);
-    const t = safeTotal === 1 ? 0.5 : index / (safeTotal - 1);
-    const startAngle = (160 * Math.PI) / 180; // left side of arc
-    const endAngle = (20 * Math.PI) / 180; // right side of arc
-    const angle = startAngle + (endAngle - startAngle) * t;
-
-    const rx = 34;
-    const ry = 13;
-    const cx = 50;
-    const cy = 62;
-
-    return {
-      x: cx + rx * Math.cos(angle),
-      y: cy - ry * Math.sin(angle),
-      scale: 0.9 + 0.15 * Math.sin(t * Math.PI),
-    };
-  };
-
-  return (
-    <section id="about" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-      
-      <div className="container mx-auto max-w-6xl relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">About Me</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Illustration Side */}
-          <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
-            {/* Orbit guides around computer area */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[78%] h-[30%] rounded-full border border-border/40 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
-              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[62%] h-[22%] rounded-full border border-primary/20" />
-            </div>
-
-            {/* Center illustration image */}
-            <img
-              src={illustrationUrl}
-              alt="Developer working at desk"
-              className="relative z-10 w-auto h-[280px] md:h-[340px] object-contain drop-shadow-2xl"
-              loading="lazy"
-            />
-
-            {/* Floating skill icons */}
-            {skillIcons.map((item, index) => {
-              const pos = getIconPosition(index, skillIcons.length);
-              return (
-                <div
-                  key={index}
-                  className="absolute floating-icon z-20"
-                  style={{
-                    left: `${pos.x}%`,
-                    top: `${pos.y}%`,
-                    transform: `translate(-50%, -50%) scale(${pos.scale})`,
-                    animationDelay: `${index * 0.35}s`,
-                    animationDuration: `${3.2 + (index % 3) * 0.45}s`,
-                  }}
-                >
-                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl shadow-lg backdrop-blur-sm border border-border/40 bg-card/90 hover:scale-110 transition-transform cursor-default">
-                    {item.image_url ? (
-                      <img src={item.image_url} alt={item.label} className="w-5 h-5 rounded object-contain" />
-                    ) : (
-                      <div
-                        className="w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold text-primary-foreground"
-                        style={{ backgroundColor: item.color }}
-                      >
-                        {item.label.slice(0, 2).toUpperCase()}
-                      </div>
-                    )}
-                    <span className="text-[11px] font-semibold text-foreground/80 whitespace-nowrap">{item.label}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Text Side */}
-          <div className="glass-card rounded-2xl p-8 md:p-10 order-1 lg:order-2">
-            <div 
+            <div
               className="prose prose-lg max-w-none text-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground"
               dangerouslySetInnerHTML={{ __html: content }}
             />
