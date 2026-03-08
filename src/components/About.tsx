@@ -49,12 +49,12 @@ const About = () => {
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Distribute icons in an ellipse around the illustration
+    // Distribute icons in an ellipse around the computer/desk area (lower portion)
     const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
-    const rx = 38; // horizontal radius
-    const ry = 35; // vertical radius
+    const rx = 32; // horizontal radius (tighter around desk)
+    const ry = 18; // vertical radius (flatter ellipse)
     const cx = 48; // center x
-    const cy = 45; // center y
+    const cy = 72; // center y (shifted down to computer area)
     return {
       x: cx + rx * Math.cos(angle),
       y: cy + ry * Math.sin(angle),
