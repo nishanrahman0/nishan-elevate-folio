@@ -137,7 +137,9 @@ All colors MUST be HSL.
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-xl bg-white/25 dark:bg-white/5 border border-white/30 dark:border-white/10 shadow-lg;
+    @apply backdrop-blur-xl border shadow-lg;
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
   }
   
   .gradient-text {
