@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 interface Organization {
   id: string;
   name: string;
+  short_name: string | null;
   description: string | null;
   banner_url: string | null;
   logo_url: string | null;
@@ -54,7 +55,7 @@ export function ActivitiesEditor() {
 
   // Org form
   const [editingOrgId, setEditingOrgId] = useState<string | null>(null);
-  const [orgForm, setOrgForm] = useState({ name: "", description: "", banner_url: "", logo_url: "", display_order: 0, hidden: false });
+  const [orgForm, setOrgForm] = useState({ name: "", short_name: "", description: "", banner_url: "", logo_url: "", display_order: 0, hidden: false });
 
   // Role form
   const [editingRoleId, setEditingRoleId] = useState<string | null>(null);
@@ -82,10 +83,10 @@ export function ActivitiesEditor() {
   };
 
   // --- Organization CRUD ---
-  const resetOrgForm = () => { setOrgForm({ name: "", description: "", banner_url: "", logo_url: "", display_order: 0, hidden: false }); setEditingOrgId(null); };
+  const resetOrgForm = () => { setOrgForm({ name: "", short_name: "", description: "", banner_url: "", logo_url: "", display_order: 0, hidden: false }); setEditingOrgId(null); };
   const handleSaveOrg = async () => {
     try {
-      const payload = { name: orgForm.name, description: orgForm.description || null, banner_url: orgForm.banner_url || null, logo_url: orgForm.logo_url || null, display_order: orgForm.display_order, hidden: orgForm.hidden };
+      const payload = { name: orgForm.name, short_name: orgForm.short_name || null, description: orgForm.description || null, banner_url: orgForm.banner_url || null, logo_url: orgForm.logo_url || null, display_order: orgForm.display_order, hidden: orgForm.hidden };
       if (editingOrgId) {
         const { error } = await supabase.from("activity_organizations").update(payload).eq("id", editingOrgId);
         if (error) throw error;
@@ -98,7 +99,7 @@ export function ActivitiesEditor() {
       resetOrgForm(); fetchAll();
     } catch (e: any) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
   };
-  const handleEditOrg = (org: Organization) => { setEditingOrgId(org.id); setOrgForm({ name: org.name, description: org.description || "", banner_url: org.banner_url || "", logo_url: org.logo_url || "", display_order: org.display_order, hidden: org.hidden }); };
+  const handleEditOrg = (org: Organization) => { setEditingOrgId(org.id); setOrgForm({ name: org.name, short_name: org.short_name || "", description: org.description || "", banner_url: org.banner_url || "", logo_url: org.logo_url || "", display_order: org.display_order, hidden: org.hidden }); };
   const handleDeleteOrg = async (id: string) => {
     const { error } = await supabase.from("activity_organizations").delete().eq("id", id);
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
@@ -180,10 +181,14 @@ export function ActivitiesEditor() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label className="text-foreground/80">Organization Name</Label>
               <Input value={orgForm.name} onChange={e => setOrgForm({ ...orgForm, name: e.target.value })} placeholder="Rajshahi University Career Club" className="bg-background/50 border-white/20" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-foreground/80">Short Name (for button)</Label>
+              <Input value={orgForm.short_name} onChange={e => setOrgForm({ ...orgForm, short_name: e.target.value })} placeholder="RUCC" className="bg-background/50 border-white/20" />
             </div>
             <div className="space-y-2">
               <Label className="text-foreground/80">Display Order</Label>

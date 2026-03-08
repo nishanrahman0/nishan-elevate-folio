@@ -1,0 +1,1 @@
+ALTER TABLE public.activity_organizations ADD COLUMN short_name text;
