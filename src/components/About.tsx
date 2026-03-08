@@ -37,35 +37,49 @@ const About = () => {
       .limit(8);
     if (data) {
       const colors = [
-        "hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--secondary))",
-        "#E44D26", "#264DE4", "#F7DF1E", "#3178C6", "#61DAFB"
+        "hsl(var(--primary))",
+        "hsl(var(--accent))",
+        "hsl(var(--secondary))",
+        "hsl(var(--muted-foreground))",
       ];
-      setSkillIcons(data.map((s, i) => ({
-        label: s.skill_name,
-        image_url: s.image_url,
-        color: colors[i % colors.length],
-      })));
+      setSkillIcons(
+        data.map((s, i) => ({
+          label: s.skill_name,
+          image_url: s.image_url,
+          color: colors[i % colors.length],
+        }))
+      );
     }
   };
 
   const getIconPosition = (index: number, total: number) => {
-    // Distribute icons in an ellipse around the computer/desk area (lower portion)
-    const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
-    const rx = 32; // horizontal radius (tighter around desk)
-    const ry = 18; // vertical radius (flatter ellipse)
-    const cx = 48; // center x
-    const cy = 72; // center y (shifted down to computer area)
+    // Keep icons on a focused top arc around the computer area (not below the person)
+    const safeTotal = Math.max(total, 1);
+    const t = safeTotal === 1 ? 0.5 : index / (safeTotal - 1);
+    const startAngle = (160 * Math.PI) / 180;
+    const endAngle = (20 * Math.PI) / 180;
+    const angle = startAngle + (endAngle - startAngle) * t;
+
+    const rx = 34;
+    const ry = 13;
+    const cx = 50;
+    const cy = 62;
+
     return {
       x: cx + rx * Math.cos(angle),
-      y: cy + ry * Math.sin(angle),
+      y: cy - ry * Math.sin(angle),
+      scale: 0.9 + 0.15 * Math.sin(t * Math.PI),
     };
   };
 
   return (
-    <section id="about" className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
+    <section
+      id="about"
+      className="section-padding bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden"
+    >
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-      
+
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -75,9 +89,12 @@ const About = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Illustration Side */}
           <div className="relative w-full h-[420px] md:h-[500px] order-2 lg:order-1 flex items-center justify-center">
-            {/* Center illustration image */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[78%] h-[30%] rounded-full border border-border/40 bg-gradient-to-r from-primary/5 via-accent/10 to-secondary/5" />
+              <div className="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2 w-[62%] h-[22%] rounded-full border border-primary/20" />
+            </div>
+
             <img
               src={illustrationUrl}
               alt="Developer working at desk"
@@ -85,21 +102,21 @@ const About = () => {
               loading="lazy"
             />
 
-            {/* Floating skill icons */}
             {skillIcons.map((item, index) => {
               const pos = getIconPosition(index, skillIcons.length);
               return (
                 <div
                   key={index}
-                  className="absolute floating-icon z-20"
+                  className="absolute z-20"
                   style={{
                     left: `${pos.x}%`,
                     top: `${pos.y}%`,
-                    animationDelay: `${index * 0.4}s`,
-                    animationDuration: `${3 + (index % 3) * 0.5}s`,
+                    transform: `translate(-50%, -50%) scale(${pos.scale})`,
+                    animationDelay: `${index * 0.35}s`,
+                    animationDuration: `${3.2 + (index % 3) * 0.45}s`,
                   }}
                 >
-                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg shadow-md backdrop-blur-sm border border-border/30 bg-card/90 hover:scale-110 transition-transform cursor-default">
+                  <div className="floating-icon flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl shadow-lg backdrop-blur-sm border border-border/40 bg-card/90 hover:scale-110 transition-transform cursor-default">
                     {item.image_url ? (
                       <img src={item.image_url} alt={item.label} className="w-5 h-5 rounded object-contain" />
                     ) : (
@@ -117,9 +134,8 @@ const About = () => {
             })}
           </div>
 
-          {/* Text Side */}
           <div className="glass-card rounded-2xl p-8 md:p-10 order-1 lg:order-2">
-            <div 
+            <div
               className="prose prose-lg max-w-none text-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground"
               dangerouslySetInnerHTML={{ __html: content }}
             />
