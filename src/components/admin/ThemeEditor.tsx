@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Palette, RotateCcw, Save } from "lucide-react";
+import { ThemePresetsGrid } from "./ThemePresets";
 
 export function ThemeEditor() {
   const { toast } = useToast();
@@ -140,6 +141,19 @@ export function ThemeEditor() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
+        <ThemePresetsGrid
+          currentColors={colors}
+          onSelectPreset={(presetColors) => {
+            setColors(presetColors);
+            const root = document.documentElement;
+            root.style.setProperty('--primary', presetColors.primary);
+            root.style.setProperty('--secondary', presetColors.secondary);
+            root.style.setProperty('--accent', presetColors.accent);
+            localStorage.setItem('theme-colors', JSON.stringify(presetColors));
+            toast({ title: "Theme Applied", description: "Preset theme has been applied successfully." });
+          }}
+        />
+
         <div className="space-y-4">
           <div className="p-4 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 space-y-3">
             <Label htmlFor="primary-color" className="text-foreground/80 flex items-center gap-2">
