@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Palette, RotateCcw, Save } from "lucide-react";
+import { ThemePresetsGrid } from "./ThemePresets";
 
 export function ThemeEditor() {
   const { toast } = useToast();
