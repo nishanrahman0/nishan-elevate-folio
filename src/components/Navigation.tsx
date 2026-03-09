@@ -138,7 +138,7 @@ const Navigation = () => {
                 href={item.href}
                 onClick={(e) => {e.preventDefault();handleNavClick(item.href, item.isRoute);}}
                 className={`
-                    px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                    px-3.5 py-2 rounded-lg text-base font-medium transition-all duration-200
                     ${isActive(item.href) ?
                 'text-primary bg-primary/10' :
                 'text-foreground/70 hover:text-foreground hover:bg-muted/50'}
@@ -151,10 +151,10 @@ const Navigation = () => {
               <div className="ml-2 flex items-center gap-1">
                 {user &&
                 <>
-                    <Button onClick={() => navigate("/admin")} variant="ghost" size="sm" className="text-xs">
+                    <Button onClick={() => navigate("/admin")} variant="ghost" size="sm" className="text-sm">
                       Admin
                     </Button>
-                    <Button onClick={signOut} variant="ghost" size="sm" className="text-xs">
+                    <Button onClick={signOut} variant="ghost" size="sm" className="text-sm">
                       <LogOut className="h-3.5 w-3.5" />
                     </Button>
                   </>
@@ -187,7 +187,7 @@ const Navigation = () => {
                 href={item.href}
                 onClick={(e) => {e.preventDefault();handleNavClick(item.href, item.isRoute);}}
                 className={`
-                      flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all
+                      flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all
                       ${isActive(item.href) ?
                 'text-primary bg-primary/10' :
                 'text-foreground/70 hover:text-foreground hover:bg-muted/50'}
@@ -202,10 +202,10 @@ const Navigation = () => {
               <div className="border-t border-border pt-4 space-y-2">
                 {user &&
               <>
-                    <Button onClick={() => {setIsOpen(false);navigate("/admin");}} variant="ghost" size="sm" className="w-full justify-start text-xs">
+                    <Button onClick={() => {setIsOpen(false);navigate("/admin");}} variant="ghost" size="sm" className="w-full justify-start text-sm">
                       Admin Panel
                     </Button>
-                    <Button onClick={() => {setIsOpen(false);signOut();}} variant="ghost" size="sm" className="w-full justify-start text-xs text-destructive">
+                    <Button onClick={() => {setIsOpen(false);signOut();}} variant="ghost" size="sm" className="w-full justify-start text-sm text-destructive">
                       <LogOut className="h-3.5 w-3.5 mr-2" />
                       Sign Out
                     </Button>
