@@ -37,6 +37,7 @@ interface Task {
   image_url: string | null;
   images: string[];
   files: string[];
+  videos: string[];
   link_url: string | null;
   client_url: string | null;
   display_order: number;
@@ -63,7 +64,8 @@ export function ActivitiesEditor() {
 
   // Task form
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  const [taskForm, setTaskForm] = useState({ title: "", description: "", image_url: "", images: [] as string[], files: [] as string[], link_url: "", client_url: "", display_order: 0, role_id: "" });
+  const [taskForm, setTaskForm] = useState({ title: "", description: "", image_url: "", images: [] as string[], files: [] as string[], videos: [] as string[], link_url: "", client_url: "", display_order: 0, role_id: "" });
+  const [newVideoUrl, setNewVideoUrl] = useState("");
 
   useEffect(() => { fetchAll(); }, []);
 
@@ -76,7 +78,7 @@ export function ActivitiesEditor() {
       ]);
       setOrganizations(orgRes.data || []);
       setRoles(roleRes.data || []);
-      setTasks((taskRes.data || []).map(t => ({ ...t, images: (t.images as string[]) || [], files: (t.files as string[]) || [] })));
+      setTasks((taskRes.data || []).map(t => ({ ...t, images: (t.images as string[]) || [], files: (t.files as string[]) || [], videos: (t.videos as string[]) || [] })));
     } catch (e: any) {
       toast({ title: "Error", description: e.message, variant: "destructive" });
     } finally { setLoading(false); }
@@ -135,10 +137,10 @@ export function ActivitiesEditor() {
   };
 
   // --- Task CRUD ---
-  const resetTaskForm = () => { setTaskForm({ title: "", description: "", image_url: "", images: [], files: [], link_url: "", client_url: "", display_order: 0, role_id: "" }); setEditingTaskId(null); };
+  const resetTaskForm = () => { setTaskForm({ title: "", description: "", image_url: "", images: [], files: [], videos: [], link_url: "", client_url: "", display_order: 0, role_id: "" }); setEditingTaskId(null); setNewVideoUrl(""); };
   const handleSaveTask = async (roleId: string) => {
     try {
-      const payload = { title: taskForm.title, description: taskForm.description || null, image_url: taskForm.image_url || null, images: taskForm.images, files: taskForm.files, link_url: taskForm.link_url || null, client_url: taskForm.client_url || null, display_order: taskForm.display_order, role_id: roleId };
+      const payload = { title: taskForm.title, description: taskForm.description || null, image_url: taskForm.image_url || null, images: taskForm.images, files: taskForm.files, videos: taskForm.videos, link_url: taskForm.link_url || null, client_url: taskForm.client_url || null, display_order: taskForm.display_order, role_id: roleId };
       if (editingTaskId) {
         const { role_id, ...updatePayload } = payload;
         const { error } = await supabase.from("activity_tasks").update(updatePayload).eq("id", editingTaskId);
@@ -152,7 +154,7 @@ export function ActivitiesEditor() {
       resetTaskForm(); fetchAll();
     } catch (e: any) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
   };
-  const handleEditTask = (task: Task) => { setEditingTaskId(task.id); setTaskForm({ title: task.title, description: task.description || "", image_url: task.image_url || "", images: task.images, files: task.files || [], link_url: task.link_url || "", client_url: task.client_url || "", display_order: task.display_order, role_id: task.role_id }); };
+  const handleEditTask = (task: Task) => { setEditingTaskId(task.id); setTaskForm({ title: task.title, description: task.description || "", image_url: task.image_url || "", images: task.images, files: task.files || [], videos: task.videos || [], link_url: task.link_url || "", client_url: task.client_url || "", display_order: task.display_order, role_id: task.role_id }); };
   const handleDeleteTask = async (id: string) => {
     const { error } = await supabase.from("activity_tasks").delete().eq("id", id);
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
@@ -162,6 +164,14 @@ export function ActivitiesEditor() {
   const removeTaskImage = (index: number) => { setTaskForm(f => ({ ...f, images: f.images.filter((_, i) => i !== index) })); };
   const addTaskFile = (url: string) => { setTaskForm(f => ({ ...f, files: [...f.files, url] })); };
   const removeTaskFile = (index: number) => { setTaskForm(f => ({ ...f, files: f.files.filter((_, i) => i !== index) })); };
+  const addTaskVideo = () => { if (newVideoUrl.trim()) { setTaskForm(f => ({ ...f, videos: [...f.videos, newVideoUrl.trim()] })); setNewVideoUrl(""); } };
+  const removeTaskVideo = (index: number) => { setTaskForm(f => ({ ...f, videos: f.videos.filter((_, i) => i !== index) })); };
+
+  const getVideoThumbnail = (url: string): string | null => {
+    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg`;
+    return null;
+  };
 
   if (loading) return <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-rose-400" /></div>;
 
