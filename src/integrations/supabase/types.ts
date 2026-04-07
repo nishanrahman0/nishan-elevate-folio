@@ -126,6 +126,7 @@ export type Database = {
           role_id: string
           title: string
           updated_at: string
+          videos: Json | null
         }
         Insert: {
           client_url?: string | null
@@ -140,6 +141,7 @@ export type Database = {
           role_id: string
           title: string
           updated_at?: string
+          videos?: Json | null
         }
         Update: {
           client_url?: string | null
@@ -154,6 +156,7 @@ export type Database = {
           role_id?: string
           title?: string
           updated_at?: string
+          videos?: Json | null
         }
         Relationships: [
           {
