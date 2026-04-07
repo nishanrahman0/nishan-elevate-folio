@@ -171,7 +171,6 @@ const ActivityTaskDetail = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 {task.videos.map((videoUrl, i) => {
                   const embed = getVideoEmbed(videoUrl);
-                  const thumb = getVideoThumbnail(videoUrl);
                   const isPlaying = playingVideo === videoUrl;
 
                   return (
@@ -179,35 +178,20 @@ const ActivityTaskDetail = () => {
                       {isPlaying && embed ? (
                         <div className="aspect-video">
                           <iframe
-                            src={embed.embedUrl + "?autoplay=1"}
+                            src={embed.embedUrl + (embed.embedUrl.includes('?') ? '&' : '?') + 'autoplay=1'}
                             className="w-full h-full"
                             allowFullScreen
-                            allow="autoplay; encrypted-media"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
                             title={`Video ${i + 1}`}
                           />
                         </div>
-                      ) : thumb ? (
-                        <div
-                          className="aspect-video relative cursor-pointer group"
-                          onClick={() => embed ? setPlayingVideo(videoUrl) : window.open(videoUrl, "_blank")}
-                        >
-                          <img src={thumb} alt={`Video ${i + 1}`} className="w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
-                            <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                              <Play className="h-6 w-6 text-primary-foreground ml-1" />
-                            </div>
-                          </div>
-                        </div>
                       ) : (
-                        <div
-                          className="aspect-video bg-muted/30 flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                        <VideoThumbnail
+                          url={videoUrl}
+                          alt={`Video ${i + 1}`}
                           onClick={() => embed ? setPlayingVideo(videoUrl) : window.open(videoUrl, "_blank")}
-                        >
-                          <div className="text-center">
-                            <Play className="h-10 w-10 text-primary mx-auto mb-2" />
-                            <p className="text-xs text-muted-foreground">Play Video</p>
-                          </div>
-                        </div>
+                        />
                       )}
                       <div className="p-2 flex items-center justify-between">
                         <span className="text-xs text-muted-foreground truncate flex-1">{videoUrl}</span>
