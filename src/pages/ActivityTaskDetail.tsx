@@ -26,21 +26,62 @@ interface TaskDetail {
   client_url: string | null;
 }
 
+const getYouTubeId = (url: string): string | null => {
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+};
+
 const getVideoEmbed = (url: string): { embedUrl: string; type: string } | null => {
-  // YouTube
-  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  if (ytMatch) return { embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, type: "youtube" };
-  // Facebook
+  const ytId = getYouTubeId(url);
+  if (ytId) return { embedUrl: `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1`, type: "youtube" };
   if (url.includes("facebook.com") || url.includes("fb.watch")) {
-    return { embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`, type: "facebook" };
+    return { embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=560`, type: "facebook" };
   }
   return null;
 };
 
-const getVideoThumbnail = (url: string): string | null => {
-  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/maxresdefault.jpg`;
-  return null;
+const VideoThumbnail = ({ url, alt, onClick }: { url: string; alt: string; onClick: () => void }) => {
+  const ytId = getYouTubeId(url);
+  const [imgSrc, setImgSrc] = useState(
+    ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : ""
+  );
+  const [failed, setFailed] = useState(!ytId);
+
+  if (failed) {
+    return (
+      <div
+        className="aspect-video bg-muted/30 flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+        onClick={onClick}
+      >
+        <div className="text-center">
+          <Play className="h-10 w-10 text-primary mx-auto mb-2" />
+          <p className="text-xs text-muted-foreground">Play Video</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="aspect-video relative cursor-pointer group" onClick={onClick}>
+      <img
+        src={imgSrc}
+        alt={alt}
+        className="w-full h-full object-cover"
+        onError={() => {
+          if (ytId && imgSrc.includes("maxresdefault")) {
+            setImgSrc(`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`);
+          } else {
+            setFailed(true);
+          }
+        }}
+      />
+      <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
+        <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+          <Play className="h-6 w-6 text-primary-foreground ml-1" />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const ActivityTaskDetail = () => {
