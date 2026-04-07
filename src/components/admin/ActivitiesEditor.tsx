@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2, Edit2, Plus, Building2, UserCheck, ListTodo, Eye, EyeOff, ChevronDown, ChevronRight } from "lucide-react";
+import { Loader2, Trash2, Edit2, Plus, Building2, UserCheck, ListTodo, Eye, EyeOff, ChevronDown, ChevronRight, Video } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
 import { Switch } from "@/components/ui/switch";
 
