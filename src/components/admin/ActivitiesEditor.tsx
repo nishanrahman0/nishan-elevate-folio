@@ -343,6 +343,28 @@ export function ActivitiesEditor() {
                                 </div>
                               )}
                             </div>
+                            {/* Videos */}
+                            <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-2">
+                              <Label className="text-foreground/80 flex items-center gap-2"><Video className="h-4 w-4" /> Video Links (YouTube, Facebook, LinkedIn)</Label>
+                              <div className="flex gap-2">
+                                <Input value={newVideoUrl} onChange={e => setNewVideoUrl(e.target.value)} placeholder="Paste video URL..." className="bg-background/50 border-white/20" />
+                                <Button size="sm" type="button" onClick={addTaskVideo} className="shrink-0">Add</Button>
+                              </div>
+                              {taskForm.videos.length > 0 && (
+                                <div className="space-y-2 mt-2">
+                                  {taskForm.videos.map((vid, i) => {
+                                    const thumb = getVideoThumbnail(vid);
+                                    return (
+                                      <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-background/30">
+                                        {thumb && <img src={thumb} alt="" className="w-16 h-10 rounded object-cover" />}
+                                        <span className="text-xs text-foreground/70 truncate flex-1">{vid}</span>
+                                        <button onClick={() => removeTaskVideo(i)} className="bg-destructive text-destructive-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center">{"×"}</button>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
                             <div className="flex gap-2">
                               <Button size="sm" onClick={() => handleSaveTask(role.id)} className="bg-gradient-to-r from-emerald-500 to-teal-600">
                                 {editingTaskId ? "Update" : "Add"} Task
@@ -357,8 +379,8 @@ export function ActivitiesEditor() {
                               <div className="flex items-center gap-3">
                                 {task.image_url && <img src={task.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />}
                                 <div>
-                                  <p className="font-medium text-sm">{task.title}</p>
-                                  <p className="text-xs text-muted-foreground">{task.images.length} images</p>
+                                <p className="font-medium text-sm">{task.title}</p>
+                                  <p className="text-xs text-muted-foreground">{task.images.length} images · {task.videos?.length || 0} videos</p>
                                 </div>
                               </div>
                               <div className="flex gap-1">
