@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, User, Save } from "lucide-react";
-import { ImageUpload } from "./ImageUpload";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 export function AboutEditor() {
@@ -14,7 +13,6 @@ export function AboutEditor() {
   const [saving, setSaving] = useState(false);
   const [aboutId, setAboutId] = useState<string | null>(null);
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     fetchAboutContent();
@@ -32,14 +30,9 @@ export function AboutEditor() {
       if (data) {
         setAboutId(data.id);
         setContent(data.content || "");
-        setImageUrl(data.image_url || "");
       }
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -50,21 +43,14 @@ export function AboutEditor() {
     try {
       const { error } = await supabase
         .from("about_content")
-        .update({ content, image_url: imageUrl, updated_at: new Date().toISOString() })
+        .update({ content, updated_at: new Date().toISOString() })
         .eq("id", aboutId);
 
       if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "About section updated successfully",
-      });
+      toast({ title: "Success", description: "About section updated successfully" });
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -99,21 +85,6 @@ export function AboutEditor() {
             onChange={setContent}
             placeholder="Write about yourself..."
           />
-        </div>
-        <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-          <ImageUpload
-            currentImageUrl={imageUrl}
-            onImageUploaded={setImageUrl}
-            label="🖼️ Center Illustration (Person at Desk)"
-          />
-          <p className="text-xs text-muted-foreground mt-2">
-            This image appears as the center illustration in the About section. Upload a custom illustration to replace the default one.
-          </p>
-        </div>
-        <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-          <p className="text-sm text-muted-foreground">
-            💡 <strong>Floating skill icons</strong> around the illustration are pulled from your Skills. Manage them in the <strong>Skills</strong> editor — upload logos there and they'll appear as floating icons here.
-          </p>
         </div>
         <Button onClick={handleSave} disabled={saving} className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700">
           {saving ? (

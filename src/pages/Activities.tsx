@@ -20,6 +20,7 @@ interface ActivityTask {
   image_url?: string;
   images?: string[];
   files?: string[];
+  videos?: string[];
   link_url?: string;
   client_url?: string;
   display_order: number;
@@ -88,6 +89,7 @@ const Activities = () => {
                 image_url: t.image_url || undefined,
                 images: (t.images as string[]) || [],
                 files: (t.files as string[]) || [],
+                videos: (t.videos as string[]) || [],
                 link_url: t.link_url || undefined,
                 client_url: t.client_url || undefined,
               })),
@@ -109,6 +111,13 @@ const Activities = () => {
   const getCoverImage = (task: ActivityTask): string | null => {
     if (task.image_url) return task.image_url;
     if (task.images && task.images.length > 0) return task.images[0];
+    // Check for YouTube video thumbnail
+    if (task.videos && task.videos.length > 0) {
+      for (const url of task.videos) {
+        const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg`;
+      }
+    }
     return null;
   };
 

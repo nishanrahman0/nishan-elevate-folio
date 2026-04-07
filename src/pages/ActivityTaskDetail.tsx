@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, FileText, Download } from "lucide-react";
+import { ArrowLeft, FileText, Download, Play } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -21,14 +21,33 @@ interface TaskDetail {
   image_url: string | null;
   images: string[];
   files: string[];
+  videos: string[];
   link_url: string | null;
   client_url: string | null;
 }
+
+const getVideoEmbed = (url: string): { embedUrl: string; type: string } | null => {
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch) return { embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, type: "youtube" };
+  // Facebook
+  if (url.includes("facebook.com") || url.includes("fb.watch")) {
+    return { embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`, type: "facebook" };
+  }
+  return null;
+};
+
+const getVideoThumbnail = (url: string): string | null => {
+  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch) return `https://img.youtube.com/vi/${ytMatch[1]}/maxresdefault.jpg`;
+  return null;
+};
 
 const ActivityTaskDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState<TaskDetail | null>(null);
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -39,7 +58,16 @@ const ActivityTaskDetail = () => {
         .eq("id", id)
         .maybeSingle();
       if (data) {
-        setTask({ ...data, images: (data.images as string[]) || [], files: (data.files as string[]) || [], description: data.description, image_url: data.image_url, link_url: data.link_url, client_url: data.client_url });
+        setTask({
+          ...data,
+          images: (data.images as string[]) || [],
+          files: (data.files as string[]) || [],
+          videos: (data.videos as string[]) || [],
+          description: data.description,
+          image_url: data.image_url,
+          link_url: data.link_url,
+          client_url: data.client_url,
+        });
       }
     };
     fetch();
@@ -91,6 +119,66 @@ const ActivityTaskDetail = () => {
 
           {task.description && (
             <div className="prose prose-lg dark:prose-invert max-w-none mb-8" dangerouslySetInnerHTML={{ __html: task.description }} />
+          )}
+
+          {/* Videos Section */}
+          {task.videos.length > 0 && (
+            <div className="mb-8 space-y-4">
+              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Play className="h-5 w-5 text-primary" /> Videos
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {task.videos.map((videoUrl, i) => {
+                  const embed = getVideoEmbed(videoUrl);
+                  const thumb = getVideoThumbnail(videoUrl);
+                  const isPlaying = playingVideo === videoUrl;
+
+                  return (
+                    <div key={i} className="rounded-xl overflow-hidden border border-border/40 bg-card/50">
+                      {isPlaying && embed ? (
+                        <div className="aspect-video">
+                          <iframe
+                            src={embed.embedUrl + "?autoplay=1"}
+                            className="w-full h-full"
+                            allowFullScreen
+                            allow="autoplay; encrypted-media"
+                            title={`Video ${i + 1}`}
+                          />
+                        </div>
+                      ) : thumb ? (
+                        <div
+                          className="aspect-video relative cursor-pointer group"
+                          onClick={() => embed ? setPlayingVideo(videoUrl) : window.open(videoUrl, "_blank")}
+                        >
+                          <img src={thumb} alt={`Video ${i + 1}`} className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
+                            <div className="w-14 h-14 rounded-full bg-primary/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                              <Play className="h-6 w-6 text-primary-foreground ml-1" />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className="aspect-video bg-muted/30 flex items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                          onClick={() => embed ? setPlayingVideo(videoUrl) : window.open(videoUrl, "_blank")}
+                        >
+                          <div className="text-center">
+                            <Play className="h-10 w-10 text-primary mx-auto mb-2" />
+                            <p className="text-xs text-muted-foreground">Play Video</p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="p-2 flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground truncate flex-1">{videoUrl}</span>
+                        <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => window.open(videoUrl, "_blank")}>
+                          Open
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           )}
 
           {/* Files Section */}

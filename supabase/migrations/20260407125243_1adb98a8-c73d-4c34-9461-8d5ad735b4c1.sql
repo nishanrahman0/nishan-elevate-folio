@@ -1,0 +1,1 @@
+ALTER TABLE public.activity_tasks ADD COLUMN videos jsonb DEFAULT '[]'::jsonb;
