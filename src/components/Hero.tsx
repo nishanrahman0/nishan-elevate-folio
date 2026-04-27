@@ -4,6 +4,7 @@ import { Mail, Linkedin, Github, Facebook, Instagram, Download, Eye, ChevronDown
 import * as Icons from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpg";
 import { supabase } from "@/integrations/supabase/client";
+import DownloadPortfolioButton from "@/components/DownloadPortfolioButton";
 
 interface SocialLink {
   id: string;
@@ -188,6 +189,7 @@ const Hero = () => {
                   )}
                 </div>
               )}
+              <DownloadPortfolioButton variant="outline" size="lg" />
             </div>
 
             {/* Social Links */}
