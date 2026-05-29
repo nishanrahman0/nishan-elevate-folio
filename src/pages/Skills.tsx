@@ -20,6 +20,7 @@ interface Skill {
   color_gradient: string;
   image_url?: string;
   link_url?: string;
+  skill_type?: string;
 }
 
 interface SkillItem {
@@ -34,6 +35,7 @@ interface SkillCategory {
   color: string;
   skills: SkillItem[];
 }
+
 
 const getCategoryIcon = (categoryName: string) => {
   const lc = categoryName.toLowerCase();
@@ -61,40 +63,33 @@ const getCategoryIcon = (categoryName: string) => {
 const Skills = () => {
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [activeType, setActiveType] = useState<"technical" | "soft">("technical");
   const [search, setSearch] = useState("");
-  const [totalSkills, setTotalSkills] = useState(0);
 
   useEffect(() => {
-    fetchSkills();
+    supabase.from("skills").select("*").order("display_order").then(({ data }) => {
+      setAllSkills((data || []) as Skill[]);
+    });
   }, []);
 
-  const fetchSkills = async () => {
-    const { data } = await supabase
-      .from("skills")
-      .select("*")
-      .order("display_order");
+  const filteredByType = allSkills.filter(s => (s.skill_type || "technical") === activeType);
 
-    if (data) {
-      setTotalSkills(data.length);
-      const grouped = data.reduce((acc: Record<string, Skill[]>, skill: Skill) => {
-        if (!acc[skill.category]) acc[skill.category] = [];
-        acc[skill.category].push(skill);
-        return acc;
-      }, {});
+  const skillCategories: SkillCategory[] = (() => {
+    const grouped = filteredByType.reduce((acc: Record<string, Skill[]>, s) => {
+      (acc[s.category] = acc[s.category] || []).push(s);
+      return acc;
+    }, {});
+    return Object.entries(grouped).map(([category, skills]) => ({
+      category,
+      icon: getCategoryIcon(category),
+      color: skills[0].color_gradient,
+      skills: skills.map(s => ({ name: s.skill_name, image_url: s.image_url, link_url: s.link_url })),
+    }));
+  })();
 
-      const categories = Object.entries(grouped).map(([category, skills]) => {
-        const firstSkill = skills[0];
-        return {
-          category,
-          icon: getCategoryIcon(category),
-          color: firstSkill.color_gradient,
-          skills: skills.map((s) => ({ name: s.skill_name, image_url: (s as any).image_url, link_url: (s as any).link_url })),
-        };
-      });
-      setSkillCategories(categories);
-    }
-  };
+  const totalSkills = filteredByType.length;
+
 
   const filtered = search
     ? skillCategories
