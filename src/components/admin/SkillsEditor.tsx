@@ -224,6 +224,10 @@ export function SkillsEditor() {
             <Input
               id="skill_link_url"
               value={formData.link_url}
+              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+              placeholder="https://..."
+              className="bg-background/50 border-white/20 focus:border-yellow-500/50"
+            />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -243,10 +247,6 @@ export function SkillsEditor() {
             </div>
           </div>
 
-              placeholder="https://..."
-              className="bg-background/50 border-white/20 focus:border-yellow-500/50"
-            />
-          </div>
           <div className="flex gap-2 pt-4">
             <Button onClick={handleSave} className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700">
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
