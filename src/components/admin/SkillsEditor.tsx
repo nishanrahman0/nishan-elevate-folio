@@ -87,7 +87,8 @@ export function SkillsEditor() {
         description: editingId ? "Skill updated" : "Skill added",
       });
 
-      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
+      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "", highlighted: false, skill_type: "technical" });
+
       setEditingId(null);
       fetchSkills();
     } catch (error: any) {
@@ -108,7 +109,10 @@ export function SkillsEditor() {
       color_gradient: skill.color_gradient,
       image_url: skill.image_url || "",
       link_url: skill.link_url || "",
+      highlighted: skill.highlighted || false,
+      skill_type: skill.skill_type || "technical",
     });
+
   };
 
   const handleDelete = async (id: string) => {
