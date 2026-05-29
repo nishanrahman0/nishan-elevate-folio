@@ -23,9 +23,9 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const ActivityTaskDetail = lazy(() => import("./pages/ActivityTaskDetail"));
-
-const ActivityTaskDetail = lazy(() => import("./pages/ActivityTaskDetail"));
 const Achievements = lazy(() => import("./pages/Achievements"));
+
+const queryClient = new QueryClient();
 
 
 const PageLoader = () => (
