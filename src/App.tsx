@@ -58,13 +58,13 @@ const App = () => (
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/activity-task/:id" element={<ActivityTaskDetail />} />
+              <Route path="/achievements" element={<Achievements />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-              <Route path="/activity-task/:id" element={<ActivityTaskDetail />} />
-              <Route path="/achievements" element={<Achievements />} />
-
+          </Suspense>
         </BrowserRouter>
+
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
