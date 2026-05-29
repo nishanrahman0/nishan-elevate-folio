@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2, Edit2, Plus, Building2, UserCheck, ListTodo, Eye, EyeOff, ChevronDown, ChevronRight, Video } from "lucide-react";
+import { Loader2, Trash2, Edit2, Plus, Building2, UserCheck, ListTodo, Eye, EyeOff, ChevronDown, ChevronRight, Video, Star } from "lucide-react";
+
 import { ImageUpload } from "./ImageUpload";
 import { Switch } from "@/components/ui/switch";
 
@@ -41,6 +42,8 @@ interface Task {
   link_url: string | null;
   client_url: string | null;
   display_order: number;
+  highlighted?: boolean;
+
 }
 
 export function ActivitiesEditor() {
@@ -375,20 +378,31 @@ export function ActivitiesEditor() {
 
                           {/* Task List */}
                           {tasks.filter(t => t.role_id === role.id).map(task => (
+
                             <div key={task.id} className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/5 border border-white/10">
                               <div className="flex items-center gap-3">
                                 {task.image_url && <img src={task.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />}
                                 <div>
-                                <p className="font-medium text-sm">{task.title}</p>
+                                  <p className="font-medium text-sm flex items-center gap-1.5">
+                                    {task.title}
+                                    {task.highlighted && <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />}
+                                  </p>
                                   <p className="text-xs text-muted-foreground">{task.images.length} images · {task.videos?.length || 0} videos</p>
                                 </div>
                               </div>
                               <div className="flex gap-1">
+                                <Button variant="ghost" size="sm" onClick={async () => {
+                                  await supabase.from("activity_tasks").update({ highlighted: !task.highlighted }).eq("id", task.id);
+                                  fetchAll();
+                                }} className="h-7 hover:bg-yellow-500/20" title={task.highlighted ? "Unfeature" : "Feature on homepage"}>
+                                  <Star className={`h-3 w-3 ${task.highlighted ? "fill-yellow-500 text-yellow-500" : ""}`} />
+                                </Button>
                                 <Button variant="ghost" size="sm" onClick={() => handleEditTask(task)} className="h-7 hover:bg-emerald-500/20"><Edit2 className="h-3 w-3" /></Button>
                                 <Button variant="ghost" size="sm" onClick={() => handleDeleteTask(task.id)} className="h-7 hover:bg-red-500/20"><Trash2 className="h-3 w-3" /></Button>
                               </div>
                             </div>
                           ))}
+
                         </div>
                       )}
                     </div>

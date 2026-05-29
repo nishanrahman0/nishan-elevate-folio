@@ -20,6 +20,7 @@ interface Skill {
   color_gradient: string;
   image_url?: string;
   link_url?: string;
+  skill_type?: string;
 }
 
 interface SkillItem {
@@ -34,6 +35,7 @@ interface SkillCategory {
   color: string;
   skills: SkillItem[];
 }
+
 
 const getCategoryIcon = (categoryName: string) => {
   const lc = categoryName.toLowerCase();
@@ -61,40 +63,33 @@ const getCategoryIcon = (categoryName: string) => {
 const Skills = () => {
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [activeType, setActiveType] = useState<"technical" | "soft">("technical");
   const [search, setSearch] = useState("");
-  const [totalSkills, setTotalSkills] = useState(0);
 
   useEffect(() => {
-    fetchSkills();
+    supabase.from("skills").select("*").order("display_order").then(({ data }) => {
+      setAllSkills((data || []) as Skill[]);
+    });
   }, []);
 
-  const fetchSkills = async () => {
-    const { data } = await supabase
-      .from("skills")
-      .select("*")
-      .order("display_order");
+  const filteredByType = allSkills.filter(s => (s.skill_type || "technical") === activeType);
 
-    if (data) {
-      setTotalSkills(data.length);
-      const grouped = data.reduce((acc: Record<string, Skill[]>, skill: Skill) => {
-        if (!acc[skill.category]) acc[skill.category] = [];
-        acc[skill.category].push(skill);
-        return acc;
-      }, {});
+  const skillCategories: SkillCategory[] = (() => {
+    const grouped = filteredByType.reduce((acc: Record<string, Skill[]>, s) => {
+      (acc[s.category] = acc[s.category] || []).push(s);
+      return acc;
+    }, {});
+    return Object.entries(grouped).map(([category, skills]) => ({
+      category,
+      icon: getCategoryIcon(category),
+      color: skills[0].color_gradient,
+      skills: skills.map(s => ({ name: s.skill_name, image_url: s.image_url, link_url: s.link_url })),
+    }));
+  })();
 
-      const categories = Object.entries(grouped).map(([category, skills]) => {
-        const firstSkill = skills[0];
-        return {
-          category,
-          icon: getCategoryIcon(category),
-          color: firstSkill.color_gradient,
-          skills: skills.map((s) => ({ name: s.skill_name, image_url: (s as any).image_url, link_url: (s as any).link_url })),
-        };
-      });
-      setSkillCategories(categories);
-    }
-  };
+  const totalSkills = filteredByType.length;
+
 
   const filtered = search
     ? skillCategories
@@ -125,15 +120,18 @@ const Skills = () => {
                     <Zap className="h-6 w-6 text-primary" />
                   </div>
                   <span className="text-sm font-medium text-primary tracking-wide uppercase">
-                    Technical Expertise
+                    {activeType === "technical" ? "Technical Expertise" : "Soft Skills"}
                   </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
                   Skills
                 </h1>
                 <p className="text-muted-foreground mt-3 text-lg max-w-xl">
-                  Tools, technologies, and frameworks I work with daily.
+                  {activeType === "technical"
+                    ? "Tools, technologies, and frameworks I work with daily."
+                    : "Interpersonal strengths I bring to every team."}
                 </p>
+
               </div>
               {isAdmin && (
                 <Button variant="outline" size="sm" onClick={() => navigate("/admin?tab=skills")} className="shrink-0">
@@ -151,7 +149,28 @@ const Skills = () => {
             </div>
           </div>
 
+          {/* Type tabs */}
+          <div className="mb-6 inline-flex gap-1 p-1 rounded-xl bg-card border border-border/60">
+            {(["technical", "soft"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setActiveType(t)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeType === t
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t === "technical" ? "Technical Skills" : "Soft Skills"}
+                <span className="ml-2 text-xs opacity-70">
+                  {allSkills.filter(s => (s.skill_type || "technical") === t).length}
+                </span>
+              </button>
+            ))}
+          </div>
+
           {/* Search */}
+
           <div className="mb-10">
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

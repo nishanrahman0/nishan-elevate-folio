@@ -44,6 +44,8 @@ import { ProjectsEditor } from "@/components/admin/ProjectsEditor";
 import { FooterEditor } from "@/components/admin/FooterEditor";
 import { SEOEditor } from "@/components/admin/SEOEditor";
 import { DashboardOverview } from "@/components/admin/DashboardOverview";
+import { AchievementsEditor } from "@/components/admin/AchievementsEditor";
+
 import { cn } from "@/lib/utils";
 
 const menuItems = [
@@ -58,6 +60,8 @@ const menuItems = [
   { id: "education", label: "Education", icon: GraduationCap, description: "Academic background", color: "from-cyan-500 to-blue-500" },
   { id: "certificates", label: "Certificates", icon: Award, description: "Credentials & awards", color: "from-yellow-500 to-amber-500" },
   { id: "activities", label: "Activities", icon: Users, description: "Extracurricular", color: "from-green-500 to-emerald-500" },
+  { id: "achievements", label: "Achievements", icon: Award, description: "Awards & milestones (hidden)", color: "from-yellow-500 to-orange-500" },
+
   { id: "events", label: "Events", icon: Calendar, description: "Events & photos", color: "from-purple-500 to-violet-500" },
   { id: "blog", label: "Blog Posts", icon: FileText, description: "Articles & posts", color: "from-rose-500 to-pink-500" },
   { id: "projects", label: "Projects", icon: FolderOpen, description: "Portfolio projects", color: "from-teal-500 to-cyan-500" },
@@ -120,7 +124,9 @@ export default function Admin() {
       case "events": return <EventsEditor />;
       case "blog": return <BlogEditor />;
       case "activities": return <ActivitiesEditor />;
-      case "navigation": return <NavigationEditor />;
+      case "activities": return <ActivitiesEditor />;
+      case "achievements": return <AchievementsEditor />;
+
       case "theme": return <ThemeEditor />;
       case "seo": return <SEOEditor />;
       case "contact": return <ContactEditor />;

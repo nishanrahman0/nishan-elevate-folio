@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Edit, Trash2, Award, Eye, EyeOff } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Award, Eye, EyeOff, Star } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+
 
 interface Certificate {
   id: string;
@@ -16,6 +17,8 @@ interface Certificate {
   image_url?: string;
   display_order: number;
   hidden: boolean;
+  highlighted?: boolean;
+
 }
 
 export function CertificatesEditor() {
@@ -222,12 +225,21 @@ export function CertificatesEditor() {
                 <div className="flex items-center gap-4">
                   <span className="text-3xl">{cert.icon_emoji}</span>
                   <div>
-                    <h3 className="font-semibold text-foreground">{cert.title}</h3>
+                    <h3 className="font-semibold text-foreground flex items-center gap-2">
+                      {cert.title}
+                      {cert.highlighted && <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />}
+                    </h3>
                     <p className="text-sm text-amber-400">{cert.issuer}</p>
                     {cert.hidden && <p className="text-xs text-muted-foreground">Hidden</p>}
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={async () => {
+                    await supabase.from("certificates").update({ highlighted: !cert.highlighted }).eq("id", cert.id);
+                    fetchCertificates();
+                  }} className="border-white/20 hover:bg-yellow-500/20" title={cert.highlighted ? "Unfeature" : "Feature on homepage"}>
+                    <Star className={`h-4 w-4 ${cert.highlighted ? "fill-yellow-500 text-yellow-500" : ""}`} />
+                  </Button>
                   <Button variant="outline" size="sm" onClick={async () => {
                     await supabase.from("certificates").update({ hidden: !cert.hidden }).eq("id", cert.id);
                     fetchCertificates();
@@ -237,6 +249,7 @@ export function CertificatesEditor() {
                   <Button variant="outline" size="sm" onClick={() => handleEdit(cert)} className="border-white/20 hover:bg-amber-500/20 hover:text-amber-400">
                     <Edit className="h-4 w-4" />
                   </Button>
+
                   <Button variant="destructive" size="sm" onClick={() => handleDelete(cert.id)} className="bg-red-500/20 text-red-400 hover:bg-red-500/30">
                     <Trash2 className="h-4 w-4" />
                   </Button>

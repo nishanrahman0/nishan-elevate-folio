@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Education from "@/components/Education";
+import Highlights from "@/components/Highlights";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import AdminPanel from "@/components/AdminPanel";
@@ -18,6 +19,7 @@ const Index = () => {
         <Navigation />
         <Hero />
         <About />
+        <Highlights />
         <div className="container mx-auto px-4">
           <AdminPanel />
         </div>
@@ -32,3 +34,4 @@ const Index = () => {
 };
 
 export default Index;
+

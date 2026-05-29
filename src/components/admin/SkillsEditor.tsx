@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Edit, Trash2, Zap } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Zap, Star } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 interface Skill {
   id: string;
@@ -17,6 +20,8 @@ interface Skill {
   display_order: number;
   image_url: string | null;
   link_url: string | null;
+  highlighted: boolean;
+  skill_type: string;
 }
 
 export function SkillsEditor() {
@@ -31,7 +36,10 @@ export function SkillsEditor() {
     color_gradient: "from-primary to-secondary",
     image_url: "",
     link_url: "",
+    highlighted: false,
+    skill_type: "technical",
   });
+
 
   useEffect(() => {
     fetchSkills();
@@ -79,7 +87,8 @@ export function SkillsEditor() {
         description: editingId ? "Skill updated" : "Skill added",
       });
 
-      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
+      setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "", highlighted: false, skill_type: "technical" });
+
       setEditingId(null);
       fetchSkills();
     } catch (error: any) {
@@ -100,7 +109,10 @@ export function SkillsEditor() {
       color_gradient: skill.color_gradient,
       image_url: skill.image_url || "",
       link_url: skill.link_url || "",
+      highlighted: skill.highlighted || false,
+      skill_type: skill.skill_type || "technical",
     });
+
   };
 
   const handleDelete = async (id: string) => {
@@ -217,6 +229,24 @@ export function SkillsEditor() {
               className="bg-background/50 border-white/20 focus:border-yellow-500/50"
             />
           </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-foreground/80">Skill Type</Label>
+              <Select value={formData.skill_type} onValueChange={(v) => setFormData({ ...formData, skill_type: v })}>
+                <SelectTrigger className="bg-background/50 border-white/20"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="technical">Technical (Hard Skills)</SelectItem>
+                  <SelectItem value="soft">Soft Skills</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+              <Switch checked={formData.highlighted} onCheckedChange={(c) => setFormData({ ...formData, highlighted: c })} />
+              <Label className="flex items-center gap-1.5"><Star className="h-4 w-4 text-yellow-500" /> Highlight on homepage</Label>
+            </div>
+          </div>
+
           <div className="flex gap-2 pt-4">
             <Button onClick={handleSave} className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700">
               {editingId ? <Edit className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />}
@@ -225,7 +255,7 @@ export function SkillsEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
+                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "", highlighted: false, skill_type: "technical" });
               }} className="border-white/20">
                 Cancel
               </Button>

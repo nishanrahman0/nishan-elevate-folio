@@ -38,6 +38,54 @@ export type Database = {
         }
         Relationships: []
       }
+      achievements: {
+        Row: {
+          created_at: string
+          date_text: string | null
+          description: string | null
+          display_order: number | null
+          hidden: boolean
+          highlighted: boolean
+          id: string
+          images: Json | null
+          issuer: string | null
+          link_url: string | null
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          date_text?: string | null
+          description?: string | null
+          display_order?: number | null
+          hidden?: boolean
+          highlighted?: boolean
+          id?: string
+          images?: Json | null
+          issuer?: string | null
+          link_url?: string | null
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          date_text?: string | null
+          description?: string | null
+          display_order?: number | null
+          hidden?: boolean
+          highlighted?: boolean
+          id?: string
+          images?: Json | null
+          issuer?: string | null
+          link_url?: string | null
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       activity_organizations: {
         Row: {
           banner_url: string | null
@@ -119,6 +167,7 @@ export type Database = {
           description: string | null
           display_order: number | null
           files: Json | null
+          highlighted: boolean
           id: string
           image_url: string | null
           images: Json | null
@@ -134,6 +183,7 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           files?: Json | null
+          highlighted?: boolean
           id?: string
           image_url?: string | null
           images?: Json | null
@@ -149,6 +199,7 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           files?: Json | null
+          highlighted?: boolean
           id?: string
           image_url?: string | null
           images?: Json | null
@@ -211,6 +262,7 @@ export type Database = {
           category: string | null
           content: string
           created_at: string | null
+          highlighted: boolean
           id: string
           images: Json | null
           published: boolean | null
@@ -224,6 +276,7 @@ export type Database = {
           category?: string | null
           content: string
           created_at?: string | null
+          highlighted?: boolean
           id?: string
           images?: Json | null
           published?: boolean | null
@@ -237,6 +290,7 @@ export type Database = {
           category?: string | null
           content?: string
           created_at?: string | null
+          highlighted?: boolean
           id?: string
           images?: Json | null
           published?: boolean | null
@@ -253,6 +307,7 @@ export type Database = {
           created_at: string | null
           display_order: number | null
           hidden: boolean
+          highlighted: boolean
           icon_emoji: string
           id: string
           image_url: string | null
@@ -265,6 +320,7 @@ export type Database = {
           created_at?: string | null
           display_order?: number | null
           hidden?: boolean
+          highlighted?: boolean
           icon_emoji?: string
           id?: string
           image_url?: string | null
@@ -277,6 +333,7 @@ export type Database = {
           created_at?: string | null
           display_order?: number | null
           hidden?: boolean
+          highlighted?: boolean
           icon_emoji?: string
           id?: string
           image_url?: string | null
@@ -359,6 +416,7 @@ export type Database = {
           created_at: string | null
           description: string
           display_order: number | null
+          highlighted: boolean
           id: string
           images: Json | null
           title: string
@@ -369,6 +427,7 @@ export type Database = {
           created_at?: string | null
           description: string
           display_order?: number | null
+          highlighted?: boolean
           id?: string
           images?: Json | null
           title: string
@@ -379,6 +438,7 @@ export type Database = {
           created_at?: string | null
           description?: string
           display_order?: number | null
+          highlighted?: boolean
           id?: string
           images?: Json | null
           title?: string
@@ -393,6 +453,7 @@ export type Database = {
           description: string
           display_order: number | null
           duration: string
+          highlighted: boolean
           icon_name: string
           id: string
           image_url: string | null
@@ -407,6 +468,7 @@ export type Database = {
           description: string
           display_order?: number | null
           duration: string
+          highlighted?: boolean
           icon_name?: string
           id?: string
           image_url?: string | null
@@ -421,6 +483,7 @@ export type Database = {
           description?: string
           display_order?: number | null
           duration?: string
+          highlighted?: boolean
           icon_name?: string
           id?: string
           image_url?: string | null
@@ -658,6 +721,7 @@ export type Database = {
           display_order: number | null
           files: Json | null
           github_url: string | null
+          highlighted: boolean
           icon_name: string
           id: string
           image_url: string | null
@@ -675,6 +739,7 @@ export type Database = {
           display_order?: number | null
           files?: Json | null
           github_url?: string | null
+          highlighted?: boolean
           icon_name?: string
           id?: string
           image_url?: string | null
@@ -692,6 +757,7 @@ export type Database = {
           display_order?: number | null
           files?: Json | null
           github_url?: string | null
+          highlighted?: boolean
           icon_name?: string
           id?: string
           image_url?: string | null
@@ -782,11 +848,13 @@ export type Database = {
           color_gradient: string
           created_at: string | null
           display_order: number | null
+          highlighted: boolean
           icon_name: string
           id: string
           image_url: string | null
           link_url: string | null
           skill_name: string
+          skill_type: string
           updated_at: string | null
         }
         Insert: {
@@ -794,11 +862,13 @@ export type Database = {
           color_gradient?: string
           created_at?: string | null
           display_order?: number | null
+          highlighted?: boolean
           icon_name?: string
           id?: string
           image_url?: string | null
           link_url?: string | null
           skill_name: string
+          skill_type?: string
           updated_at?: string | null
         }
         Update: {
@@ -806,11 +876,13 @@ export type Database = {
           color_gradient?: string
           created_at?: string | null
           display_order?: number | null
+          highlighted?: boolean
           icon_name?: string
           id?: string
           image_url?: string | null
           link_url?: string | null
           skill_name?: string
+          skill_type?: string
           updated_at?: string | null
         }
         Relationships: []
