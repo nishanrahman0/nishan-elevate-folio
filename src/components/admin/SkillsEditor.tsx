@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Edit, Trash2, Zap } from "lucide-react";
+import { Loader2, Plus, Edit, Trash2, Zap, Star } from "lucide-react";
 import { ImageUpload } from "./ImageUpload";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 interface Skill {
   id: string;
@@ -17,6 +20,8 @@ interface Skill {
   display_order: number;
   image_url: string | null;
   link_url: string | null;
+  highlighted: boolean;
+  skill_type: string;
 }
 
 export function SkillsEditor() {
@@ -31,7 +36,10 @@ export function SkillsEditor() {
     color_gradient: "from-primary to-secondary",
     image_url: "",
     link_url: "",
+    highlighted: false,
+    skill_type: "technical",
   });
+
 
   useEffect(() => {
     fetchSkills();
