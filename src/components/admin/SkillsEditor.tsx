@@ -224,7 +224,25 @@ export function SkillsEditor() {
             <Input
               id="skill_link_url"
               value={formData.link_url}
-              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-foreground/80">Skill Type</Label>
+              <Select value={formData.skill_type} onValueChange={(v) => setFormData({ ...formData, skill_type: v })}>
+                <SelectTrigger className="bg-background/50 border-white/20"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="technical">Technical (Hard Skills)</SelectItem>
+                  <SelectItem value="soft">Soft Skills</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+              <Switch checked={formData.highlighted} onCheckedChange={(c) => setFormData({ ...formData, highlighted: c })} />
+              <Label className="flex items-center gap-1.5"><Star className="h-4 w-4 text-yellow-500" /> Highlight on homepage</Label>
+            </div>
+          </div>
+
               placeholder="https://..."
               className="bg-background/50 border-white/20 focus:border-yellow-500/50"
             />
@@ -237,7 +255,7 @@ export function SkillsEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "" });
+                setFormData({ category: "", skill_name: "", icon_name: "Code", color_gradient: "from-primary to-secondary", image_url: "", link_url: "", highlighted: false, skill_type: "technical" });
               }} className="border-white/20">
                 Cancel
               </Button>
