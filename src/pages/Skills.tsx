@@ -120,15 +120,18 @@ const Skills = () => {
                     <Zap className="h-6 w-6 text-primary" />
                   </div>
                   <span className="text-sm font-medium text-primary tracking-wide uppercase">
-                    Technical Expertise
+                    {activeType === "technical" ? "Technical Expertise" : "Soft Skills"}
                   </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
                   Skills
                 </h1>
                 <p className="text-muted-foreground mt-3 text-lg max-w-xl">
-                  Tools, technologies, and frameworks I work with daily.
+                  {activeType === "technical"
+                    ? "Tools, technologies, and frameworks I work with daily."
+                    : "Interpersonal strengths I bring to every team."}
                 </p>
+
               </div>
               {isAdmin && (
                 <Button variant="outline" size="sm" onClick={() => navigate("/admin?tab=skills")} className="shrink-0">
@@ -146,7 +149,28 @@ const Skills = () => {
             </div>
           </div>
 
+          {/* Type tabs */}
+          <div className="mb-6 inline-flex gap-1 p-1 rounded-xl bg-card border border-border/60">
+            {(["technical", "soft"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setActiveType(t)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  activeType === t
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t === "technical" ? "Technical Skills" : "Soft Skills"}
+                <span className="ml-2 text-xs opacity-70">
+                  {allSkills.filter(s => (s.skill_type || "technical") === t).length}
+                </span>
+              </button>
+            ))}
+          </div>
+
           {/* Search */}
+
           <div className="mb-10">
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
