@@ -378,7 +378,7 @@ export function ActivitiesEditor() {
 
                           {/* Task List */}
                           {tasks.filter(t => t.role_id === role.id).map(task => (
-                          {tasks.filter(t => t.role_id === role.id).map(task => (
+
                             <div key={task.id} className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/5 border border-white/10">
                               <div className="flex items-center gap-3">
                                 {task.image_url && <img src={task.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />}

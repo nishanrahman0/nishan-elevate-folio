@@ -246,9 +246,10 @@ export function CertificatesEditor() {
                   }} className="border-white/20 hover:bg-amber-500/20 hover:text-amber-400" title={cert.hidden ? "Show" : "Hide"}>
                     {cert.hidden ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
-
+                  <Button variant="outline" size="sm" onClick={() => handleEdit(cert)} className="border-white/20 hover:bg-amber-500/20 hover:text-amber-400">
                     <Edit className="h-4 w-4" />
                   </Button>
+
                   <Button variant="destructive" size="sm" onClick={() => handleDelete(cert.id)} className="bg-red-500/20 text-red-400 hover:bg-red-500/30">
                     <Trash2 className="h-4 w-4" />
                   </Button>
