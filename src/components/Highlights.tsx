@@ -84,7 +84,8 @@ const Highlights = () => {
     load();
   }, []);
 
-  if (loading || items.length === 0) return null;
+  if (loading) return null;
+  if (items.length === 0 && !isAdmin) return null;
 
   return (
     <section id="highlights" className="section-padding relative overflow-hidden">
