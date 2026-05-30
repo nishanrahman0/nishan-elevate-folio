@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Star, Award, Zap, FolderOpen, Users, Calendar, FileText, Briefcase, Trophy, ArrowRight } from "lucide-react";
+import { Star, Award, Zap, FolderOpen, Users, Calendar, FileText, Briefcase, Trophy, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HighlightItem {
   id: string;
@@ -17,6 +18,7 @@ interface HighlightItem {
 const Highlights = () => {
   const [items, setItems] = useState<HighlightItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const load = async () => {
@@ -82,7 +84,8 @@ const Highlights = () => {
     load();
   }, []);
 
-  if (loading || items.length === 0) return null;
+  if (loading) return null;
+  if (items.length === 0 && !isAdmin) return null;
 
   return (
     <section id="highlights" className="section-padding relative overflow-hidden">
@@ -102,6 +105,19 @@ const Highlights = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-6" />
         </div>
 
+        {items.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-primary/30 bg-card/50 p-10 text-center">
+            <Sparkles className="h-10 w-10 text-primary mx-auto mb-4" />
+            <h3 className="text-xl font-bold mb-2">No highlights yet</h3>
+            <p className="text-muted-foreground max-w-md mx-auto mb-4">
+              Only you can see this message. Open the Admin panel and click the star icon on any project,
+              certificate, activity, skill, experience, event, blog post, or achievement to feature it here.
+            </p>
+            <Link to="/admin" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+              Go to Admin <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((it, idx) => {
             const Icon = it.icon;
@@ -139,6 +155,7 @@ const Highlights = () => {
             );
           })}
         </div>
+        )}
       </div>
     </section>
   );
