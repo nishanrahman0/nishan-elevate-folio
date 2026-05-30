@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Star, Award, Zap, FolderOpen, Users, Calendar, FileText, Briefcase, Trophy, ArrowRight } from "lucide-react";
+import { Star, Award, Zap, FolderOpen, Users, Calendar, FileText, Briefcase, Trophy, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HighlightItem {
   id: string;
