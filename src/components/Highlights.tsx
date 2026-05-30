@@ -18,6 +18,7 @@ interface HighlightItem {
 const Highlights = () => {
   const [items, setItems] = useState<HighlightItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const load = async () => {
