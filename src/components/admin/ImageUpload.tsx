@@ -143,13 +143,17 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
     setUploading(true);
     setImageToCrop(null);
     try {
-      const fileExt = originalFile.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      // Re-encode the cropped image as WebP for size savings
+      const croppedFile = new File([croppedBlob], originalFile.name, { type: croppedBlob.type || originalFile.type });
+      const finalBlob = await convertToWebP(croppedFile);
+      const isWebP = finalBlob.type === "image/webp";
+      const ext = isWebP ? "webp" : (originalFile.name.split('.').pop() || "png");
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${ext}`;
       const filePath = `${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('portfolio-images')
-        .upload(filePath, croppedBlob);
+        .upload(filePath, finalBlob, { contentType: finalBlob.type });
 
       if (uploadError) throw uploadError;
 
