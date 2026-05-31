@@ -27,6 +27,10 @@ const About = () => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto max-w-4xl relative z-10">
+        {/* SEO: hidden but crawlable identity line */}
+        <p className="sr-only">
+          Nishan Rahman — BBA student at the University of Rajshahi (Rajshahi University), Bangladesh. Aspiring Data Analyst, AI enthusiast and Tech Explorer.
+        </p>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">About Me</span>
