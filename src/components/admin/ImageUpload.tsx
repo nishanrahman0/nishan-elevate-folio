@@ -71,15 +71,47 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
     setOriginalFile(null);
   };
 
+  const convertToWebP = async (file: File): Promise<Blob> => {
+    // SVG and GIF stay as-is (no quality loss / animation preserved)
+    if (file.type === "image/svg+xml" || file.type === "image/gif") return file;
+    try {
+      const bitmap = await createImageBitmap(file);
+      // Cap at 1920px on the longest side
+      const maxDim = 1920;
+      let { width, height } = bitmap;
+      if (width > maxDim || height > maxDim) {
+        const scale = maxDim / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return file;
+      ctx.drawImage(bitmap, 0, 0, width, height);
+      const blob: Blob | null = await new Promise((resolve) =>
+        canvas.toBlob(resolve, "image/webp", 0.85)
+      );
+      return blob && blob.size < file.size ? blob : file;
+    } catch {
+      return file;
+    }
+  };
+
   const uploadFileDirect = async (file: File) => {
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const isImage = file.type.startsWith("image/");
+      const finalBlob = isImage ? await convertToWebP(file) : file;
+      const isWebP = finalBlob.type === "image/webp";
+      const originalExt = file.name.split(".").pop() || "bin";
+      const ext = isImage ? (isWebP ? "webp" : originalExt) : originalExt;
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${ext}`;
 
       const { error: uploadError } = await supabase.storage
         .from('portfolio-images')
-        .upload(fileName, file);
+        .upload(fileName, finalBlob, { contentType: finalBlob.type || file.type });
 
       if (uploadError) throw uploadError;
 
@@ -92,7 +124,7 @@ export function ImageUpload({ currentImageUrl, onImageUploaded, label = "Image",
 
       toast({
         title: "Success",
-        description: "File uploaded successfully",
+        description: isWebP ? "Uploaded (optimized to WebP)" : "File uploaded successfully",
       });
     } catch (error: any) {
       toast({
