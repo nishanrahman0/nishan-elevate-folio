@@ -105,15 +105,15 @@ const Hero = () => {
   ].filter(l => l.url);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background effects */}
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 pb-12 md:pt-20 md:pb-0">
+      {/* Background effects (static — animate-pulse on huge blurs hurts mobile perf) */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-accent/5 to-secondary/8" />
-      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/15 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/15 rounded-full blur-3xl animate-pulse delay-1000" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-56 h-56 md:w-72 md:h-72 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-64 h-64 md:w-96 md:h-96 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
           {/* Profile Photo */}
           <div className={`transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="relative group">
@@ -121,9 +121,13 @@ const Hero = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-60" />
               <img
                 src={imgSrc}
-                alt={heroData.name || "Profile"}
-                className="relative w-60 h-60 md:w-72 md:h-72 rounded-full object-cover shadow-2xl"
+                alt={`${heroData.name || "Nishan Rahman"} — BBA student, University of Rajshahi`}
+                width={288}
+                height={288}
+                className="relative w-44 h-44 sm:w-56 sm:h-56 md:w-72 md:h-72 rounded-full object-cover shadow-2xl"
                 loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>
@@ -131,13 +135,13 @@ const Hero = () => {
           {/* Hero Content */}
           <div className={`text-center md:text-left max-w-2xl transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {heroData.name && (
-              <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-3 md:mb-4 leading-tight">
                 <span className="gradient-text">{heroData.name}</span>
               </h1>
             )}
             
             {heroData.tagline && (
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 font-medium leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 md:mb-8 font-medium leading-relaxed">
                 {heroData.tagline}
               </p>
             )}
