@@ -304,6 +304,7 @@ export type Database = {
       }
       certificates: {
         Row: {
+          certificate_type: string
           created_at: string | null
           display_order: number | null
           hidden: boolean
@@ -317,6 +318,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          certificate_type?: string
           created_at?: string | null
           display_order?: number | null
           hidden?: boolean
@@ -330,6 +332,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          certificate_type?: string
           created_at?: string | null
           display_order?: number | null
           hidden?: boolean

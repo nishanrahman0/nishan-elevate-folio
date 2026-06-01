@@ -15,6 +15,7 @@ interface Certificate {
   icon_emoji: string;
   image_url?: string;
   link_url?: string;
+  certificate_type?: string;
 }
 
 const Certificates = () => {
@@ -23,6 +24,9 @@ const Certificates = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [search, setSearch] = useState("");
   const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<"all" | "digital" | "physical">("all");
+
+
 
   useEffect(() => {
     fetchCertificates();
@@ -44,8 +48,12 @@ const Certificates = () => {
       cert.title.toLowerCase().includes(search.toLowerCase()) ||
       cert.issuer.toLowerCase().includes(search.toLowerCase());
     const matchesIssuer = !selectedIssuer || cert.issuer === selectedIssuer;
-    return matchesSearch && matchesIssuer;
+    const matchesType = selectedType === "all" || (cert.certificate_type || "digital") === selectedType;
+    return matchesSearch && matchesIssuer && matchesType;
   });
+
+  const digitalCount = certificates.filter((c) => (c.certificate_type || "digital") === "digital").length;
+  const physicalCount = certificates.filter((c) => c.certificate_type === "physical").length;
 
   return (
     <div className="min-h-screen bg-background relative">
@@ -98,6 +106,27 @@ const Certificates = () => {
               <span className="font-semibold text-foreground text-2xl">{issuers.length}</span>
               <span className="-ml-4">organizations</span>
             </div>
+          </div>
+
+          {/* Type Tabs */}
+          <div className="mb-6 inline-flex p-1 rounded-xl bg-card border border-border/60">
+            {([
+              { key: "all", label: `All (${certificates.length})` },
+              { key: "digital", label: `Digital (${digitalCount})` },
+              { key: "physical", label: `Physical (${physicalCount})` },
+            ] as const).map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setSelectedType(tab.key)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  selectedType === tab.key
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           {/* Search & Filters */}
