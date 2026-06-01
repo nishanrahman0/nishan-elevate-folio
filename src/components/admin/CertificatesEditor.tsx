@@ -18,7 +18,7 @@ interface Certificate {
   display_order: number;
   hidden: boolean;
   highlighted?: boolean;
-
+  certificate_type?: string;
 }
 
 export function CertificatesEditor() {
@@ -32,6 +32,7 @@ export function CertificatesEditor() {
     icon_emoji: "📜",
     image_url: "",
     link_url: "",
+    certificate_type: "digital",
   });
 
   useEffect(() => {
@@ -80,7 +81,7 @@ export function CertificatesEditor() {
         description: editingId ? "Certificate updated" : "Certificate added",
       });
 
-      setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "", link_url: "" });
+      setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "", link_url: "", certificate_type: "digital" });
       setEditingId(null);
       fetchCertificates();
     } catch (error: any) {
@@ -100,6 +101,7 @@ export function CertificatesEditor() {
       icon_emoji: cert.icon_emoji,
       image_url: cert.image_url || "",
       link_url: (cert as any).link_url || "",
+      certificate_type: cert.certificate_type || "digital",
     });
   };
 
@@ -184,15 +186,29 @@ export function CertificatesEditor() {
               label="🏆 Certificate Image"
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="cert_link_url" className="text-foreground/80">Link URL (optional)</Label>
-            <Input
-              id="cert_link_url"
-              value={formData.link_url}
-              onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
-              placeholder="https://..."
-              className="bg-background/50 border-white/20 focus:border-amber-500/50"
-            />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="cert_link_url" className="text-foreground/80">Link URL (optional)</Label>
+              <Input
+                id="cert_link_url"
+                value={formData.link_url}
+                onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+                placeholder="https://..."
+                className="bg-background/50 border-white/20 focus:border-amber-500/50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cert_type" className="text-foreground/80">Certificate Type</Label>
+              <select
+                id="cert_type"
+                value={formData.certificate_type}
+                onChange={(e) => setFormData({ ...formData, certificate_type: e.target.value })}
+                className="w-full h-10 rounded-md bg-background/50 border border-white/20 focus:border-amber-500/50 px-3 text-foreground"
+              >
+                <option value="digital">Digital</option>
+                <option value="physical">Physical</option>
+              </select>
+            </div>
           </div>
           <div className="flex gap-2 pt-4">
             <Button onClick={handleSave} className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700">
@@ -202,7 +218,7 @@ export function CertificatesEditor() {
             {editingId && (
               <Button variant="outline" onClick={() => {
                 setEditingId(null);
-                setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "", link_url: "" });
+                setFormData({ title: "", issuer: "", icon_emoji: "📜", image_url: "", link_url: "", certificate_type: "digital" });
               }} className="border-white/20">
                 Cancel
               </Button>
@@ -229,7 +245,7 @@ export function CertificatesEditor() {
                       {cert.title}
                       {cert.highlighted && <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />}
                     </h3>
-                    <p className="text-sm text-amber-400">{cert.issuer}</p>
+                    <p className="text-sm text-amber-400">{cert.issuer} · <span className="capitalize text-foreground/60">{cert.certificate_type || 'digital'}</span></p>
                     {cert.hidden && <p className="text-xs text-muted-foreground">Hidden</p>}
                   </div>
                 </div>
