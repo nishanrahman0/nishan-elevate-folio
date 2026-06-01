@@ -26,12 +26,7 @@ const Certificates = () => {
   const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<"all" | "digital" | "physical">("all");
 
-const Certificates = () => {
-  const { isAdmin } = useAuth();
-  const navigate = useNavigate();
-  const [certificates, setCertificates] = useState<Certificate[]>([]);
-  const [search, setSearch] = useState("");
-  const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
+
 
   useEffect(() => {
     fetchCertificates();
