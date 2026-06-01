@@ -15,7 +15,16 @@ interface Certificate {
   icon_emoji: string;
   image_url?: string;
   link_url?: string;
+  certificate_type?: string;
 }
+
+const Certificates = () => {
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [search, setSearch] = useState("");
+  const [selectedIssuer, setSelectedIssuer] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<"all" | "digital" | "physical">("all");
 
 const Certificates = () => {
   const { isAdmin } = useAuth();
@@ -44,8 +53,12 @@ const Certificates = () => {
       cert.title.toLowerCase().includes(search.toLowerCase()) ||
       cert.issuer.toLowerCase().includes(search.toLowerCase());
     const matchesIssuer = !selectedIssuer || cert.issuer === selectedIssuer;
-    return matchesSearch && matchesIssuer;
+    const matchesType = selectedType === "all" || (cert.certificate_type || "digital") === selectedType;
+    return matchesSearch && matchesIssuer && matchesType;
   });
+
+  const digitalCount = certificates.filter((c) => (c.certificate_type || "digital") === "digital").length;
+  const physicalCount = certificates.filter((c) => c.certificate_type === "physical").length;
 
   return (
     <div className="min-h-screen bg-background relative">
