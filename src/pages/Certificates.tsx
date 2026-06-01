@@ -108,6 +108,27 @@ const Certificates = () => {
             </div>
           </div>
 
+          {/* Type Tabs */}
+          <div className="mb-6 inline-flex p-1 rounded-xl bg-card border border-border/60">
+            {([
+              { key: "all", label: `All (${certificates.length})` },
+              { key: "digital", label: `Digital (${digitalCount})` },
+              { key: "physical", label: `Physical (${physicalCount})` },
+            ] as const).map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setSelectedType(tab.key)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  selectedType === tab.key
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
           {/* Search & Filters */}
           <div className="mb-10 flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1 max-w-md">
